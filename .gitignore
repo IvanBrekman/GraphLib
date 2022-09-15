@@ -31,5 +31,8 @@
 *.out
 *.app
 
+bin/
 *.purrrrr
 *.meow
+
+logs/
