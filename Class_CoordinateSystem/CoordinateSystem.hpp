@@ -44,6 +44,7 @@ class CoordinateSystem : public Drawable {
         : CoordinateSystem(Point2D(x, y), diry, dirx) {};
 
         Point2D point_to_pixel(Point2D point)   const;
+        Point2D pixel_to_point(Point2D pixel)   const;
 
 
         void append_object (Drawable*               object,  int index=CoordinateSystem::__LAST_INDEX);

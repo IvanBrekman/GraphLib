@@ -19,9 +19,16 @@ CoordinateSystem::CoordinateSystem(Point2D center, AxisY_Direction diry, AxisX_D
     this->__axis_y.set_color(this->color);
 }
 
-Point2D CoordinateSystem::point_to_pixel(Point2D point) const{
+Point2D CoordinateSystem::point_to_pixel(Point2D point) const {
     double new_x = center.x + this->axis_x_direction * point.x;
     double new_y = center.y + this->axis_y_direction * point.y;
+
+    return Point2D(new_x, new_y);
+}
+
+Point2D CoordinateSystem::pixel_to_point(Point2D pixel) const {
+    double new_x = this->axis_x_direction * (pixel.x - center.x);
+    double new_y = this->axis_y_direction * (pixel.y - center.y);
 
     return Point2D(new_x, new_y);
 }

@@ -31,6 +31,24 @@ bool Window::poll_event(Event* event) {
         case sf::Event::EventType::Closed:
             event->type = Event::Type::WINDOW_CLOSED;
             break;
+        case sf::Event::EventType::MouseButtonPressed:
+            event->type         = Event::Type::MOUSE_BUTTON_PRESSED;
+            event->mouse.pos    = event->__get_mouse_button_pos(this->__poll_event);
+            event->mouse.button = (Event::MouseEvent::Button_Type)this->__poll_event.mouseButton.button;
+
+            break;
+        case sf::Event::EventType::MouseButtonReleased:
+            event->type         = Event::Type::MOUSE_BUTTON_RELEASED;
+            event->mouse.pos    = event->__get_mouse_button_pos(this->__poll_event);
+            event->mouse.button = (Event::MouseEvent::Button_Type)this->__poll_event.mouseButton.button;
+
+            break;
+        
+        case sf::Event::EventType::MouseMoved:
+            event->type      = Event::Type::MOUSE_MOVED;
+            event->mouse.pos = event->__get_mouse_move_pos(this->__poll_event);
+
+            break;
         
         default:
             LOG1(printf(RED "Unassembled Event. EventType: %d\n" NATURAL, this->__poll_event.type););

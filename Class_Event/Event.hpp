@@ -6,13 +6,43 @@
 
 #include <SFML/Graphics.hpp>
 
-class Event {
-    public:
-        enum Type {
-            NO_EVENT        = 0,
+#include "../Class_Point/Point.hpp"
 
-            WINDOW_CLOSED   = 1
+class Window;
+
+class Event {
+    friend class Window;
+
+    public:
+        Event() {}
+
+        enum Type {
+            NO_EVENT                = 0,
+
+            WINDOW_CLOSED           = 1,
+            MOUSE_BUTTON_PRESSED    = 2,
+            MOUSE_BUTTON_RELEASED   = 3,
+            MOUSE_MOVED             = 4,
+        };
+        Type type = Type::NO_EVENT;
+
+        struct MouseEvent {
+            enum Button_Type {
+                NONE    = -1,
+                LEFT    =  0,
+                RIGHT   =  1,
+                MIDDLE  =  2
+            };
+
+            Button_Type button = Button_Type::NONE;
+            Point2D pos = Point2D(0, 0);
         };
 
-        Type type = NO_EVENT;
+        union {
+            MouseEvent mouse;
+        };
+    
+    private:
+        Point2D __get_mouse_button_pos(sf::Event event) { return Point2D(event.mouseButton.x, event.mouseButton.y); }
+        Point2D __get_mouse_move_pos  (sf::Event event) { return Point2D(event.mouseMove.x,   event.mouseMove.y);   }
 };
