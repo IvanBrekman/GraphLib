@@ -1,21 +1,33 @@
 #include <SFML/Graphics.hpp>
 
-int main(void) {
-    sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
-    sf::CircleShape  shape(100.f);
-    
-    shape.setFillColor(sf::Color::Green);
+#include "GraphLib.hpp"
 
-    while (window.isOpen()) {
-        sf::Event event;
-        while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed) {
+
+int main(void) {
+    Window window(400, 400);
+    window.set_coordinate_system_type(Window::Coordinate_System_Type::CENTER);
+
+    Vector v1(0, 0, 100, 100, Color::Red);
+
+    CoordinateSystem system(350, 350, CoordinateSystem::AxisY_Direction::UP, CoordinateSystem::AxisX_Direction::LEFT);
+    system.show();
+
+    window.append_object(&v1);
+    window.append_object(&system);
+
+    while (window.is_open()) {
+        Event event;
+        while (window.poll_event(&event)) {
+            if (event.type == Event::WINDOW_CLOSED) {
                 window.close();
             }
         }
 
         window.clear();
-        window.draw(shape);
+
+        // window.draw_window_coordinate_system();
+        window.draw_added_objects();
+
         window.display();
     }
 

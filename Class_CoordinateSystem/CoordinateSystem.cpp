@@ -1,0 +1,46 @@
+//
+// Created by IvanBrekman on 19.09.2022
+//
+
+#include "CoordinateSystem.hpp"
+
+CoordinateSystem::CoordinateSystem(Point2D center, AxisY_Direction diry, AxisX_Direction dirx)
+: center(center), axis_x_direction(dirx), axis_y_direction(diry), Drawable(Color::Blue) {
+    double x = dirx * CoordinateSystem::__DRAW_AXIS_LENGTH;
+    double y = diry * CoordinateSystem::__DRAW_AXIS_LENGTH;
+
+    this->__axis_x = Vector(center - Point2D(x, 0), center + Point2D(x, 0), this->color);
+    this->__axis_y = Vector(center - Point2D(0, y), center + Point2D(0, y), this->color);
+
+    this->hidden = true;
+}
+
+Point2D CoordinateSystem::point_to_pixel(Point2D point) const{
+    double new_x = center.x + this->axis_x_direction * point.x;
+    double new_y = center.y + this->axis_y_direction * point.y;
+
+    return Point2D(new_x, new_y);
+}
+
+void CoordinateSystem::draw_on_window(Window& window) {
+    this->draw(window, CoordinateSystem(0, 0));
+}
+
+void CoordinateSystem::draw(Window& window, const CoordinateSystem& system) {
+    if (this->hidden) return;
+    
+    this->__axis_x.draw(window, system);
+    this->__axis_y.draw(window, system);
+}
+
+void CoordinateSystem::dump() const {
+    printf(
+        "<CoordinateSystem: center - (%5.1lf, %5.1lf) | type - '%4s-%-5s'\n",
+        this->center.x, this->center.y,
+        this->axis_y_direction == CoordinateSystem::AxisY_Direction::UP   ? "UP"   : "DOWN",
+        this->axis_x_direction == CoordinateSystem::AxisX_Direction::LEFT ? "LEFT" : "RIGHT"
+    );
+    printf("    AxisX - "); this->__axis_x.dump();
+    printf("    AxisY - "); this->__axis_y.dump();
+    printf(">\n");
+}

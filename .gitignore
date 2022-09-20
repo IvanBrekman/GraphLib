@@ -36,3 +36,4 @@ bin/
 *.meow
 
 logs/
+.vscode
