@@ -7,10 +7,12 @@ int main(void) {
     Window window(400, 400);
     window.set_coordinate_system_type(Window::Coordinate_System_Type::CENTER);
 
-    Vector v1(0, 0, 100, 100, Color::Red);
+    Vector v1(0, 0, 100, 100);
+    v1.set_color(Color::Red);
 
     CoordinateSystem system(350, 350, CoordinateSystem::AxisY_Direction::UP, CoordinateSystem::AxisX_Direction::LEFT);
     system.show();
+    system.append_object(&v1);
 
     window.append_object(&v1);
     window.append_object(&system);
@@ -25,7 +27,7 @@ int main(void) {
 
         window.clear();
 
-        // window.draw_window_coordinate_system();
+        window.draw_window_coordinate_system();
         window.draw_added_objects();
 
         window.display();

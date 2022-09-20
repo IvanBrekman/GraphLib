@@ -40,7 +40,13 @@ bool Window::poll_event(Event* event) {
     return 1;
 }
 
+std::vector <Drawable*>* Window::objects() {
+    return &this->__coordinate_system.objects;
+}
+
 void Window::set_coordinate_system(CoordinateSystem system) {
+    system.objects = this->__coordinate_system.objects;
+
     this->__coordinate_system = system;
 }
 
@@ -63,7 +69,12 @@ void Window::set_coordinate_system_type(Coordinate_System_Type type) {
 }
 
 void Window::draw_window_coordinate_system() {
+    bool save = this->__coordinate_system.hidden;
+    this->__coordinate_system.hidden = false;
+
     this->__coordinate_system.draw_on_window(*this);
+
+    this->__coordinate_system.hidden = save;
 }
 
 void Window::clear() {
@@ -79,26 +90,24 @@ void Window::close() {
 }
 
 void Window::append_object(Drawable* object, int index) {
-    if (index == Window::__LAST_INDEX) this->objects.push_back(object);
-    else                               this->objects.emplace(this->objects.cbegin() + index, object);
+    this->__coordinate_system.append_object(object, index);
 }
 
 void Window::extend_objects(std::vector <Drawable*> objects, int index) {
-    for (Drawable* object : objects) {
-        this->append_object(object);
-    }
+    this->__coordinate_system.extend_objects(objects, index);
 }
 
 void Window::draw(Drawable* object) {
     if (typeid(*object) == typeid(CoordinateSystem)) {
         ((CoordinateSystem*)object)->draw_on_window(*this);
+        ((CoordinateSystem*)object)->draw_added_objects(*this);
     } else {
         object->draw(*this, this->__coordinate_system);
     }
 }
 
 void Window::draw_added_objects() {
-    for (Drawable* object : this->objects) {
+    for (Drawable* object : *this->objects()) {
         this->draw(object);
     }
 }

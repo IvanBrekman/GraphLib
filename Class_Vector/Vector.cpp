@@ -56,8 +56,8 @@ Vector Vector::operator -() const {
     return Vector(this->start, -(this->end - this->start) + this->start);
 }
 
-Line Vector::to_line(Color color) const {
-    return Line(this->start, this->end, color);
+Line Vector::to_line() const {
+    return Line(this->start, this->end);
 }
 
 void Vector::move_to(Point2D new_start) {
@@ -69,13 +69,19 @@ void Vector::move_to(Point2D new_start) {
 
 void Vector::draw(Window& window, const CoordinateSystem& system) {
     if (this->hidden) return;
-    
+
     Line::draw(window, system);
 
     Vector normal_vector = Vector::get_normal(Vector::Normal_Type::LEFT_NORMAL);
 
-    (( normal_vector * this->__DRAW_NORMAL_COEF - *this) * this->__DRAW_ARROW_COEF).to_line(this->color).draw(window, system);
-    ((-normal_vector * this->__DRAW_NORMAL_COEF - *this) * this->__DRAW_ARROW_COEF).to_line(this->color).draw(window, system);
+    Line l_arrow = Vector(( normal_vector * this->__DRAW_NORMAL_COEF - *this) * this->__DRAW_ARROW_COEF).to_line();
+    Line r_arrow = Vector((-normal_vector * this->__DRAW_NORMAL_COEF - *this) * this->__DRAW_ARROW_COEF).to_line();
+
+    l_arrow.set_color(this->color);
+    r_arrow.set_color(this->color);
+
+    l_arrow.draw(window, system);
+    r_arrow.draw(window, system);
 }
 
 void Vector::dump() const {

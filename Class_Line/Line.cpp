@@ -4,6 +4,8 @@
 
 #include <math.h>
 
+#include "../config/baselib.hpp"
+
 #include "Line.hpp"
 
 #include "../Class_Window/Window.hpp"
@@ -15,6 +17,8 @@ double Line::length() const {
 
 void Line::draw(Window& window, const CoordinateSystem& system) {
     if (this->hidden) return;
+
+    CoordinateSystem draw_system = system;
     
     Line line(system.point_to_pixel(this->start), system.point_to_pixel(this->end));
 

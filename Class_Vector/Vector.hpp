@@ -22,11 +22,11 @@ class Vector : public Line {
         Vector()
         : Line(0, 0, 0, 0) {};
         
-        Vector(double x1, double y1, double x2, double y2, Color color=Color::Black)
-        : Line(x1, y1, x2, y2, color) {}
+        Vector(double x1, double y1, double x2, double y2)
+        : Line(x1, y1, x2, y2) {}
 
-        Vector(Point2D start, Point2D end, Color color=Color::Black)
-        : Vector(start.x, start.y, end.x, end.y, color) {}
+        Vector(Point2D start, Point2D end)
+        : Vector(start.x, start.y, end.x, end.y) {}
 
         Vector get_normal(Normal_Type type)     const;
 
@@ -39,7 +39,7 @@ class Vector : public Line {
         Vector operator *(double scalar)        const;
         Vector operator -()                     const;
 
-        Line to_line(Color color=Color::Black)  const;
+        Line to_line()  const;
 
         void move_to(Point2D new_start);
 

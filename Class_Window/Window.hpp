@@ -28,14 +28,10 @@ class Window {
 
         Color color;
 
-        std::vector <Drawable*> objects;
-
     private:
         sf::Event           __poll_event;
         sf::RenderWindow    __sfml_window;
         CoordinateSystem    __coordinate_system;
-
-        static const int    __LAST_INDEX = -1;
 
     public:
         Window(int width, int height, const char* text="GraphLib Window", Color color=Color::White);
@@ -43,6 +39,8 @@ class Window {
 
         bool is_open() const;
         bool poll_event(Event* event);
+
+        std::vector <Drawable*>* objects();
 
         void set_coordinate_system     (CoordinateSystem system);
         void set_coordinate_system_type(Coordinate_System_Type type);
@@ -52,8 +50,8 @@ class Window {
         void display();
         void close();
 
-        void append_object (Drawable*               object,  int index=Window::__LAST_INDEX);
-        void extend_objects(std::vector <Drawable*> objects, int index=Window::__LAST_INDEX);
+        void append_object (Drawable*               object,  int index=CoordinateSystem::__LAST_INDEX);
+        void extend_objects(std::vector <Drawable*> objects, int index=CoordinateSystem::__LAST_INDEX);
 
         void draw(Drawable* object);
         void draw_added_objects();

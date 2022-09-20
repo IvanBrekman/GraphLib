@@ -5,14 +5,18 @@
 #include "CoordinateSystem.hpp"
 
 CoordinateSystem::CoordinateSystem(Point2D center, AxisY_Direction diry, AxisX_Direction dirx)
-: center(center), axis_x_direction(dirx), axis_y_direction(diry), Drawable(Color::Blue) {
+: center(center), axis_x_direction(dirx), axis_y_direction(diry), Drawable() {
+    this->hidden = true;
+    this->color  = Color::Blue;
+
     double x = dirx * CoordinateSystem::__DRAW_AXIS_LENGTH;
     double y = diry * CoordinateSystem::__DRAW_AXIS_LENGTH;
 
-    this->__axis_x = Vector(center - Point2D(x, 0), center + Point2D(x, 0), this->color);
-    this->__axis_y = Vector(center - Point2D(0, y), center + Point2D(0, y), this->color);
+    this->__axis_x = Vector(center - Point2D(x, 0), center + Point2D(x, 0));
+    this->__axis_y = Vector(center - Point2D(0, y), center + Point2D(0, y));
 
-    this->hidden = true;
+    this->__axis_x.set_color(this->color);
+    this->__axis_y.set_color(this->color);
 }
 
 Point2D CoordinateSystem::point_to_pixel(Point2D point) const{
@@ -22,8 +26,25 @@ Point2D CoordinateSystem::point_to_pixel(Point2D point) const{
     return Point2D(new_x, new_y);
 }
 
+void CoordinateSystem::append_object(Drawable* object, int index) {
+    if (index == CoordinateSystem::__LAST_INDEX) this->objects.push_back(object);
+    else                                         this->objects.emplace(this->objects.cbegin() + index, object);
+}
+
+void CoordinateSystem::extend_objects(std::vector <Drawable*> objects, int index) {
+    for (Drawable* object : objects) {
+        this->append_object(object, index++);
+    }
+}
+
 void CoordinateSystem::draw_on_window(Window& window) {
     this->draw(window, CoordinateSystem(0, 0));
+}
+
+void CoordinateSystem::draw_added_objects(Window& window) {
+    for (Drawable* object : this->objects) {
+        object->draw(window, *this);
+    }
 }
 
 void CoordinateSystem::draw(Window& window, const CoordinateSystem& system) {

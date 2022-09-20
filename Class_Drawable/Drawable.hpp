@@ -20,13 +20,10 @@ class Drawable {
         Drawable()
         : color(Color::Black) {};
 
-        Drawable(Color color)
-        : color(color) {}
-        
-        virtual ~Drawable() {};
-
         virtual void draw(Window& window, const CoordinateSystem& system) = 0;
         virtual void draw_on_window(Window& window);
+
+        void set_color(Color color) { this->color = color; }
 
         void show() { this->hidden = false; }
         void hide() { this->hidden = true;  }
