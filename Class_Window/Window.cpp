@@ -4,7 +4,7 @@
 
 #include <cassert>
 
-#include "../config/baselib.hpp"
+#include "../Class_Utils/baselib.hpp"
 #include "Window.hpp"
 
 Window::Window(int width, int height, const char* text, Color color)
@@ -24,34 +24,34 @@ bool Window::is_open() const {
 }
 
 bool Window::poll_event(Event* event) {
-    bool result = this->__sfml_window.pollEvent(this->__poll_event);
+    bool result = this->__sfml_window.pollEvent(this->__sfml_poll_event);
     if (result == 0) return 0;
 
-    switch (this->__poll_event.type) {
+    switch (this->__sfml_poll_event.type) {
         case sf::Event::EventType::Closed:
             event->type = Event::Type::WINDOW_CLOSED;
             break;
         case sf::Event::EventType::MouseButtonPressed:
             event->type         = Event::Type::MOUSE_BUTTON_PRESSED;
-            event->mouse.pos    = event->__get_mouse_button_pos(this->__poll_event);
-            event->mouse.button = (Event::MouseEvent::Button_Type)this->__poll_event.mouseButton.button;
+            event->mouse.pos    = event->__get_mouse_button_pos(this->__sfml_poll_event);
+            event->mouse.button = (Event::MouseEvent::Button_Type)this->__sfml_poll_event.mouseButton.button;
 
             break;
         case sf::Event::EventType::MouseButtonReleased:
             event->type         = Event::Type::MOUSE_BUTTON_RELEASED;
-            event->mouse.pos    = event->__get_mouse_button_pos(this->__poll_event);
-            event->mouse.button = (Event::MouseEvent::Button_Type)this->__poll_event.mouseButton.button;
+            event->mouse.pos    = event->__get_mouse_button_pos(this->__sfml_poll_event);
+            event->mouse.button = (Event::MouseEvent::Button_Type)this->__sfml_poll_event.mouseButton.button;
 
             break;
         
         case sf::Event::EventType::MouseMoved:
             event->type      = Event::Type::MOUSE_MOVED;
-            event->mouse.pos = event->__get_mouse_move_pos(this->__poll_event);
+            event->mouse.pos = event->__get_mouse_move_pos(this->__sfml_poll_event);
 
             break;
         
         default:
-            LOG1(printf(RED "Unassembled Event. EventType: %d\n" NATURAL, this->__poll_event.type););
+            LOG1(printf(RED "Unassembled Event. EventType: %d\n" NATURAL, this->__sfml_poll_event.type););
             break;
     }
 

@@ -9,6 +9,8 @@
 #include "../Class_Drawable/Drawable.hpp"
 #include "../Class_Point/Point.hpp"
 
+// TODO color parameter
+
 class CoordinateSystem;
 
 class Line : public Drawable {

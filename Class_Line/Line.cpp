@@ -2,9 +2,9 @@
 // Created by IvanBrekman on 16.09.2022
 //
 
-#include <math.h>
+#include <cmath>
 
-#include "../config/baselib.hpp"
+#include "../Class_Utils/baselib.hpp"
 
 #include "Line.hpp"
 

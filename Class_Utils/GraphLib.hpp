@@ -12,3 +12,5 @@
 #include "Line.hpp"
 #include "Vector.hpp"
 #include "CoordinateSystem.hpp"
+#include "Time.hpp"
+#include "Figures.hpp"

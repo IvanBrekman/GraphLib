@@ -7,6 +7,8 @@
 #include "../Class_Line/Line.hpp"
 #include "../Class_Point/Point.hpp"
 
+// TODO color parameter
+
 class Vector : public Line {
     public:
         enum Normal_Type {
@@ -33,17 +35,21 @@ class Vector : public Line {
         Vector operator  =(const Vector&  vector);
         Vector operator +=(const Point2D& point);
         Vector operator *=(double scalar);
+        Vector operator /=(double scalar);
 
         Vector operator +(const Vector& vector) const;
         Vector operator -(const Vector& vector) const;
         Vector operator *(double scalar)        const;
+        Vector operator /(double scalar)        const;
         Vector operator -()                     const;
 
-        Line to_line()  const;
+        Line to_line()      const;
+
+        Point2D normalize() const;
 
         void move_to(Point2D new_start);
-
+        void resize(double new_size);
+        void rotate(double angle);
         void draw(Window& window, const CoordinateSystem& system) override;
-
         void dump()                             const;
 };

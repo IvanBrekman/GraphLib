@@ -8,6 +8,9 @@
 
 #include "../Class_Color/Color.hpp"
 
+// TODO overload draw
+// TODO color parameter
+
 class Window;
 class CoordinateSystem;
 

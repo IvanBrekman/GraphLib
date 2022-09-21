@@ -14,6 +14,7 @@
 
 class Window {
     friend class Line;
+    friend class Figure;
     friend class Drawable;
 
     public:
@@ -29,7 +30,7 @@ class Window {
         Color color;
 
     private:
-        sf::Event           __poll_event;
+        sf::Event           __sfml_poll_event;
         sf::RenderWindow    __sfml_window;
         CoordinateSystem    __coordinate_system;
 
