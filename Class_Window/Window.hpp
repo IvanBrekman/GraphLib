@@ -43,6 +43,8 @@ class Window {
 
         std::vector <Drawable*>* objects();
 
+        CoordinateSystem* get_system();
+
         void set_coordinate_system     (CoordinateSystem system);
         void set_coordinate_system_type(Coordinate_System_Type type);
         void draw_window_coordinate_system();

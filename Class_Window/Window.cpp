@@ -62,6 +62,10 @@ std::vector <Drawable*>* Window::objects() {
     return &this->__coordinate_system.objects;
 }
 
+CoordinateSystem* Window::get_system() {
+    return &this->__coordinate_system;
+}
+
 void Window::set_coordinate_system(CoordinateSystem system) {
     system.objects = this->__coordinate_system.objects;
 

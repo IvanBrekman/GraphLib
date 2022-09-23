@@ -9,6 +9,10 @@
 #include "Figures.hpp"
 
 // ======================================== Figure ========================================
+void Figure::move_to(Point2D shift) {
+    this->start_point += shift;
+}
+
 void Figure::set_figure_color(Color fill_color, Color outline_color, double width) {
     this->fill_color    = fill_color;
     this->outline_color = outline_color;
@@ -42,6 +46,10 @@ Point2D Circle::center() {
     return this->centered ? this->start_point : (this->start_point + Point2D(radius, radius));
 }
 
+bool Circle::contains(Point2D point) {
+    return (pow(point.x - this->center().x, 2) + pow(point.y - this->center().y, 2)) <= pow(this->radius, 2);
+}
+
 void Circle::draw(Window& window, const CoordinateSystem& system) {
     double shift = sqrt(pow(this->radius, 2) + (this->radius, 2));
 
@@ -68,6 +76,14 @@ Point2D Rectangle::center() {
     return this->start_point + Point2D(this->width / 2, this->height / 2);
 }
 
+bool Rectangle::contains(Point2D point) {
+    Point2D min_point = this->start_point;
+    Point2D max_point = min_point + Point2D(this->width, this->height);
+
+    return (min_point.x <= point.x && point.x <= max_point.x) &&
+           (min_point.y <= point.y && point.y <= max_point.y);
+}
+
 void Rectangle::draw(Window& window, const CoordinateSystem& system) {
     Point2D pixel = system.point_to_pixel(this->start_point);
     if (system.axis_y_direction == CoordinateSystem::AxisY_Direction::UP)   pixel.y -= this->height;
@@ -81,6 +97,34 @@ void Rectangle::draw(Window& window, const CoordinateSystem& system) {
 RegularPolygon::RegularPolygon(Point2D start_point, double radius, double v_amount, bool centered)
 : Circle(start_point, radius, centered), vertex_amount(v_amount) {
     this->_sfml_shape.setPointCount(v_amount);
+}
+
+bool RegularPolygon::contains(Point2D point) {
+    int v_size = this->vertex_amount;
+
+    bool contains = false;
+
+    int j = v_size - 1;
+
+    point -= start_point;
+
+    for (int i = 0; i < v_size; i++) {
+        sf::Vector2f vector_pi = this->_sfml_shape.getPoint(i);
+        sf::Vector2f vector_pj = this->_sfml_shape.getPoint(j);
+
+        Point2D pi = Point2D(vector_pi.x, vector_pi.y);
+        Point2D pj = Point2D(vector_pj.x, vector_pj.y);
+
+        if (
+            ((pi.y < point.y && point.y <= pj.y) || (pj.y < point.y && point.y <= pi.y)) &&
+            ((pi.x + (point.y - pi.y) / (pj.y - pi.y) * (pj.x - pi.x)) < point.x)
+           ) {
+            contains ^= 1;
+        }
+        j = i;
+    }
+
+    return contains;
 }
 // ========================================================================================
 
@@ -108,6 +152,33 @@ Point2D Polygon::center() {
     return this->__vertexes.at(0);
 }
 
+bool Polygon::contains(Point2D point) {
+    std::vector <Point2D> v      = this->__vertexes;
+    int                   v_size = v.size();
+
+    bool contains = false;
+
+    int j = v_size - 1;
+
+    for (int i = 0; i < v_size; i++) {
+        if (
+            ((v.at(i).y < point.y && point.y <= v.at(j).y) || (v.at(j).y < point.y && point.y <= v.at(i).y)) &&
+            ((v.at(i).x + (point.y - v.at(i).y) / (v.at(j).y - v.at(i).y) * (v.at(j).x - v.at(i).x)) < point.x)
+           ) {
+            contains ^= 1;
+        }
+        j = i;
+    }
+
+    return contains;
+}
+
+void Polygon::move_to(Point2D shift) {
+    for (int i = 0; i < this->__vertexes.size(); i++) {
+        this->__vertexes.at(i) += shift;
+    }
+}
+
 void Polygon::draw(Window& window, const CoordinateSystem& system) {
     int i = 0;
     for (Point2D point : this->__vertexes) {
@@ -129,6 +200,15 @@ Ellipse::Ellipse(Point2D start_point, Point2D radius, bool centered)
 
 Point2D Ellipse::center() {
     return this->centered ? this->start_point : (this->start_point + this->radius);
+}
+
+bool Ellipse::contains(Point2D point) {
+    point -= this->center();
+    return (pow(point.x, 2) / pow(this->radius.x, 2) + pow(point.y, 2) / pow(this->radius.y, 2)) <= 1;
+}
+
+void Ellipse::move_to(Point2D shift) {
+    Figure::move_to(shift);
 }
 
 void Ellipse::draw(Window& window, const CoordinateSystem& system) {

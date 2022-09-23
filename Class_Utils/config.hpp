@@ -4,4 +4,4 @@
 
 #pragma once
 
-#define LOG_PRINTF 3
+#define LOG_PRINTF 0

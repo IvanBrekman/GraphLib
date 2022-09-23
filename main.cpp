@@ -1,9 +1,11 @@
 #include "GraphLib.hpp"
+#include "baselib.hpp"
 
 int main(void) {
-    Window window(600, 600);
+    Window window(1000, 600);
     window.set_coordinate_system_type(Window::Coordinate_System_Type::LEFT_BOTTOM);
 
+    // ======================================== Window Objects ========================================
     Vector second_hand(0, 0, 0, 100);
     second_hand.set_color(Color::Red);
 
@@ -21,17 +23,19 @@ int main(void) {
     system2.show();
     system2.append_object(&vector);
 
+    Button button(40, 32, 100, 50, Button::Button_Type::DEFAULT);
+
     window.append_object(&system1);
     window.append_object(&system2);
+    window.append_object(&button);
+    // ================================================================================================
 
-    Ellipse rect(100, 100, 50, 100, true);
-    rect.center().dump();
-    rect.set_figure_color(Color::Red, Color::Blue, 10);
-
+    bool update_clock = true;
     Event::MouseEvent::Button_Type button_presed = Event::MouseEvent::Button_Type::NONE;
 
     Clock clock(15);
     while (window.is_open()) {
+        // ==================== Window Events ====================
         Event event;
         while (window.poll_event(&event)) {
             switch (event.type) {
@@ -45,33 +49,40 @@ int main(void) {
                 
                 case Event::MOUSE_BUTTON_RELEASED:
                     button_presed = Event::MouseEvent::Button_Type::NONE;
+                    button.set_button_released();
                     break;
             }
 
             if (button_presed == Event::MouseEvent::Button_Type::LEFT  && (event.type == Event::MOUSE_MOVED || event.type == Event::MOUSE_BUTTON_PRESSED)) {
                 vector.end = system2.pixel_to_point(event.mouse.pos);
+
+                if (button.is_pressed(window.get_system()->pixel_to_point(event.mouse.pos))) {
+                    button.set_button_pressed();
+                    update_clock ^= 1;
+                }
             }
 
             if (button_presed == Event::MouseEvent::Button_Type::RIGHT && (event.type == Event::MOUSE_MOVED || event.type == Event::MOUSE_BUTTON_PRESSED)) {
                 vector.move_to(system2.pixel_to_point(event.mouse.pos));
             }
         }
+        // =======================================================
 
-        if (clock.get_elapsed_seconds() > 1) {
+        if (update_clock && clock.get_elapsed_seconds() > 1) {
             second_hand.rotate(-360.0 / (60     ));
             minute_hand.rotate(-360.0 / (60 * 60));
 
             clock.restart();
         }
 
+        // ==================== Drawing Objects ====================
         window.clear();
 
         window.draw_window_coordinate_system();
         window.draw_added_objects();
 
-        rect.draw(window, system1);
-
         window.display();
+        // =========================================================
     }
 
     return 0;
