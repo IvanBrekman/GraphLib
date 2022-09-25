@@ -15,3 +15,4 @@
 #include "Time.hpp"
 #include "Figures.hpp"
 #include "Button.hpp"
+#include "Text.hpp"

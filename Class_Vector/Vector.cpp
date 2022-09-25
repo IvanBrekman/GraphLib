@@ -15,9 +15,9 @@ Vector Vector::get_normal(Normal_Type type) const {
 }
 
 Vector Vector::operator =(const Vector& vector) {
-    this->start = vector.start;
-    this->end   = vector.end;
-    this->color = vector.color;
+    this->start      = vector.start;
+    this->end        = vector.end;
+    this->fill_color = vector.fill_color;
 
     return vector;
 }
@@ -112,8 +112,8 @@ void Vector::draw(Window& window, const CoordinateSystem& system) {
     Line l_arrow = Vector(( normal_vector * this->__DRAW_NORMAL_COEF - *this) * this->__DRAW_ARROW_COEF).to_line();
     Line r_arrow = Vector((-normal_vector * this->__DRAW_NORMAL_COEF - *this) * this->__DRAW_ARROW_COEF).to_line();
 
-    l_arrow.set_color(this->color);
-    r_arrow.set_color(this->color);
+    l_arrow.set_fill_color(this->fill_color);
+    r_arrow.set_fill_color(this->fill_color);
 
     l_arrow.draw(window, system);
     r_arrow.draw(window, system);

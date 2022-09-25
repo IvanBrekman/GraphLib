@@ -5,6 +5,8 @@
 #include <cassert>
 
 #include "../Class_Utils/baselib.hpp"
+#include "../Class_Button/Button.hpp"
+
 #include "Window.hpp"
 
 Window::Window(int width, int height, const char* text, Color color)
@@ -36,11 +38,24 @@ bool Window::poll_event(Event* event) {
             event->mouse.pos    = event->__get_mouse_button_pos(this->__sfml_poll_event);
             event->mouse.button = (Event::MouseEvent::Button_Type)this->__sfml_poll_event.mouseButton.button;
 
+            for (Button* button : this->__buttons) {
+                if (button->is_pressed(this->__coordinate_system.pixel_to_point(event->mouse.pos))) {
+                    button->set_button_pressed();
+                }
+            }
+
             break;
         case sf::Event::EventType::MouseButtonReleased:
             event->type         = Event::Type::MOUSE_BUTTON_RELEASED;
             event->mouse.pos    = event->__get_mouse_button_pos(this->__sfml_poll_event);
             event->mouse.button = (Event::MouseEvent::Button_Type)this->__sfml_poll_event.mouseButton.button;
+
+            for (Button* button : this->__buttons) {
+                if (button->is_pressed(this->__coordinate_system.pixel_to_point(event->mouse.pos))) {
+                    printf("released!!!\n");
+                    button->set_button_released();
+                }
+            }
 
             break;
         
@@ -48,6 +63,14 @@ bool Window::poll_event(Event* event) {
             event->type      = Event::Type::MOUSE_MOVED;
             event->mouse.pos = event->__get_mouse_move_pos(this->__sfml_poll_event);
 
+            for (Button* button : this->__buttons) {
+                if (button->is_pressed(this->__coordinate_system.pixel_to_point(event->mouse.pos))) {
+                    button->set_button_hovered();
+                } else {
+                    button->set_button_released();
+                }
+            }
+            
             break;
         
         default:
@@ -112,11 +135,17 @@ void Window::close() {
 }
 
 void Window::append_object(Drawable* object, int index) {
+    if (typeid(*object) == typeid(Button)) {
+        printf("Button!\n");
+        this->__buttons.push_back((Button*)object);
+    }
     this->__coordinate_system.append_object(object, index);
 }
 
 void Window::extend_objects(std::vector <Drawable*> objects, int index) {
-    this->__coordinate_system.extend_objects(objects, index);
+    for (Drawable* object : objects) {
+        this->append_object(object, index);
+    }
 }
 
 void Window::draw(Drawable* object) {

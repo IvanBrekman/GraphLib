@@ -11,26 +11,26 @@
 #include "../Class_Window/Window.hpp"
 
 class Figure : public Drawable {
-    using Drawable::set_color;
-    
     public:
         Point2D start_point;
 
-        Color  fill_color;
         Color  outline_color;
 
         double outline_width = 0;
     
     public:
-        Figure() : Figure(Point2D(0, 0)) {}
-        Figure(Point2D start_point) : start_point(start_point) {};
+        Figure()
+        : Figure(Point2D(0, 0)) {}
+
+        Figure(Point2D start_point)
+        : start_point(start_point) {};
 
         virtual Point2D center  () = 0;
         virtual bool    contains(Point2D point) = 0;
         virtual void    move_to (Point2D shift);
 
-        void set_figure_color(Color fill_color, Color outline_color, double width=1);
-        void set_figure_color(Color color) { set_figure_color(color, color, 0); }
+        void set_fill_color(Color fill_color, Color outline_color, double width=1);
+        void set_fill_color(Color color) { this->set_fill_color(color, color, 0); }
 
     protected:
         sf::RenderWindow* _get_sfml_window(Window& window) { return &window.__sfml_window; }

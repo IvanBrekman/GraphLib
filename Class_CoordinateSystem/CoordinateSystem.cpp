@@ -6,8 +6,8 @@
 
 CoordinateSystem::CoordinateSystem(Point2D center, AxisY_Direction diry, AxisX_Direction dirx)
 : center(center), axis_x_direction(dirx), axis_y_direction(diry), Drawable() {
-    this->hidden = true;
-    this->color  = Color::Blue;
+    this->hidden     = true;
+    this->fill_color = Color::Blue;
 
     double x = dirx * CoordinateSystem::__DRAW_AXIS_LENGTH;
     double y = diry * CoordinateSystem::__DRAW_AXIS_LENGTH;
@@ -15,8 +15,8 @@ CoordinateSystem::CoordinateSystem(Point2D center, AxisY_Direction diry, AxisX_D
     this->__axis_x = Vector(center - Point2D(x, 0), center + Point2D(x, 0));
     this->__axis_y = Vector(center - Point2D(0, y), center + Point2D(0, y));
 
-    this->__axis_x.set_color(this->color);
-    this->__axis_y.set_color(this->color);
+    this->__axis_x.set_fill_color(this->fill_color);
+    this->__axis_y.set_fill_color(this->fill_color);
 }
 
 Point2D CoordinateSystem::point_to_pixel(Point2D point) const {
@@ -31,6 +31,18 @@ Point2D CoordinateSystem::pixel_to_point(Point2D pixel) const {
     double new_y = this->axis_y_direction * (pixel.y - center.y);
 
     return Point2D(new_x, new_y);
+}
+
+void CoordinateSystem::hide() {
+    for (Drawable* object : objects) {
+        object->hide();
+    }
+}
+
+void CoordinateSystem::show() {
+    for (Drawable* object : objects) {
+        object->show();
+    }
 }
 
 void CoordinateSystem::append_object(Drawable* object, int index) {

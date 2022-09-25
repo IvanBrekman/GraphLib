@@ -21,5 +21,7 @@ class Point2D {
         Point2D operator *(double scalar)           const;
         Point2D operator -()                        const;
 
+        sf::Vector2f to_sfml_vector()               const;
+
         void dump() const;
 };

@@ -43,13 +43,14 @@ class Vector : public Line {
         Vector operator /(double scalar)        const;
         Vector operator -()                     const;
 
-        Line to_line()      const;
+        Line    to_line()                       const;
 
-        Point2D normalize() const;
+        Point2D normalize()                     const;
 
         void move_to(Point2D new_start);
         void resize(double new_size);
         void rotate(double angle);
+        
         void draw(Window& window, const CoordinateSystem& system) override;
         void dump()                             const;
 };

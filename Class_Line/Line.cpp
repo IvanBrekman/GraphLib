@@ -27,8 +27,8 @@ void Line::draw(Window& window, const CoordinateSystem& system) {
         sf::Vertex(sf::Vector2f(line.end.x,   line.end.y)),
     };
 
-    vert_line[0].color = this->color;
-    vert_line[1].color = this->color;
+    vert_line[0].color = this->fill_color;
+    vert_line[1].color = this->fill_color;
 
     window.__sfml_window.draw(vert_line, 2, sf::Lines);
 }

@@ -12,10 +12,13 @@
 #include "../Class_Event/Event.hpp"
 #include "../Class_CoordinateSystem/CoordinateSystem.hpp"
 
+class Button;
+
 class Window {
     friend class Line;
     friend class Figure;
     friend class Drawable;
+    friend class Text;
 
     public:
         enum Coordinate_System_Type {
@@ -30,9 +33,10 @@ class Window {
         Color color;
 
     private:
-        sf::Event           __sfml_poll_event;
-        sf::RenderWindow    __sfml_window;
-        CoordinateSystem    __coordinate_system;
+        sf::Event             __sfml_poll_event;
+        sf::RenderWindow      __sfml_window;
+        CoordinateSystem      __coordinate_system;
+        std::vector <Button*> __buttons;
 
     public:
         Window(int width, int height, const char* text="GraphLib Window", Color color=Color::White);

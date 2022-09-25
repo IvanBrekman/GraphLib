@@ -3,6 +3,7 @@
 //
 
 #include <cstdio>
+#include <SFML/Graphics.hpp>
 
 #include "Point.hpp"
 
@@ -39,6 +40,10 @@ Point2D Point2D::operator *(double scalar) const {
 
 Point2D Point2D::operator -() const {
     return Point2D(-this->x, -this->y);
+}
+
+sf::Vector2f Point2D::to_sfml_vector() const {
+    return sf::Vector2f(this->x, this->y);
 }
 
 void Point2D::dump() const {

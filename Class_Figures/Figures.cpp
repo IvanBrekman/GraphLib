@@ -13,8 +13,8 @@ void Figure::move_to(Point2D shift) {
     this->start_point += shift;
 }
 
-void Figure::set_figure_color(Color fill_color, Color outline_color, double width) {
-    this->fill_color    = fill_color;
+void Figure::set_fill_color(Color fill_color, Color outline_color, double width) {
+    Drawable::set_fill_color(fill_color);
     this->outline_color = outline_color;
     this->outline_width = width;
 }

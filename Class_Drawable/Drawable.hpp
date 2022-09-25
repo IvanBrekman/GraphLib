@@ -16,18 +16,18 @@ class CoordinateSystem;
 
 class Drawable {
     public:
-        Color color;
+        Color fill_color;
         bool  hidden=false;
 
     public:
         Drawable()
-        : color(Color::Black) {};
+        : fill_color(Color::Black) {};
 
-        virtual void draw(Window& window, const CoordinateSystem& system) = 0;
+        virtual void set_fill_color(Color color) { this->fill_color = color; }
+
+        virtual void show() { this->hidden = false; }
+        virtual void hide() { this->hidden = true;  }
+
+        virtual void draw          (Window& window, const CoordinateSystem& system) = 0;
         virtual void draw_on_window(Window& window);
-
-        void set_color(Color color) { this->color = color; }
-
-        void show() { this->hidden = false; }
-        void hide() { this->hidden = true;  }
 };
