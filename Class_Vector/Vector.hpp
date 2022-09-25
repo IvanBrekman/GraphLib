@@ -47,10 +47,11 @@ class Vector : public Line {
 
         Point2D normalize()                     const;
 
-        void move_to(Point2D new_start);
         void resize(double new_size);
         void rotate(double angle);
+        void dump()                             const;
         
         void draw(Window& window, const CoordinateSystem& system) override;
-        void dump()                             const;
+
+        void move_to_shift(Point2D shift)                         override;
 };

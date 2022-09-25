@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <SFML/Graphics.hpp>
+
 class Point2D {
     public:
         double x;

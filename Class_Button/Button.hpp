@@ -5,10 +5,12 @@
 #pragma once
 
 #include "../Class_Drawable/Drawable.hpp"
-#include "../Class_Figures/Figures.hpp"
+#include "../Class_Moveable/Moveable.hpp"
 #include "../Class_Text/Text.hpp"
 
-class Button : public Drawable {
+class Figure;
+
+class Button : public Drawable, public Moveable {
     public:
         enum Button_Type {
             DEFAULT = 0,
@@ -17,40 +19,33 @@ class Button : public Drawable {
         };
 
         Button_Type type;
-
-        const char* text;
-
-        bool    centered = false;
-
-        Point2D start_point;
-        double  width;
-        double  height;
+        bool        centered = false;
     
     private:
         Text                    __text;
         Figure*                 __shape;
         Color                   __shape_color;
 
-        std::vector <Drawable*> __drawing_objects;
+        const double            __EXTRA_WIDTH       = 30;
+        const double            __EXTRA_HEIGHT      = 15;
+        const double            __EXTRA_TEXT_COEF   = 0.3;
     
     public:
-        Button(Point2D start_point, const char* text, int text_size, Button_Type type=Button_Type::DEFAULT);
-        Button(double x, double y,  const char* text, int text_size, Button_Type type=Button_Type::DEFAULT)
+        Button(Point2D main_point, const char* text, int text_size, Button_Type type=Button_Type::DEFAULT);
+        Button(double x, double y, const char* text, int text_size, Button_Type type=Button_Type::DEFAULT)
         : Button(Point2D(x, y), text, text_size, type) {}
+
+        double width();
+        double height();
 
         bool is_pressed(Point2D point);
 
         Point2D center();
-
-        void move_to(Point2D shift);
-
-        void hide() override;
-
         void set_button_type(Button_Type type);
 
         void set_button_pressed();
         void set_button_released();
         void set_button_hovered();
 
-        void draw(Window& window, const CoordinateSystem& system);
+        void draw(Window& window, const CoordinateSystem& system) override;
 };

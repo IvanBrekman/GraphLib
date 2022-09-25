@@ -5,50 +5,47 @@
 #include <iostream>
 
 #include "../Class_Utils/baselib.hpp"
+#include "../Class_Figures/Figures.hpp"
 
 #include "Button.hpp"
 
-Button::Button(Point2D start_point, const char* text, int text_size, Button::Button_Type type)
-: start_point(start_point), text(text), type(type), __text(start_point, text, text_size) {
-    this->width  = this->__text.get_width()  + 40;
-    this->height = this->__text.get_height() + 10;
-
-    this->__text.move_to(Point2D(20, -13));
+Button::Button(Point2D main_point, const char* text, int text_size, Button::Button_Type type)
+: Moveable(main_point), type(type), __text(main_point, text, text_size) {
+    ASSERT_IF(VALID_PTR(text), "Invalid text ptr", );
 
     this->set_button_type(type);
 }
 
+double Button::width() {
+    return this->__text.get_width()  + Button::__EXTRA_WIDTH;
+}
+
+double Button::height() {
+    return this->__text.get_height() + Button::__EXTRA_HEIGHT;
+}
+
 bool Button::is_pressed(Point2D point) {
+    if (this->hidden) return false;
+    
     return this->__shape->contains(point);
 }
 
 Point2D Button::center() {
-    if (this->centered) return this->start_point;
+    if (this->centered) return this->main_point;
 
-    return this->start_point + Point2D(this->width / 2, this->height / 2);
-}
-
-void Button::move_to(Point2D shift) {
-    this->start_point += shift;
-    this->set_button_type(this->type);
-}
-
-void Button::hide() {
-    this->set_button_released();
-    Drawable::hide();
+    return this->main_point + Point2D(this->width() / 2, this->height() / 2);
 }
 
 void Button::set_button_type(Button::Button_Type type) {
     switch (type) {
         case Button::Button_Type::DEFAULT:
-            this->__shape = new Rectangle(this->start_point, this->width, this->height);
+            this->__shape = new Rectangle(this->main_point, this->width(), this->height());
             break;
         case Button::Button_Type::ELLIPSE:
-            this->__shape = new Ellipse(this->start_point, Point2D(this->width / 2, this->height / 2));
+            this->__shape = new Ellipse(this->main_point, Point2D(this->width() / 2, this->height() / 2));
             break;
         case Button::Button_Type::CIRCLE:
-            this->height = this->width;
-            this->__shape = new Circle(this->start_point, this->width / 2);
+            this->__shape = new Circle(this->main_point, this->width() / 2);
             break;
         
         default:
@@ -58,11 +55,6 @@ void Button::set_button_type(Button::Button_Type type) {
 
     this->__shape_color = Color::White;
     this->__shape->set_fill_color(this->__shape_color, Color::Black, 5);
-
-    this->__drawing_objects.clear();
-
-    this->__drawing_objects.push_back(this->__shape);
-    this->__drawing_objects.push_back(&this->__text);
 }
 
 void Button::set_button_pressed() {
@@ -83,7 +75,11 @@ void Button::set_button_hovered() {
 void Button::draw(Window& window, const CoordinateSystem& system) {
     if (this->hidden) return;
 
-    for (Drawable* object : this->__drawing_objects) {
-        object->draw(window, system);
-    }
+    this->__shape->draw(window, system);
+
+    Point2D shift = Point2D(Button::__EXTRA_WIDTH / 2, -this->__text.get_height() * Button::__EXTRA_TEXT_COEF + Button::__EXTRA_HEIGHT / 2);
+
+    this->__text.move_to_shift( shift);
+    this->__text.draw(window, system);
+    this->__text.move_to_shift(-shift);
 }

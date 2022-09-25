@@ -7,17 +7,17 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 
+#include "../Class_Event/Event.hpp"
 #include "../Class_Color/Color.hpp"
 #include "../Class_Drawable/Drawable.hpp"
-#include "../Class_Event/Event.hpp"
 #include "../Class_CoordinateSystem/CoordinateSystem.hpp"
 
 class Button;
 
 class Window {
+    friend class Drawable;
     friend class Line;
     friend class Figure;
-    friend class Drawable;
     friend class Text;
 
     public:

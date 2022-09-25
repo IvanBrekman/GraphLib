@@ -17,7 +17,7 @@ int main(void) {
     Button show_view3_button(0,    0, "Sphere",             30);
     Button exit_button      (0, -100, "Exit",               30);
 
-    std::vector <Drawable*> view1 = { &show_view2_button, &show_view3_button, &exit_button };
+    std::vector <Drawable*> view1 = {&show_view2_button, &show_view3_button, &exit_button };
     // ========================================================================================
 
     // ======================================== View 2 ========================================
@@ -33,7 +33,7 @@ int main(void) {
     system1.set_draw_status(true);
     system1.extend_objects({&second_hand, &minute_hand});
 
-    CoordinateSystem system2(800, 300, CoordinateSystem::AxisY_Direction::DOWN, CoordinateSystem::AxisX_Direction::RIGHT);
+    CoordinateSystem system2(900, 300, CoordinateSystem::AxisY_Direction::DOWN, CoordinateSystem::AxisX_Direction::LEFT);
     system2.set_draw_status(true);
     system2.append_object(&vector);
 
@@ -102,15 +102,11 @@ int main(void) {
             }
 
             if (button_presed == Event::MouseEvent::Button_Type::LEFT  && (event.type == Event::MOUSE_MOVED || event.type == Event::MOUSE_BUTTON_PRESSED)) {
-                if (vector.hidden == false) {
-                    vector.end = system2.pixel_to_point(event.mouse.pos);
-                }
+                vector.end_point = system2.pixel_to_point(event.mouse.pos);
             }
 
             if (button_presed == Event::MouseEvent::Button_Type::RIGHT && (event.type == Event::MOUSE_MOVED || event.type == Event::MOUSE_BUTTON_PRESSED)) {
-                if (vector.hidden == false) {
-                    vector.move_to(system2.pixel_to_point(event.mouse.pos));
-                }
+                vector.move_to_point(system2.pixel_to_point(event.mouse.pos));
             }
         }
         // =======================================================

@@ -28,6 +28,8 @@
 #include <cerrno>
 #include <cassert>
 
+#define IS_INSTANCE(var, class_) dynamic_cast<class_>(var) != nullptr
+
 #define MAX(arg1, arg2) (arg1) > (arg2) ? (arg1) : (arg2)
 #define MIN(arg1, arg2) (arg1) < (arg2) ? (arg1) : (arg2)
 

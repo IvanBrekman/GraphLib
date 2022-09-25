@@ -4,8 +4,6 @@
 
 #pragma once
 
-#include <SFML/Graphics.hpp>
-
 #include "../Class_Color/Color.hpp"
 
 // TODO overload draw

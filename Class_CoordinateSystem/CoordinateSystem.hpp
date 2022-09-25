@@ -46,18 +46,18 @@ class CoordinateSystem : public Drawable {
         Point2D point_to_pixel(Point2D point)   const;
         Point2D pixel_to_point(Point2D pixel)   const;
 
-        void hide() override;
-        void show() override;
-
-        void set_draw_status(bool need_to_draw) { this->hidden = !need_to_draw; }
+        void set_draw_status(bool need_to_draw);
 
         void append_object (Drawable*               object,  int index=CoordinateSystem::__LAST_INDEX);
         void extend_objects(std::vector <Drawable*> objects, int index=CoordinateSystem::__LAST_INDEX);
 
-        void draw_on_window    (Window& window) override;
         void draw_added_objects(Window& window);
 
         void dump()                             const;
+
+        void hide()                                               override;
+        void show()                                               override;
+        void draw_on_window(Window& window)                       override;
 
     private:
         void draw(Window& window, const CoordinateSystem& system) override;

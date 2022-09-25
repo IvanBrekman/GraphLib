@@ -9,30 +9,29 @@
 
 class Window;
 
-class Text : public Drawable {
-    public:
-        const char* text;
-        double      size;
-
-        Point2D     start_point;
-    
+class Text : public Drawable, public Moveable {
     private:
         sf::Text __sfml_text;
         sf::Font __sfml_font;
+
+        const char* __str_text;
     
     public:
-        Text(Point2D start_point, const char* text, int size=30);
-        Text(double x, double y,  const char* text, int size=30)
+        Text(Point2D main_point, const char* text, int size=30);
+        Text(double x, double y, const char* text, int size=30)
         : Text(Point2D(x, y), text, size) {}
-
-        void move_to(Point2D shift);
-        void set_fill_color(Color color) override;
         
         void set_text(const char* text);
         void set_size(double size);
 
+        const char* get_text();
+        int         get_size();
+
+
+
         double get_width();
         double get_height();
 
-        void draw(Window& window, const CoordinateSystem& system);
+        void set_fill_color(Color color)                          override;
+        void draw(Window& window, const CoordinateSystem& system) override;
 };

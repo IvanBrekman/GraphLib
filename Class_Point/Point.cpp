@@ -3,7 +3,6 @@
 //
 
 #include <cstdio>
-#include <SFML/Graphics.hpp>
 
 #include "Point.hpp"
 

@@ -11,6 +11,8 @@
 
 Window::Window(int width, int height, const char* text, Color color)
 : width(width), height(height), color(color) {
+    ASSERT_IF(VALID_PTR(text), "Ivalid text ptr", );
+
     this->__sfml_window.create(sf::VideoMode(width, height), text);
 
     this->set_coordinate_system_type(Coordinate_System_Type::LEFT_UP);
@@ -26,6 +28,8 @@ bool Window::is_open() const {
 }
 
 bool Window::poll_event(Event* event) {
+    ASSERT_IF(VALID_PTR(event), "Invalid event ptr", false);
+
     bool result = this->__sfml_window.pollEvent(this->__sfml_poll_event);
     if (result == 0) return 0;
 
@@ -52,7 +56,6 @@ bool Window::poll_event(Event* event) {
 
             for (Button* button : this->__buttons) {
                 if (button->is_pressed(this->__coordinate_system.pixel_to_point(event->mouse.pos))) {
-                    printf("released!!!\n");
                     button->set_button_released();
                 }
             }
@@ -135,9 +138,10 @@ void Window::close() {
 }
 
 void Window::append_object(Drawable* object, int index) {
-    if (typeid(*object) == typeid(Button)) {
-        printf("Button!\n");
-        this->__buttons.push_back((Button*)object);
+    ASSERT_IF(VALID_PTR(object), "Invalid object ptr", );
+    
+    if (IS_INSTANCE(object, Button*)) {
+        this->__buttons.push_back(dynamic_cast<Button*>(object));
     }
     this->__coordinate_system.append_object(object, index);
 }
@@ -149,9 +153,11 @@ void Window::extend_objects(std::vector <Drawable*> objects, int index) {
 }
 
 void Window::draw(Drawable* object) {
-    if (typeid(*object) == typeid(CoordinateSystem)) {
-        ((CoordinateSystem*)object)->draw_on_window(*this);
-        ((CoordinateSystem*)object)->draw_added_objects(*this);
+    ASSERT_IF(VALID_PTR(object), "Invalid object ptr", );
+    
+    if (IS_INSTANCE(object, CoordinateSystem*)) {
+        (dynamic_cast<CoordinateSystem*>(object))->draw_on_window(*this);
+        (dynamic_cast<CoordinateSystem*>(object))->draw_added_objects(*this);
     } else {
         object->draw(*this, this->__coordinate_system);
     }
