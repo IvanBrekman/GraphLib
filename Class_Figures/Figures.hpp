@@ -19,10 +19,10 @@ class Figure : public Drawable, public Moveable {
     
     public:
         Figure()
-        : Figure(Point2D(0, 0)) {}
+        : Figure(Point2D(0, 0), false) {}
 
-        Figure(Point2D main_point)
-        : Moveable(main_point) {}
+        Figure(Point2D main_point, bool centered)
+        : Moveable(main_point), centered(centered) {}
 
         void set_fill_color(Color fill_color, Color outline_color, double width=1);
         void set_fill_color(Color color) { this->set_fill_color(color, color, 0); }
@@ -92,6 +92,8 @@ class RegularPolygon : public Circle {
 
 // TODO написать приватный метод в Point2D.__sfml_vector2f(), изза чего будет много friend;
 class Polygon : public Figure {
+    using Figure::set_centered;
+
     protected:
         sf::ConvexShape _sfml_shape;
     
@@ -114,7 +116,7 @@ class Polygon : public Figure {
         void move_to_shift(Point2D shift)                         override;
     
     protected:
-        Polygon(Point2D main_point) : Figure(main_point) {}
+        Polygon(Point2D main_point, bool centered) : Figure(main_point, centered) {}
 };
 
 class Ellipse : public Polygon {
@@ -123,7 +125,6 @@ class Ellipse : public Polygon {
 
     public:
         Point2D radius;
-        bool    centered;
     
     private:
         static const int __POINTS_ON_DRAW = 100;

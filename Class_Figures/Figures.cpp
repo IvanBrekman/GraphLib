@@ -44,15 +44,14 @@ void Figure::_draw(Window& window, const CoordinateSystem& system, Point2D pixel
 
 // ======================================== Circle ========================================
 Circle::Circle(Point2D main_point, double radius, bool centered)
-: Figure(main_point), radius(radius) {
+: Figure(main_point, centered), radius(radius) {
     this->_sfml_shape = sf::CircleShape(radius, Circle::__POINTS_ON_DRAW);
 
     this->centered = centered;
-    if (centered) Circle::set_centered();
 }
 
 Point2D Circle::center() {
-    return this->centered ? this->main_point : (this->main_point + Point2D(radius, radius));
+    return this->centered ? this->main_point : (this->main_point + Point2D(this->radius, this->radius));
 }
 
 bool Circle::contains(Point2D point) {
@@ -61,12 +60,10 @@ bool Circle::contains(Point2D point) {
 
 void Circle::draw(Window& window, const CoordinateSystem& system) {
     if (this->hidden) return;
-    
-    double shift = sqrt(pow(this->radius, 2) + pow(this->radius, 2));
 
     Point2D min_point = this->main_point;
     if (this->centered) {
-        min_point = this->main_point - Point2D(shift, shift);
+        min_point = this->main_point - Point2D(this->radius, this->radius);
     }
     
     Point2D pixel = system.point_to_pixel(min_point);
@@ -79,16 +76,16 @@ void Circle::draw(Window& window, const CoordinateSystem& system) {
 
 // ======================================= Rectangle ======================================
 Rectangle::Rectangle(Point2D main_point, double width, double height)
-: Figure(main_point), width(width), height(height) {
+: Figure(main_point, false), width(width), height(height) {
     this->__sfml_shape = sf::RectangleShape(sf::Vector2f(width, height));
 }
 
 Point2D Rectangle::center() {
-    return this->main_point + Point2D(this->width / 2, this->height / 2);
+    return this->centered ? this->main_point : (this->main_point + Point2D(this->width / 2, this->height / 2));
 }
 
 bool Rectangle::contains(Point2D point) {
-    Point2D min_point = this->main_point;
+    Point2D min_point = this->centered ? (this->main_point - Point2D(this->width / 2, this->height / 2)) : this->main_point;
     Point2D max_point = min_point + Point2D(this->width, this->height);
 
     return (min_point.x <= point.x && point.x <= max_point.x) &&
@@ -97,8 +94,13 @@ bool Rectangle::contains(Point2D point) {
 
 void Rectangle::draw(Window& window, const CoordinateSystem& system) {
     if (this->hidden) return;
+
+    Point2D point = this->main_point;
+    if (this->centered) {
+        point = this->main_point - Point2D(this->width / 2, this->height / 2);
+    }
     
-    Point2D pixel = system.point_to_pixel(this->main_point);
+    Point2D pixel = system.point_to_pixel(point);
     if (system.axis_y_direction == CoordinateSystem::AxisY_Direction::UP)   pixel.y -= this->height;
     if (system.axis_x_direction == CoordinateSystem::AxisX_Direction::LEFT) pixel.x -= this->width;
 
@@ -207,7 +209,7 @@ void Polygon::move_to_shift(Point2D shift) {
 
 // ======================================= Ellipse ========================================
 Ellipse::Ellipse(Point2D main_point, Point2D radius, bool centered)
-: Polygon(main_point), radius(radius), centered(centered) {
+: Polygon(main_point, centered), radius(radius) {
     this->_sfml_shape.setPointCount(Ellipse::__POINTS_ON_DRAW);
 }
 

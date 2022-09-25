@@ -24,8 +24,8 @@ double Button::height() {
     return this->__text.get_height() + Button::__EXTRA_HEIGHT;
 }
 
-bool Button::is_pressed(Point2D point) {
-    if (this->hidden) return false;
+bool Button::is_pressed(Point2D point, Event::MouseEvent::Button_Type button) {
+    if (this->hidden || button != Event::MouseEvent::Button_Type::LEFT) return false;
     
     return this->__shape->contains(point);
 }
@@ -72,12 +72,25 @@ void Button::set_button_hovered() {
     this->__shape->set_fill_color(Color::Yellow, Color::Black, 5);
 }
 
+void Button::set_centered() {
+    if (this->hidden) return;
+
+    this->centered = true;
+}
+
 void Button::draw(Window& window, const CoordinateSystem& system) {
     if (this->hidden) return;
 
-    this->__shape->draw(window, system);
-
     Point2D shift = Point2D(Button::__EXTRA_WIDTH / 2, -this->__text.get_height() * Button::__EXTRA_TEXT_COEF + Button::__EXTRA_HEIGHT / 2);
+
+    if (this->centered) {
+        this->__shape->set_centered();
+
+        shift.x -= this->width()  / 2;
+        shift.y -= this->height() / 2;
+    }
+
+    this->__shape->draw(window, system);
 
     this->__text.move_to_shift( shift);
     this->__text.draw(window, system);

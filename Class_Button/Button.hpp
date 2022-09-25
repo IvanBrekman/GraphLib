@@ -6,6 +6,7 @@
 
 #include "../Class_Drawable/Drawable.hpp"
 #include "../Class_Moveable/Moveable.hpp"
+#include "../Class_Event/Event.hpp"
 #include "../Class_Text/Text.hpp"
 
 class Figure;
@@ -38,7 +39,7 @@ class Button : public Drawable, public Moveable {
         double width();
         double height();
 
-        bool is_pressed(Point2D point);
+        bool is_pressed(Point2D point, Event::MouseEvent::Button_Type button);
 
         Point2D center();
         void set_button_type(Button_Type type);
@@ -46,6 +47,8 @@ class Button : public Drawable, public Moveable {
         void set_button_pressed();
         void set_button_released();
         void set_button_hovered();
+
+        void set_centered();
 
         void draw(Window& window, const CoordinateSystem& system) override;
 };

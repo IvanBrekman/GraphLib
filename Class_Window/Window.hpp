@@ -13,6 +13,7 @@
 #include "../Class_CoordinateSystem/CoordinateSystem.hpp"
 
 class Button;
+class WindowView;
 
 class Window {
     friend class Drawable;
@@ -33,10 +34,12 @@ class Window {
         Color color;
 
     private:
-        sf::Event             __sfml_poll_event;
-        sf::RenderWindow      __sfml_window;
-        CoordinateSystem      __coordinate_system;
-        std::vector <Button*> __buttons;
+        sf::Event                   __sfml_poll_event;
+        sf::RenderWindow            __sfml_window;
+
+        CoordinateSystem            __coordinate_system;
+        std::vector <Button*>       __buttons;
+        std::vector <WindowView*>   __views;
 
     public:
         Window(int width, int height, const char* text="GraphLib Window", Color color=Color::White);
@@ -56,6 +59,10 @@ class Window {
         void clear();
         void display();
         void close();
+
+        void append_view (WindowView* view);
+        void extend_views(std::vector <WindowView*> views);
+        void show_view(WindowView* view);
 
         void append_object (Drawable*               object,  int index=CoordinateSystem::__LAST_INDEX);
         void extend_objects(std::vector <Drawable*> objects, int index=CoordinateSystem::__LAST_INDEX);

@@ -6,6 +6,7 @@
 
 #include "../Class_Utils/baselib.hpp"
 #include "../Class_Button/Button.hpp"
+#include "../Class_WindowView/WindowView.hpp"
 
 #include "Window.hpp"
 
@@ -43,7 +44,7 @@ bool Window::poll_event(Event* event) {
             event->mouse.button = (Event::MouseEvent::Button_Type)this->__sfml_poll_event.mouseButton.button;
 
             for (Button* button : this->__buttons) {
-                if (button->is_pressed(this->__coordinate_system.pixel_to_point(event->mouse.pos))) {
+                if (button->is_pressed(this->__coordinate_system.pixel_to_point(event->mouse.pos), event->mouse.button)) {
                     button->set_button_pressed();
                 }
             }
@@ -55,7 +56,7 @@ bool Window::poll_event(Event* event) {
             event->mouse.button = (Event::MouseEvent::Button_Type)this->__sfml_poll_event.mouseButton.button;
 
             for (Button* button : this->__buttons) {
-                if (button->is_pressed(this->__coordinate_system.pixel_to_point(event->mouse.pos))) {
+                if (button->is_pressed(this->__coordinate_system.pixel_to_point(event->mouse.pos), event->mouse.button)) {
                     button->set_button_released();
                 }
             }
@@ -67,7 +68,7 @@ bool Window::poll_event(Event* event) {
             event->mouse.pos = event->__get_mouse_move_pos(this->__sfml_poll_event);
 
             for (Button* button : this->__buttons) {
-                if (button->is_pressed(this->__coordinate_system.pixel_to_point(event->mouse.pos))) {
+                if (button->is_pressed(this->__coordinate_system.pixel_to_point(event->mouse.pos), Event::MouseEvent::Button_Type::LEFT)) {
                     button->set_button_hovered();
                 } else {
                     button->set_button_released();
@@ -135,6 +136,29 @@ void Window::display() {
 
 void Window::close() {
     this->__sfml_window.close();
+}
+
+void Window::append_view(WindowView* view) {
+    this->__views.push_back(view);
+
+    this->extend_objects(view->objects);
+}
+
+void Window::extend_views(std::vector <WindowView*> views) {
+    for (WindowView* view : views) {
+        this->append_view(view);
+    }
+}
+
+void Window::show_view(WindowView* view) {
+    bool has_view = false;
+    for (WindowView* window_view : this->__views) {
+        if (window_view == view) has_view = true;
+        window_view->set_objects_visibility(true);
+    }
+
+    if (!has_view) this->__views.push_back(view);
+    view->set_objects_visibility(false);
 }
 
 void Window::append_object(Drawable* object, int index) {

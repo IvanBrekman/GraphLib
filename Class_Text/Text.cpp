@@ -16,6 +16,10 @@ Text::Text(Point2D main_point, const char* text, int size)
     this->set_fill_color(Color::Black);
 }
 
+void Text::set_centered() {
+    this->centered = true;
+}
+
 void Text::set_text(const char* text) {
     ASSERT_IF(VALID_PTR(text), "Invalid text ptr", );
 
@@ -51,7 +55,12 @@ void Text::set_fill_color(Color color) {
 void Text::draw(Window& window, const CoordinateSystem& system) {
     if (this->hidden) return;
 
-    Point2D pixel = system.point_to_pixel(this->main_point);
+    Point2D point = this->main_point;
+    if (this->centered) {
+        point = this->main_point - Point2D(this->get_width() / 2, this->get_height() / 2);
+    }
+
+    Point2D pixel = system.point_to_pixel(point);
 
     if (system.axis_y_direction == CoordinateSystem::AxisY_Direction::UP)   pixel.y -= this->get_height() * 1.6;
     else                                                                    pixel.y -= this->get_height() * 0.3;
@@ -59,9 +68,4 @@ void Text::draw(Window& window, const CoordinateSystem& system) {
 
     this->__sfml_text.setPosition(sf::Vector2f(pixel.x, pixel.y));
     window.__sfml_window.draw(this->__sfml_text);
-
-    // system.point_to_pixel(this->main_point).dump();
-    // sf::Vector2f vector = this->__sfml_text.getPosition();
-    // Point2D(vector.x, vector.y).dump();
-    // printf("%lf %s\n\n", this->get_height(), this->get_text());
 }
