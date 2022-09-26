@@ -14,7 +14,7 @@ Window::Window(int width, int height, const char* text, Color color)
 : width(width), height(height), color(color) {
     ASSERT_IF(VALID_PTR(text), "Ivalid text ptr", );
 
-    this->__sfml_window.create(sf::VideoMode(width, height), text);
+    this->__sfml_window.create(sf::VideoMode(width, height), text, sf::Style::Titlebar | sf::Style::Close);
 
     this->set_coordinate_system_type(Coordinate_System_Type::LEFT_UP);
 }

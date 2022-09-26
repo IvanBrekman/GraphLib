@@ -1,5 +1,5 @@
-#include "GraphLib.hpp"
 #include "baselib.hpp"
+#include "GraphLib.hpp"
 
 int main(void) {
     // ======================================== View 1 ========================================
