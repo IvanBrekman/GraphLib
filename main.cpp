@@ -7,11 +7,13 @@ int main(void) {
     Button show_view3_button(0,    0, "Sphere",             30);
     Button exit_button      (0, -100, "Exit",               30);
 
+    Button nothing_button(-490, -290, "Nothing", 40);
+
     show_view2_button.set_centered();
     show_view3_button.set_centered();
     exit_button.      set_centered();
 
-    WindowView view1(3, &show_view2_button, &show_view3_button, &exit_button);
+    WindowView view1(4, &show_view2_button, &show_view3_button, &exit_button, &nothing_button);
     // ========================================================================================
 
     // ======================================== View 2 ========================================
@@ -37,7 +39,7 @@ int main(void) {
     // ========================================================================================
 
     // ======================================== View 3 ========================================
-    Circle sphere(0, 0, 200, true);
+    Circle sphere(0, 0, 100, true);
     sphere.set_fill_color(Color::Red);
 
     WindowView view3(2, &back_button, &sphere);

@@ -13,6 +13,7 @@ Button::Button(Point2D main_point, const char* text, int text_size, Button::Butt
 : Moveable(main_point), type(type), __text(main_point, text, text_size) {
     ASSERT_IF(VALID_PTR(text), "Invalid text ptr", );
 
+    this->set_fill_color(Color::White);
     this->set_button_type(type);
 }
 
@@ -53,7 +54,7 @@ void Button::set_button_type(Button::Button_Type type) {
             return;
     }
 
-    this->__shape_color = Color::White;
+    this->__shape_color = this->fill_color;
     this->__shape->set_fill_color(this->__shape_color, Color::Black, 5);
 }
 
@@ -62,7 +63,7 @@ void Button::set_button_pressed() {
 }
 
 void Button::set_button_released() {
-    this->__shape->set_fill_color(this->__shape_color, Color::Black, 5);
+    this->__shape->set_fill_color(this->fill_color, Color::Black, 5);
 }
 
 void Button::set_button_hovered() {

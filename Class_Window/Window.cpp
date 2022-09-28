@@ -38,6 +38,7 @@ bool Window::poll_event(Event* event) {
         case sf::Event::EventType::Closed:
             event->type = Event::Type::WINDOW_CLOSED;
             break;
+        
         case sf::Event::EventType::MouseButtonPressed:
             event->type         = Event::Type::MOUSE_BUTTON_PRESSED;
             event->mouse.pos    = event->__get_mouse_button_pos(this->__sfml_poll_event);
@@ -50,14 +51,16 @@ bool Window::poll_event(Event* event) {
             }
 
             break;
+        
         case sf::Event::EventType::MouseButtonReleased:
             event->type         = Event::Type::MOUSE_BUTTON_RELEASED;
             event->mouse.pos    = event->__get_mouse_button_pos(this->__sfml_poll_event);
             event->mouse.button = (Event::MouseEvent::Button_Type)this->__sfml_poll_event.mouseButton.button;
 
             for (Button* button : this->__buttons) {
+                button->set_button_released();
                 if (button->is_pressed(this->__coordinate_system.pixel_to_point(event->mouse.pos), event->mouse.button)) {
-                    button->set_button_released();
+                    button->set_button_hovered();
                 }
             }
 
@@ -76,7 +79,7 @@ bool Window::poll_event(Event* event) {
             }
             
             break;
-        
+          
         default:
             LOG1(printf(RED "Unassembled Event. EventType: %d\n" NATURAL, this->__sfml_poll_event.type););
             break;
