@@ -3,11 +3,11 @@
 
 int main(void) {
     // ======================================== View 1 ========================================
+    Button nothing_button(-490, -290, "Nothing", 40);
+
     Button show_view2_button(0,  100, "Coordinate Systems", 30);
     Button show_view3_button(0,    0, "Sphere",             30);
     Button exit_button      (0, -100, "Exit",               30);
-
-    Button nothing_button(-490, -290, "Nothing", 40);
 
     show_view2_button.set_centered();
     show_view3_button.set_centered();
@@ -39,8 +39,19 @@ int main(void) {
     // ========================================================================================
 
     // ======================================== View 3 ========================================
-    Scene  scene (-500, -300, 1000, 600);
+    Scene scene (-500, -300, 1000, 600);
 
+    scene.extend_spheres({
+        new Sphere(Point3D(-3.0,  0.0, -16.0), 2, EMERALD),
+        new Sphere(Point3D(-1.0, -1.5, -12.0), 2, MIRROR ),
+        new Sphere(Point3D( 1.5, -0.5, -18.0), 3, RUBIN  ),
+        new Sphere(Point3D( 7.0,  5.0, -18.0), 4, MIRROR )
+    });
+    scene.extend_lights({
+        new Light (Point3D(-20, 20,  20), 1.5),
+        new Light (Point3D( 30, 50, -25), 1.8),
+        new Light (Point3D( 30, 20,  30), 1.7)
+    });
 
     WindowView view3(2, &scene, &back_button);
     // ========================================================================================
