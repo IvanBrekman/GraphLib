@@ -16,7 +16,7 @@ Window::Window(int width, int height, const char* text, Color color)
 
     this->__sfml_window.create(sf::VideoMode(width, height), text, sf::Style::Titlebar | sf::Style::Close);
 
-    this->set_coordinate_system_type(Coordinate_System_Type::LEFT_UP);
+    this->set_coordinate_system_type(CoordinateSystem::Type::LEFT_UP);
 }
 
 Window::~Window() {
@@ -102,22 +102,8 @@ void Window::set_coordinate_system(CoordinateSystem system) {
     this->__coordinate_system = system;
 }
 
-void Window::set_coordinate_system_type(Coordinate_System_Type type) {
-    switch (type) {
-        case Coordinate_System_Type::CENTER:
-            Window::set_coordinate_system(CoordinateSystem(this->width / 2, this->height / 2, CoordinateSystem::AxisY_Direction::UP));
-            break;
-        case Coordinate_System_Type::LEFT_UP:
-            Window::set_coordinate_system(CoordinateSystem(0, 0));
-            break;
-        case Coordinate_System_Type::LEFT_BOTTOM:
-            Window::set_coordinate_system(CoordinateSystem(0, this->height, CoordinateSystem::AxisY_Direction::UP));
-            break;
-        
-        default:
-            ASSERT_IF(0, "Unknown Coordinate_System_Type value", );
-            break;
-    }
+void Window::set_coordinate_system_type(CoordinateSystem::Type type) {
+    Window::set_coordinate_system(CoordinateSystem::get_system_by_type(type, this->width, this->height));
 }
 
 void Window::draw_window_coordinate_system() {

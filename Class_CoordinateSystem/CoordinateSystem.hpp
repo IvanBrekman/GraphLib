@@ -19,6 +19,11 @@ class CoordinateSystem : public Drawable {
             UP      = -1,
             DOWN    =  1
         };
+        enum Type {
+            CENTER      = 0,
+            LEFT_UP     = 1,
+            LEFT_BOTTOM = 2
+        };
 
         Point2D center;
 
@@ -45,6 +50,8 @@ class CoordinateSystem : public Drawable {
 
         Point2D point_to_pixel(Point2D point)   const;
         Point2D pixel_to_point(Point2D pixel)   const;
+
+        static CoordinateSystem get_system_by_type(Type type, double width, double height);
 
         void set_draw_status(bool need_to_draw);
 

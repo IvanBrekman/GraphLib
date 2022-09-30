@@ -19,15 +19,10 @@ class Window {
     friend class Drawable;
     friend class Line;
     friend class Figure;
+    friend class PixelMap;
     friend class Text;
 
     public:
-        enum Coordinate_System_Type {
-            CENTER      = 0,
-            LEFT_UP     = 1,
-            LEFT_BOTTOM = 2
-        };
-        
         int width;
         int height;
 
@@ -53,7 +48,7 @@ class Window {
         CoordinateSystem* get_system();
 
         void set_coordinate_system     (CoordinateSystem system);
-        void set_coordinate_system_type(Coordinate_System_Type type);
+        void set_coordinate_system_type(CoordinateSystem::Type type);
         void draw_window_coordinate_system();
 
         void clear();

@@ -17,3 +17,7 @@
 #include "Button.hpp"
 #include "Text.hpp"
 #include "WindowView.hpp"
+#include "PixelMap.hpp"
+#include "Scene.hpp"
+#include "Sphere.hpp"
+#include "Light.hpp"

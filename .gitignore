@@ -35,5 +35,6 @@ bin/
 *.purrrrr
 *.meow
 
+test/
 logs/
 .vscode

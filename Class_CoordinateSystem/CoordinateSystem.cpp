@@ -33,6 +33,20 @@ Point2D CoordinateSystem::pixel_to_point(Point2D pixel) const {
     return Point2D(new_x, new_y);
 }
 
+CoordinateSystem CoordinateSystem::get_system_by_type(CoordinateSystem::Type type, double width, double height) {
+    switch (type) {
+        case CoordinateSystem::Type::CENTER:
+            return CoordinateSystem(width / 2, height / 2, CoordinateSystem::AxisY_Direction::UP);
+        case CoordinateSystem::Type::LEFT_UP:
+            return CoordinateSystem(0, 0);
+        case CoordinateSystem::Type::LEFT_BOTTOM:
+            return CoordinateSystem(0, height, CoordinateSystem::AxisY_Direction::UP);
+        
+        default:
+            ASSERT_IF(0, "Unknown Coordinate_System_Type value", CoordinateSystem(width, height));
+    }
+}
+
 void CoordinateSystem::set_draw_status(bool need_to_draw) {
     this->hidden = !need_to_draw;
 }

@@ -39,14 +39,14 @@ int main(void) {
     // ========================================================================================
 
     // ======================================== View 3 ========================================
-    Circle sphere(0, 0, 100, true);
-    sphere.set_fill_color(Color::Red);
+    Scene  scene (-500, -300, 1000, 600);
 
-    WindowView view3(2, &back_button, &sphere);
+
+    WindowView view3(2, &scene, &back_button);
     // ========================================================================================
 
     Window window(1000, 600);
-    window.set_coordinate_system_type(Window::Coordinate_System_Type::CENTER);
+    window.set_coordinate_system_type(CoordinateSystem::Type::CENTER);
     window.extend_views({ &view1, &view2, &view3 });
     window.show_view(&view1);
 
@@ -69,10 +69,9 @@ int main(void) {
 
                     Point2D point = window.get_system()->pixel_to_point(event.mouse.pos);
 
-                    if (back_button.      is_pressed(point, button_presed)) {
+                    if (back_button.is_pressed(point, button_presed)) {
                         window.show_view(&view1);
-                        window.color = Color::White;
-                        wait_click   = true;
+                        wait_click = true;
                     }
 
                     if (show_view2_button.is_pressed(point, button_presed)) {
@@ -82,8 +81,7 @@ int main(void) {
 
                     if (show_view3_button.is_pressed(point, button_presed)) {
                         window.show_view(&view3);
-                        window.color = Color::Black;
-                        wait_click   = true;
+                        wait_click = true;
                     }
 
                     if (exit_button.is_pressed(point, button_presed)) window.close();
