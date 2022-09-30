@@ -18,12 +18,12 @@ Color Scene::cast_ray(Point3D ray_start, Point3D ray_dir, std::vector <Sphere*> 
     Point3D  normal      (0, 0, 0);         // normal vector to intersection point
     Material material;
 
-    if (depth > 4 || !this->intersect_objects(ray_start, ray_dir, spheres, intersection, normal, material)) {
+    if (depth > this->__REFLECT_DEPTH || !this->intersect_objects(ray_start, ray_dir, spheres, intersection, normal, material)) {
         return this->background;
     }
 
     Point3D reflect_dir   = reflect(ray_dir, normal).normalize();
-    Point3D reflect_start = intersection - (normal * 1e-3) * (2 * (Point3D::scalar_product(reflect_dir, normal) < 0) - 1);
+    Point3D reflect_start = intersection - (normal * this->__DEFAULT_DEVIATION) * (2 * (Point3D::scalar_product(reflect_dir, normal) < 0) - 1);
     Color   reflect_color = this->cast_ray(reflect_start, reflect_dir, spheres, lights, depth + 1);
 
     double  diffuse_light_intensity = 0;    // coef for diffuse  light
@@ -33,7 +33,7 @@ Color Scene::cast_ray(Point3D ray_start, Point3D ray_dir, std::vector <Sphere*> 
         double  light_dist  = (light->pos - intersection).length_square();
 
         // ==================== Calculate shadows ====================
-        Point3D  shadow_start = intersection - (normal * 1e-3) * (2 * (Point3D::scalar_product(light_dir, normal) < 0) - 1);
+        Point3D  shadow_start = intersection - (normal * this->__DEFAULT_DEVIATION) * (2 * (Point3D::scalar_product(light_dir, normal) < 0) - 1);
         Point3D  shadow_intersection(0, 0, 0);
         Point3D  shadow_normal      (0, 0, 0);
         Material shadow_material;
@@ -81,8 +81,9 @@ bool Scene::intersect_objects(Point3D ray_start, Point3D ray_dir, std::vector <S
         }
     }
 
+    // TODO
     double checkerboard_dist = std::numeric_limits<float>::max();
-    if (fabs(ray_dir.y) > 1e-3) {
+    if (fabs(ray_dir.y) > this->__DEFAULT_DEVIATION) {
         double d = -(ray_start.y+4)/ray_dir.y; // the checkerboard plane has equation y = -4
         Point3D pt = ray_start + ray_dir*d;
         if (d>0 && fabs(pt.x)<10 && pt.z<-10 && pt.z>-30 && d<min_dist) {
@@ -92,6 +93,8 @@ bool Scene::intersect_objects(Point3D ray_start, Point3D ray_dir, std::vector <S
             material.diffuse_color = (int(.5*intersection.x+1000) + int(.5*intersection.z)) & 1 ? Color(255,178.5,76.5) : Color(255, 178.5, 76.5);
         }
     }
+    // TODO
+
     return std::min(min_dist, checkerboard_dist) < 1000;
 }
 
@@ -118,8 +121,8 @@ void Scene::extend_lights(std::vector <Light*> lights) {
 void Scene::render() {
     for (int x = 0; x < this->width; x++) {
         for (int y = 0; y < this->height; y++) {
-            double px =  (2 * (x + 0.5) / (double)width  - 1) * tan(this->__fov / 2.) * width / (double)height;
-            double py = -(2 * (y + 0.5) / (double)height - 1) * tan(this->__fov / 2.);
+            double px =  (2 * (x + 0.5) / (double)width  - 1) * tan(this->__FOV / 2.) * width / (double)height;
+            double py = -(2 * (y + 0.5) / (double)height - 1) * tan(this->__FOV / 2.);
 
             Point3D dir = Point3D(px, py, -1).normalize();
 
