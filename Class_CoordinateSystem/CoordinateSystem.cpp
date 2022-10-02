@@ -82,12 +82,14 @@ void CoordinateSystem::dump() const {
     printf(">\n");
 }
 
+// @virtual
 void CoordinateSystem::set_hidden(bool hidden) {
     for (Drawable* object : m_objects) {
         object->set_hidden(hidden);
     }
 }
 
+// @virtual
 void CoordinateSystem::draw_impl_(Window& window, const CoordinateSystem& system) {
     for (Drawable* object : m_objects) {
         object->draw(window, *this);

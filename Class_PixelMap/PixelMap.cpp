@@ -8,13 +8,13 @@
 #include "PixelMap.hpp"
 
 PixelMap::PixelMap(Point2D main_point, int width, int height)
-: Drawable(), Moveable(main_point), width(width), height(height) {
-    this->__sfml_pixels = new sf::Uint8[width * height * 4];
-    this->__sfml_texture.create(width, height);
+: Drawable(), Moveable(main_point), m_width(width), m_height(height) {
+    m_sfml_pixels__ = new sf::Uint8[width * height * 4];
+    m_sfml_texture__.create(width, height);
 }
 
 void PixelMap::set_pixel(int x, int y, Color color) {
-    sf::Uint8* pixel = this->__sfml_pixels + (x + y * this->width) * 4;
+    sf::Uint8* pixel = m_sfml_pixels__ + (x + y * m_width) * 4;
 
     pixel[0] = color.r;
     pixel[1] = color.g;
@@ -23,29 +23,31 @@ void PixelMap::set_pixel(int x, int y, Color color) {
 }
 
 Color PixelMap::get_pixel(int x, int y) {
-    sf::Uint8* pixel = this->__sfml_pixels + (x + y * this->width) * 4;
+    sf::Uint8* pixel = m_sfml_pixels__ + (x + y * m_width) * 4;
 
     return Color(pixel[0], pixel[1], pixel[2], pixel[3]);
 }
 
+// @virtual
 void PixelMap::draw_impl_(Window& window, const CoordinateSystem& system) {
-    if (this->m_hidden) return;
+    if (m_hidden) return;
 
-    Point2D pixel = system.point_to_pixel(this->m_mainPoint);
-    if (system.m_axisYDirection == CoordinateSystem::AxisY_Direction::UP)   pixel.y -= this->height;
-    if (system.m_axisXDirection == CoordinateSystem::AxisX_Direction::LEFT) pixel.x -= this->width;
+    Point2D pixel = system.point_to_pixel(m_mainPoint);
+    if (system.m_axisYDirection == CoordinateSystem::AxisY_Direction::UP)   pixel.y -= m_height;
+    if (system.m_axisXDirection == CoordinateSystem::AxisX_Direction::LEFT) pixel.x -= m_width;
 
-    this->__sfml_texture.update(this->__sfml_pixels);
+    m_sfml_texture__.update(m_sfml_pixels__);
 
-    this->__sfml_sprite = sf::Sprite(this->__sfml_texture);
-    this->__sfml_sprite.setPosition(pixel.to_sfml_vector());
+    m_sfml_sprite__ = sf::Sprite(m_sfml_texture__);
+    m_sfml_sprite__.setPosition(pixel.to_sfml_vector());
 
-    Color color = this->get_pixel(0, 0);
-    // printf("%d %d %d %d\n", color.r, color.g, color.b, color.a);
+    Color color = get_pixel(0, 0);
 
-    window.__sfml_window.draw(this->__sfml_sprite);
+    window.__sfml_window.draw(m_sfml_sprite__);
 }
 
+// @virtual
 Point2D PixelMap::center() const {
-    return m_mainPoint;
+    if (m_centered) return m_mainPoint;
+    return m_mainPoint + Point2D(m_width / 2, m_height / 2);
 }

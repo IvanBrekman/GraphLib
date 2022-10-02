@@ -15,13 +15,13 @@ class CoordinateSystem;
 
 class PixelMap : public Drawable, public Moveable {
     public:
-        int width;
-        int height;
+        int m_width;
+        int m_height;
     
     private:
-        sf::Uint8*  __sfml_pixels;
-        sf::Texture __sfml_texture;
-        sf::Sprite  __sfml_sprite;
+        sf::Uint8*  m_sfml_pixels__;
+        sf::Texture m_sfml_texture__;
+        sf::Sprite  m_sfml_sprite__;
     
     public:
         PixelMap(Point2D main_point, int width, int height);
