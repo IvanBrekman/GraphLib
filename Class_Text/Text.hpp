@@ -38,5 +38,5 @@ class Text : public Drawable, public Moveable {
         double get_height();
 
         void set_fill_color(Color color)                          override;
-        void draw(Window& window, const CoordinateSystem& system) override;
+        void draw_impl_(Window& window, const CoordinateSystem& system) override;
 };

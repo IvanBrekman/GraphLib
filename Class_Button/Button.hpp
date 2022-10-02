@@ -50,5 +50,5 @@ class Button : public Drawable, public Moveable {
 
         void set_centered();
 
-        void draw(Window& window, const CoordinateSystem& system) override;
+        void draw_impl_(Window& window, const CoordinateSystem& system) override;
 };

@@ -104,10 +104,8 @@ void Vector::dump() const {
     printf("<Vector: (%.3lf, %.3lf) -> (%.3lf, %.3lf) >\n", this->main_point.x, this->main_point.y, this->end_point.x, this->end_point.y);
 }
 
-void Vector::draw(Window& window, const CoordinateSystem& system) {
-    if (this->hidden) return;
-
-    Line::draw(window, system);
+void Vector::draw_impl_(Window& window, const CoordinateSystem& system) {
+    Line::draw_impl_(window, system);
 
     Vector normal_vector = Vector::get_normal(Vector::Normal_Type::LEFT_NORMAL);
 
@@ -118,7 +116,7 @@ void Vector::draw(Window& window, const CoordinateSystem& system) {
     r_arrow.set_fill_color(this->fill_color);
 
     l_arrow.draw(window, system);
-    r_arrow.draw(window, system);
+    r_arrow.draw_impl_(window, system);
 }
 
 void Vector::move_to_shift(Point2D shift) {

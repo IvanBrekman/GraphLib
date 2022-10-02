@@ -83,14 +83,18 @@ bool Scene::intersect_objects(Point3D ray_start, Point3D ray_dir, std::vector <S
 
     // TODO
     double checkerboard_dist = std::numeric_limits<float>::max();
-    if (fabs(ray_dir.y) > this->__DEFAULT_DEVIATION) {
-        double d = -(ray_start.y+4)/ray_dir.y; // the checkerboard plane has equation y = -4
-        Point3D pt = ray_start + ray_dir*d;
-        if (d>0 && fabs(pt.x)<10 && pt.z<-10 && pt.z>-30 && d<min_dist) {
-            checkerboard_dist = d;
-            intersection = pt;
-            normal = Point3D(0,1,0);
-            material.diffuse_color = (int(.5*intersection.x+1000) + int(.5*intersection.z)) & 1 ? Color(255,178.5,76.5) : Color(255, 178.5, 76.5);
+    Point3D n = Point3D(0, 1, 0);
+    double  d = -4;
+
+    double c = Point3D::scalar_product(ray_dir, n);
+    if (fabs(c) > this->__DEFAULT_DEVIATION) {
+        double  alpha = (d - Point3D::scalar_product(ray_start, n)) / c;
+        Point3D q     = ray_start + ray_dir * alpha;
+        if (alpha > 0 && (-10 < q.x && q.x < 10) && (-30 < q.z && q.z < -10) && alpha < min_dist) {
+            checkerboard_dist = alpha;
+            intersection      = q;
+            normal            = n;
+            material.diffuse_color = Color(255,178.5,76.5);
         }
     }
     // TODO
@@ -131,7 +135,7 @@ void Scene::render() {
     }
 }
 
-void Scene::draw(Window& window, const CoordinateSystem& system) {
+void Scene::draw_impl_(Window& window, const CoordinateSystem& system) {
     if (this->hidden) return;
 
     this->render();

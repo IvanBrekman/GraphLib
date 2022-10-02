@@ -50,7 +50,7 @@ class Scene : public Drawable, public Moveable {
 
         void render();
 
-        void draw(Window& window, const CoordinateSystem& system) override;
+        void draw_impl_(Window& window, const CoordinateSystem& system) override;
 };
 
 double  keep_in_range(double min, double max, double val);

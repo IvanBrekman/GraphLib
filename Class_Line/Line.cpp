@@ -18,9 +18,7 @@ void Line::dump() const {
     printf("<Line: (%.3lf, %.3lf) -> (%.3lf, %.3lf) >\n", this->main_point.x, this->main_point.y, this->end_point.x, this->end_point.y);
 }
 
-void Line::draw(Window& window, const CoordinateSystem& system) {
-    if (this->hidden) return;
-
+void Line::draw_impl_(Window& window, const CoordinateSystem& system) {
     CoordinateSystem draw_system = system;
     
     Line line(system.point_to_pixel(this->main_point), system.point_to_pixel(this->end_point));

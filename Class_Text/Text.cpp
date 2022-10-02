@@ -52,7 +52,7 @@ void Text::set_fill_color(Color color) {
     this->__sfml_text.setFillColor(color);
 }
 
-void Text::draw(Window& window, const CoordinateSystem& system) {
+void Text::draw_impl_(Window& window, const CoordinateSystem& system) {
     if (this->hidden) return;
 
     Point2D point = this->main_point;

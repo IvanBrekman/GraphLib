@@ -29,7 +29,7 @@ int main(void) {
     system1.extend_objects({&second_hand, &minute_hand});
 
     CoordinateSystem system2(900, 300, CoordinateSystem::AxisY_Direction::DOWN, CoordinateSystem::AxisX_Direction::LEFT);
-    system2.set_draw_status(true);
+    system2.set_show_axis(true);
     system2.append_object(&vector);
 
     Button back_button(0, -250, "Back", 30, Button::Button_Type::ELLIPSE);
@@ -125,8 +125,8 @@ int main(void) {
         // ==================== Drawing Objects ====================
         window.clear();
 
-        system1.set_draw_status(!view2.hidden);
-        system2.set_draw_status(!view2.hidden);
+        system1.set_show_axis(!view2.hidden);
+        system2.set_show_axis(!view2.hidden);
         if (!view2.hidden) window.draw_window_coordinate_system();
 
         window.draw_added_objects();

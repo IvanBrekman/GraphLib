@@ -5,9 +5,8 @@
 #include "CoordinateSystem.hpp"
 
 CoordinateSystem::CoordinateSystem(Point2D center, AxisY_Direction diry, AxisX_Direction dirx)
-: center(center), axis_x_direction(dirx), axis_y_direction(diry), Drawable() {
-    this->hidden     = true;
-    this->fill_color = Color::Blue;
+: center(center), show_axis(false), axis_x_direction(dirx), axis_y_direction(diry), Drawable() {
+    set_fill_color(Color::Blue);
 
     double x = dirx * CoordinateSystem::__DRAW_AXIS_LENGTH;
     double y = diry * CoordinateSystem::__DRAW_AXIS_LENGTH;
@@ -47,8 +46,15 @@ CoordinateSystem CoordinateSystem::get_system_by_type(CoordinateSystem::Type typ
     }
 }
 
-void CoordinateSystem::set_draw_status(bool need_to_draw) {
-    this->hidden = !need_to_draw;
+void CoordinateSystem::set_show_axis(bool show_axis_val) {
+    show_axis = show_axis_val;
+}
+
+void CoordinateSystem::draw_axis(Window& window) {
+    if (show_axis) {
+        this->__axis_x.draw(window, CoordinateSystem(0, 0));
+        this->__axis_y.draw(window, CoordinateSystem(0, 0));
+    }
 }
 
 void CoordinateSystem::append_object(Drawable* object, int index) {
@@ -61,12 +67,6 @@ void CoordinateSystem::append_object(Drawable* object, int index) {
 void CoordinateSystem::extend_objects(std::vector <Drawable*> objects, int index) {
     for (Drawable* object : objects) {
         this->append_object(object, index++);
-    }
-}
-
-void CoordinateSystem::draw_added_objects(Window& window) {
-    for (Drawable* object : this->objects) {
-        object->draw(window, *this);
     }
 }
 
@@ -94,13 +94,10 @@ void CoordinateSystem::show() {
     }
 }
 
-void CoordinateSystem::draw_on_window(Window& window) {
-    this->draw(window, CoordinateSystem(0, 0));
-}
+void CoordinateSystem::draw_impl_(Window& window, const CoordinateSystem& system) {
+    for (Drawable* object : this->objects) {
+        object->draw(window, *this);
+    }
 
-void CoordinateSystem::draw(Window& window, const CoordinateSystem& system) {
-    if (this->hidden) return;
-    
-    this->__axis_x.draw(window, system);
-    this->__axis_y.draw(window, system);
+    draw_axis(window);
 }

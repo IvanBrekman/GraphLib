@@ -3,6 +3,7 @@
 //
 
 #include <cassert>
+#include <iostream>
 
 #include "../Class_Utils/baselib.hpp"
 #include "../Class_Button/Button.hpp"
@@ -107,12 +108,12 @@ void Window::set_coordinate_system_type(CoordinateSystem::Type type) {
 }
 
 void Window::draw_window_coordinate_system() {
-    bool save = this->__coordinate_system.hidden;
-    this->__coordinate_system.hidden = false;
+    bool save = this->__coordinate_system.show_axis;
+    this->__coordinate_system.show_axis = true;
 
     this->__coordinate_system.draw_on_window(*this);
 
-    this->__coordinate_system.hidden = save;
+    this->__coordinate_system.show_axis = save;
 }
 
 void Window::clear() {
@@ -168,12 +169,7 @@ void Window::extend_objects(std::vector <Drawable*> objects, int index) {
 void Window::draw(Drawable* object) {
     ASSERT_IF(VALID_PTR(object), "Invalid object ptr", );
     
-    if (IS_INSTANCE(object, CoordinateSystem*)) {
-        (dynamic_cast<CoordinateSystem*>(object))->draw_on_window(*this);
-        (dynamic_cast<CoordinateSystem*>(object))->draw_added_objects(*this);
-    } else {
-        object->draw(*this, this->__coordinate_system);
-    }
+    object->draw(*this, this->__coordinate_system);
 }
 
 void Window::draw_added_objects() {

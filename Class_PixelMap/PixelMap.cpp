@@ -28,7 +28,7 @@ Color PixelMap::get_pixel(int x, int y) {
     return Color(pixel[0], pixel[1], pixel[2], pixel[3]);
 }
 
-void PixelMap::draw(Window& window, const CoordinateSystem& system) {
+void PixelMap::draw_impl_(Window& window, const CoordinateSystem& system) {
     if (this->hidden) return;
 
     Point2D pixel = system.point_to_pixel(this->main_point);

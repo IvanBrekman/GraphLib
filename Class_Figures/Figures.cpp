@@ -58,7 +58,7 @@ bool Circle::contains(Point2D point) {
     return (pow(point.x - this->center().x, 2) + pow(point.y - this->center().y, 2)) <= pow(this->radius, 2);
 }
 
-void Circle::draw(Window& window, const CoordinateSystem& system) {
+void Circle::draw_impl_(Window& window, const CoordinateSystem& system) {
     if (this->hidden) return;
 
     Point2D min_point = this->main_point;
@@ -92,7 +92,7 @@ bool Rectangle::contains(Point2D point) {
            (min_point.y <= point.y && point.y <= max_point.y);
 }
 
-void Rectangle::draw(Window& window, const CoordinateSystem& system) {
+void Rectangle::draw_impl_(Window& window, const CoordinateSystem& system) {
     if (this->hidden) return;
 
     Point2D point = this->main_point;
@@ -184,7 +184,7 @@ bool Polygon::contains(Point2D point) {
     return contains;
 }
 
-void Polygon::draw(Window& window, const CoordinateSystem& system) {
+void Polygon::draw_impl_(Window& window, const CoordinateSystem& system) {
     if (this->hidden) return;
     
     int i = 0;
@@ -222,7 +222,7 @@ bool Ellipse::contains(Point2D point) {
     return (pow(point.x, 2) / pow(this->radius.x, 2) + pow(point.y, 2) / pow(this->radius.y, 2)) <= 1;
 }
 
-void Ellipse::draw(Window& window, const CoordinateSystem& system) {
+void Ellipse::draw_impl_(Window& window, const CoordinateSystem& system) {
     if (this->hidden) return;
     
     for (int i = 0; i < Ellipse::__POINTS_ON_DRAW; i++) {

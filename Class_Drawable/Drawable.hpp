@@ -25,7 +25,10 @@ class Drawable {
 
         virtual void show() { this->hidden = false; }
         virtual void hide() { this->hidden = true;  }
-
-        virtual void draw          (Window& window, const CoordinateSystem& system) = 0;
-        virtual void draw_on_window(Window& window);
+        
+        void draw          (Window& window, const CoordinateSystem& system) { if (!hidden) draw_impl_(window, system); }
+        void draw_on_window(Window& window);
+    
+    protected:
+        virtual void draw_impl_(Window& window, const CoordinateSystem& system) = 0;
 };

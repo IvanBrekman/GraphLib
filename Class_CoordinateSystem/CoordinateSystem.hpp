@@ -26,6 +26,7 @@ class CoordinateSystem : public Drawable {
         };
 
         Point2D center;
+        bool    show_axis;
 
         AxisX_Direction axis_x_direction;
         AxisY_Direction axis_y_direction;
@@ -53,19 +54,17 @@ class CoordinateSystem : public Drawable {
 
         static CoordinateSystem get_system_by_type(Type type, double width, double height);
 
-        void set_draw_status(bool need_to_draw);
+        void set_show_axis(bool show_axis_val);
+        void draw_axis(Window& window);
 
         void append_object (Drawable*               object,  int index=CoordinateSystem::__LAST_INDEX);
         void extend_objects(std::vector <Drawable*> objects, int index=CoordinateSystem::__LAST_INDEX);
-
-        void draw_added_objects(Window& window);
 
         void dump()                             const;
 
         void hide()                                               override;
         void show()                                               override;
-        void draw_on_window(Window& window)                       override;
 
     private:
-        void draw(Window& window, const CoordinateSystem& system) override;
+        void draw_impl_(Window& window, const CoordinateSystem& system) override;
 };

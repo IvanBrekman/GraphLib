@@ -33,7 +33,7 @@
 #define MAX(arg1, arg2) (arg1) > (arg2) ? (arg1) : (arg2)
 #define MIN(arg1, arg2) (arg1) < (arg2) ? (arg1) : (arg2)
 
-#define dbg(code)      do { printf("%s:%d\n", __FILE__, __LINE__); code } while (0)
+#define DBG            printf("%s:%d\n", __FILE__, __LINE__)
 #define LOCATION(var)  { TYPE, #var, __FILE__, __FUNCTION__, __LINE__ }
 #define WAIT_INPUT     do { if (EXECUTE_WAITINGS == 1 && LOG_PRINTF > 0) { printf(BLUE "Press any button...\n" NATURAL); getchar(); } } while(0)
 

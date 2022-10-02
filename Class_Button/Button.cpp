@@ -79,9 +79,7 @@ void Button::set_centered() {
     this->centered = true;
 }
 
-void Button::draw(Window& window, const CoordinateSystem& system) {
-    if (this->hidden) return;
-
+void Button::draw_impl_(Window& window, const CoordinateSystem& system) {
     Point2D shift = Point2D(Button::__EXTRA_WIDTH / 2, -this->__text.get_height() * Button::__EXTRA_TEXT_COEF + Button::__EXTRA_HEIGHT / 2);
 
     if (this->centered) {
