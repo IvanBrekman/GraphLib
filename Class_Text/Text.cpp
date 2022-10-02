@@ -16,10 +16,6 @@ Text::Text(Point2D main_point, const char* text, int size)
     this->set_fill_color(Color::Black);
 }
 
-void Text::set_centered() {
-    this->centered = true;
-}
-
 void Text::set_text(const char* text) {
     ASSERT_IF(VALID_PTR(text), "Invalid text ptr", );
 
@@ -55,9 +51,9 @@ void Text::set_fill_color(Color color) {
 void Text::draw_impl_(Window& window, const CoordinateSystem& system) {
     if (this->m_hidden) return;
 
-    Point2D point = this->main_point;
-    if (this->centered) {
-        point = this->main_point - Point2D(this->get_width() / 2, this->get_height() / 2);
+    Point2D point = this->m_mainPoint;
+    if (this->m_centered) {
+        point = this->m_mainPoint - Point2D(this->get_width() / 2, this->get_height() / 2);
     }
 
     Point2D pixel = system.point_to_pixel(point);
@@ -68,4 +64,8 @@ void Text::draw_impl_(Window& window, const CoordinateSystem& system) {
 
     this->__sfml_text.setPosition(sf::Vector2f(pixel.x, pixel.y));
     window.__sfml_window.draw(this->__sfml_text);
+}
+
+Point2D Text::center() {
+    return m_mainPoint;
 }

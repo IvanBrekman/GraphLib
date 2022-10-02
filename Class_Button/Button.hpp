@@ -20,7 +20,6 @@ class Button : public Drawable, public Moveable {
         };
 
         Button_Type type;
-        bool        centered = false;
     
     private:
         Text                    __text;
@@ -41,14 +40,12 @@ class Button : public Drawable, public Moveable {
 
         bool is_pressed(Point2D point, Event::MouseEvent::Button_Type button);
 
-        Point2D center();
         void set_button_type(Button_Type type);
 
         void set_button_pressed();
         void set_button_released();
         void set_button_hovered();
 
-        void set_centered();
-
         void draw_impl_(Window& window, const CoordinateSystem& system) override;
+        Point2D center()                                                override;
 };

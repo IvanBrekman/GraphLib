@@ -10,16 +10,15 @@
 #include "Figures.hpp"
 
 // ======================================== Figure ========================================
+Figure::Figure(Point2D mainPoint, bool centered)
+: Moveable(mainPoint) {
+    m_centered = centered;
+}
+
 void Figure::set_fill_color(Color fill_color, Color outline_color, double width) {
     Drawable::set_fill_color(fill_color);
     this->outline_color = outline_color;
     this->outline_width = width;
-}
-
-void Figure::set_centered() {
-    if (this->m_hidden) return;
-    
-    this->centered = true;
 }
 
 sf::RenderWindow* Figure::_get_sfml_window(Window& window) {
@@ -47,11 +46,11 @@ Circle::Circle(Point2D main_point, double radius, bool centered)
 : Figure(main_point, centered), radius(radius) {
     this->_sfml_shape = sf::CircleShape(radius, Circle::__POINTS_ON_DRAW);
 
-    this->centered = centered;
+    this->m_centered = centered;
 }
 
 Point2D Circle::center() {
-    return this->centered ? this->main_point : (this->main_point + Point2D(this->radius, this->radius));
+    return this->m_centered ? this->m_mainPoint : (this->m_mainPoint + Point2D(this->radius, this->radius));
 }
 
 bool Circle::contains(Point2D point) {
@@ -59,11 +58,9 @@ bool Circle::contains(Point2D point) {
 }
 
 void Circle::draw_impl_(Window& window, const CoordinateSystem& system) {
-    if (this->m_hidden) return;
-
-    Point2D min_point = this->main_point;
-    if (this->centered) {
-        min_point = this->main_point - Point2D(this->radius, this->radius);
+    Point2D min_point = this->m_mainPoint;
+    if (this->m_centered) {
+        min_point = this->m_mainPoint - Point2D(this->radius, this->radius);
     }
     
     Point2D pixel = system.point_to_pixel(min_point);
@@ -81,11 +78,11 @@ Rectangle::Rectangle(Point2D main_point, double width, double height)
 }
 
 Point2D Rectangle::center() {
-    return this->centered ? this->main_point : (this->main_point + Point2D(this->width / 2, this->height / 2));
+    return this->m_centered ? this->m_mainPoint : (this->m_mainPoint + Point2D(this->width / 2, this->height / 2));
 }
 
 bool Rectangle::contains(Point2D point) {
-    Point2D min_point = this->centered ? (this->main_point - Point2D(this->width / 2, this->height / 2)) : this->main_point;
+    Point2D min_point = this->m_centered ? (this->m_mainPoint - Point2D(this->width / 2, this->height / 2)) : this->m_mainPoint;
     Point2D max_point = min_point + Point2D(this->width, this->height);
 
     return (min_point.x <= point.x && point.x <= max_point.x) &&
@@ -93,11 +90,9 @@ bool Rectangle::contains(Point2D point) {
 }
 
 void Rectangle::draw_impl_(Window& window, const CoordinateSystem& system) {
-    if (this->m_hidden) return;
-
-    Point2D point = this->main_point;
-    if (this->centered) {
-        point = this->main_point - Point2D(this->width / 2, this->height / 2);
+    Point2D point = this->m_mainPoint;
+    if (this->m_centered) {
+        point = this->m_mainPoint - Point2D(this->width / 2, this->height / 2);
     }
     
     Point2D pixel = system.point_to_pixel(point);
@@ -119,7 +114,7 @@ bool RegularPolygon::contains(Point2D point) {
 
     bool contains = false;
 
-    point -= main_point;
+    point -= m_mainPoint;
 
     for (int i = 0, j = v_size - 1; i < v_size; i++) {
         sf::Vector2f vector_pi = this->_sfml_shape.getPoint(i);
@@ -198,7 +193,7 @@ void Polygon::draw_impl_(Window& window, const CoordinateSystem& system) {
     this->_get_sfml_window(window)->draw(this->_sfml_shape);
 }
 
-void Polygon::move_to_shift(Point2D shift) {
+void Polygon::move_to_shift_impl_(Point2D shift) {
     if (this->m_hidden) return;
     
     for (int i = 0; i < this->__vertexes.size(); i++) {
@@ -214,7 +209,7 @@ Ellipse::Ellipse(Point2D main_point, Point2D radius, bool centered)
 }
 
 Point2D Ellipse::center() {
-    return this->centered ? this->main_point : (this->main_point + this->radius);
+    return this->m_centered ? this->m_mainPoint : (this->m_mainPoint + this->radius);
 }
 
 bool Ellipse::contains(Point2D point) {
@@ -234,7 +229,7 @@ void Ellipse::draw_impl_(Window& window, const CoordinateSystem& system) {
     this->_get_sfml_window(window)->draw(this->_sfml_shape);
 }
 
-void Ellipse::move_to_shift(Point2D shift) {
+void Ellipse::move_to_shift_impl_(Point2D shift) {
     if (this->m_hidden) return;
     
     Figure::move_to_shift(shift);
@@ -245,8 +240,8 @@ Point2D Ellipse::__get_point(int index) {
     float x = std::cos(angle) * this->radius.x;
     float y = std::sin(angle) * this->radius.y;
 
-    Point2D point = this->main_point + Point2D(radius.x + x, radius.y + y);
+    Point2D point = this->m_mainPoint + Point2D(radius.x + x, radius.y + y);
 
-    return this->centered ? (point - this->radius) : point;
+    return this->m_centered ? (point - this->radius) : point;
 }
 // ========================================================================================

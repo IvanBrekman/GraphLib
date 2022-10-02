@@ -9,9 +9,9 @@ int main(void) {
     Button show_view3_button(0,    0, "Sphere",             30);
     Button exit_button      (0, -100, "Exit",               30);
 
-    show_view2_button.set_centered();
-    show_view3_button.set_centered();
-    exit_button.      set_centered();
+    show_view2_button.set_centered(true);
+    show_view3_button.set_centered(true);
+    exit_button.      set_centered(true);
 
     WindowView view1(4, &show_view2_button, &show_view3_button, &exit_button, &nothing_button);
     // ========================================================================================
@@ -33,7 +33,7 @@ int main(void) {
     system2.append_object(&vector);
 
     Button back_button(0, -250, "Back", 30, Button::Button_Type::ELLIPSE);
-    back_button.set_centered();
+    back_button.set_centered(true);
 
     WindowView view2(4, &back_button, &system1, &system2, &vector);
     // ========================================================================================

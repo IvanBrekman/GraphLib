@@ -31,7 +31,7 @@ Color PixelMap::get_pixel(int x, int y) {
 void PixelMap::draw_impl_(Window& window, const CoordinateSystem& system) {
     if (this->m_hidden) return;
 
-    Point2D pixel = system.point_to_pixel(this->main_point);
+    Point2D pixel = system.point_to_pixel(this->m_mainPoint);
     if (system.axis_y_direction == CoordinateSystem::AxisY_Direction::UP)   pixel.y -= this->height;
     if (system.axis_x_direction == CoordinateSystem::AxisX_Direction::LEFT) pixel.x -= this->width;
 
@@ -44,4 +44,8 @@ void PixelMap::draw_impl_(Window& window, const CoordinateSystem& system) {
     // printf("%d %d %d %d\n", color.r, color.g, color.b, color.a);
 
     window.__sfml_window.draw(this->__sfml_sprite);
+}
+
+Point2D PixelMap::center() {
+    return m_mainPoint;
 }

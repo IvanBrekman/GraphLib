@@ -31,22 +31,16 @@ bool Button::is_pressed(Point2D point, Event::MouseEvent::Button_Type button) {
     return this->__shape->contains(point);
 }
 
-Point2D Button::center() {
-    if (this->centered) return this->main_point;
-
-    return this->main_point + Point2D(this->width() / 2, this->height() / 2);
-}
-
 void Button::set_button_type(Button::Button_Type type) {
     switch (type) {
         case Button::Button_Type::DEFAULT:
-            this->__shape = new Rectangle(this->main_point, this->width(), this->height());
+            this->__shape = new Rectangle(this->m_mainPoint, this->width(), this->height());
             break;
         case Button::Button_Type::ELLIPSE:
-            this->__shape = new Ellipse(this->main_point, Point2D(this->width() / 2, this->height() / 2));
+            this->__shape = new Ellipse(this->m_mainPoint, Point2D(this->width() / 2, this->height() / 2));
             break;
         case Button::Button_Type::CIRCLE:
-            this->__shape = new Circle(this->main_point, this->width() / 2);
+            this->__shape = new Circle(this->m_mainPoint, this->width() / 2);
             break;
         
         default:
@@ -73,17 +67,11 @@ void Button::set_button_hovered() {
     this->__shape->set_fill_color(Color::Yellow, Color::Black, 5);
 }
 
-void Button::set_centered() {
-    if (this->m_hidden) return;
-
-    this->centered = true;
-}
-
 void Button::draw_impl_(Window& window, const CoordinateSystem& system) {
     Point2D shift = Point2D(Button::__EXTRA_WIDTH / 2, -this->__text.get_height() * Button::__EXTRA_TEXT_COEF + Button::__EXTRA_HEIGHT / 2);
 
-    if (this->centered) {
-        this->__shape->set_centered();
+    if (this->m_centered) {
+        this->__shape->set_centered(true);
 
         shift.x -= this->width()  / 2;
         shift.y -= this->height() / 2;
@@ -94,4 +82,10 @@ void Button::draw_impl_(Window& window, const CoordinateSystem& system) {
     this->__text.move_to_shift( shift);
     this->__text.draw(window, system);
     this->__text.move_to_shift(-shift);
+}
+
+Point2D Button::center() {
+    if (this->m_centered) return this->m_mainPoint;
+
+    return this->m_mainPoint + Point2D(this->width() / 2, this->height() / 2);
 }

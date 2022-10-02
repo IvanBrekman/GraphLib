@@ -53,5 +53,5 @@ class Vector : public Line {
         
         void draw_impl_(Window& window, const CoordinateSystem& system) override;
 
-        void move_to_shift(Point2D shift)                         override;
+        void move_to_shift_impl_(Point2D shift)                         override;
 };

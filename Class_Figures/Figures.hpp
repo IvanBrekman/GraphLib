@@ -14,22 +14,16 @@ class Figure : public Drawable, public Moveable {
     public:
         Color  outline_color;
         double outline_width = 0;
-
-        bool   centered      = false;
     
     public:
+        Figure(Point2D main_point, bool centered);
         Figure()
         : Figure(Point2D(0, 0), false) {}
-
-        Figure(Point2D main_point, bool centered)
-        : Moveable(main_point), centered(centered) {}
 
         void set_fill_color(Color fill_color, Color outline_color, double width=1);
         void set_fill_color(Color color) { this->set_fill_color(color, color, 0); }
 
-        virtual Point2D center      ()              = 0;
-        virtual void    set_centered();
-        virtual bool    contains    (Point2D point) = 0;
+        virtual bool contains(Point2D point) = 0;
 
     protected:
         sf::RenderWindow* _get_sfml_window(Window& window);
@@ -53,10 +47,10 @@ class Circle : public Figure {
         Circle(double x, double y, double radius, bool centered=false)
         : Circle(Point2D(x, y), radius, centered) {}
 
-        Point2D center  ()                                              override;
-        bool    contains(Point2D point)                                 override;
+        bool contains(Point2D point)                                    override;
 
         void draw_impl_(Window& window, const CoordinateSystem& system) override;
+        Point2D center()                                                override;
 };
 
 class Rectangle : public Figure {
@@ -72,10 +66,10 @@ class Rectangle : public Figure {
         Rectangle(double x, double y, double width, double height)
         : Rectangle(Point2D(x, y), width, height) {}
 
-        Point2D center  ()                                              override;
-        bool    contains(Point2D point)                                 override;
+        bool contains(Point2D point)                                    override;
 
         void draw_impl_(Window& window, const CoordinateSystem& system) override;
+        Point2D center()                                                override;
 };
 
 class RegularPolygon : public Circle {
@@ -108,12 +102,12 @@ class Polygon : public Figure {
         std::vector <Point2D>* get_vertexes();
         Point2D                get_vertex  (int index);
 
-        Point2D center  ()                                              override;
-        bool    contains(Point2D point)                                 override;
+        bool contains(Point2D point)                                    override;
 
         void draw_impl_(Window& window, const CoordinateSystem& system) override;
 
-        void move_to_shift(Point2D shift)                               override;
+        Point2D center()                                                override;
+        void move_to_shift_impl_(Point2D shift)                         override;
     
     protected:
         Polygon(Point2D main_point, bool centered) : Figure(main_point, centered) {}
@@ -134,12 +128,12 @@ class Ellipse : public Polygon {
         Ellipse(double x, double y, double rx, double ry, bool centered=false)
         : Ellipse(Point2D(x, y), Point2D(rx, ry), centered) {}
 
-        Point2D center  ()                                              override;
-        bool    contains(Point2D point)                                 override;
+        bool contains(Point2D point)                                    override;
 
         void draw_impl_(Window& window, const CoordinateSystem& system) override;
 
-        void move_to_shift(Point2D shift)                               override;
+        Point2D center()                                                override;
+        void move_to_shift_impl_(Point2D shift)                         override;
 
     private:
         Point2D __get_point(int index);

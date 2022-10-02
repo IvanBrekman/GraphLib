@@ -9,14 +9,14 @@
 #include "Vector.hpp"
 
 Vector Vector::get_normal(Normal_Type type) const {
-    Vector normal(Point2D(0, 0), Point2D(this->end_point.y - this->main_point.y, this->main_point.x - this->end_point.x));
-    normal += this->main_point;
+    Vector normal(Point2D(0, 0), Point2D(this->end_point.y - this->m_mainPoint.y, this->m_mainPoint.x - this->end_point.x));
+    normal += this->m_mainPoint;
 
     return normal;
 }
 
 Vector Vector::operator =(const Vector& vector) {
-    this->main_point = vector.main_point;
+    this->m_mainPoint = vector.m_mainPoint;
     this->end_point  = vector.end_point;
     this->m_fillColor = vector.m_fillColor;
 
@@ -24,14 +24,14 @@ Vector Vector::operator =(const Vector& vector) {
 }
 
 Vector Vector::operator +=(const Point2D& point) {
-    this->main_point += point;
+    this->m_mainPoint += point;
     this->end_point  += point;
 
     return *this;
 }
 
 Vector Vector::operator *=(double scalar) {
-    this->end_point = this->normalize() * scalar + this->main_point;
+    this->end_point = this->normalize() * scalar + this->m_mainPoint;
 
     return *this;
 }
@@ -41,15 +41,15 @@ Vector Vector::operator /=(double scalar) {
 }
 
 Vector Vector::operator +(const Vector& vector) const {
-    Vector tmp(vector.main_point, vector.end_point);
+    Vector tmp(vector.m_mainPoint, vector.end_point);
     tmp.move_to_point(this->end_point);
 
-    return Vector(this->main_point, tmp.end_point);
+    return Vector(this->m_mainPoint, tmp.end_point);
 }
 
 Vector Vector::operator -(const Vector& vector) const {
-    Vector tmp(vector.main_point, vector.end_point);
-    tmp.move_to_point(this->main_point);
+    Vector tmp(vector.m_mainPoint, vector.end_point);
+    tmp.move_to_point(this->m_mainPoint);
 
     return Vector(tmp.end_point, this->end_point);
 }
@@ -64,15 +64,15 @@ Vector Vector::operator /(double scalar) const  {
 }
 
 Vector Vector::operator -() const {
-    return Vector(this->main_point, -this->normalize() + this->main_point);
+    return Vector(this->m_mainPoint, -this->normalize() + this->m_mainPoint);
 }
 
 Line Vector::to_line() const {
-    return Line(this->main_point, this->end_point);
+    return Line(this->m_mainPoint, this->end_point);
 }
 
 Point2D Vector::normalize() const {
-    return this->end_point - this->main_point;
+    return this->end_point - this->m_mainPoint;
 }
 
 void Vector::resize(double new_size) {
@@ -84,7 +84,7 @@ void Vector::resize(double new_size) {
 void Vector::rotate(double angle) {
     if (this->m_hidden) return;
     
-    Point2D old_start        = this->main_point;
+    Point2D old_start        = this->m_mainPoint;
     Point2D direction_vector = this->normalize();
 
     angle = angle - 360 * (int)(angle / 360);
@@ -94,14 +94,14 @@ void Vector::rotate(double angle) {
     double new_x = direction_vector.x * cos(radians) - direction_vector.y * sin(radians);
     double new_y = direction_vector.x * sin(radians) + direction_vector.y * cos(radians);
 
-    this->main_point = Point2D(0, 0);
+    this->m_mainPoint = Point2D(0, 0);
     this->end_point  = Point2D(new_x, new_y);
 
     this->move_to_point(old_start);
 }
 
 void Vector::dump() const {
-    printf("<Vector: (%.3lf, %.3lf) -> (%.3lf, %.3lf) >\n", this->main_point.x, this->main_point.y, this->end_point.x, this->end_point.y);
+    printf("<Vector: (%.3lf, %.3lf) -> (%.3lf, %.3lf) >\n", this->m_mainPoint.x, this->m_mainPoint.y, this->end_point.x, this->end_point.y);
 }
 
 void Vector::draw_impl_(Window& window, const CoordinateSystem& system) {
@@ -119,11 +119,11 @@ void Vector::draw_impl_(Window& window, const CoordinateSystem& system) {
     r_arrow.draw_impl_(window, system);
 }
 
-void Vector::move_to_shift(Point2D shift) {
+void Vector::move_to_shift_impl_(Point2D shift) {
     if (this->m_hidden) return;
     
     Point2D base_shift = this->normalize();
 
-    this->main_point += shift;
-    this->end_point   = this->main_point + base_shift;
+    this->m_mainPoint += shift;
+    this->end_point   = this->m_mainPoint + base_shift;
 }

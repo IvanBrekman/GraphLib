@@ -10,9 +10,6 @@
 class Window;
 
 class Text : public Drawable, public Moveable {
-    public:
-        bool centered = false;
-    
     private:
         sf::Text __sfml_text;
         sf::Font __sfml_font;
@@ -24,8 +21,6 @@ class Text : public Drawable, public Moveable {
         Text(double x, double y, const char* text, int size=30)
         : Text(Point2D(x, y), text, size) {}
 
-        void set_centered();
-        
         void set_text(const char* text);
         void set_size(double size);
 
@@ -37,6 +32,7 @@ class Text : public Drawable, public Moveable {
         double get_width();
         double get_height();
 
-        void set_fill_color(Color color)                          override;
+        void set_fill_color(Color color)                                override;
         void draw_impl_(Window& window, const CoordinateSystem& system) override;
+        Point2D center()                                                override;
 };
