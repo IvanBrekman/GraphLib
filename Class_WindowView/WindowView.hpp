@@ -10,9 +10,9 @@
 
 class WindowView {
     public:
-        int                     size;
-        bool                    hidden;
-        std::vector <Drawable*> objects;
+        int                     m_size;
+        bool                    m_hidden;
+        std::vector <Drawable*> m_objects;
     
     public:
         WindowView(int size, ...);

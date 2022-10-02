@@ -6,16 +6,16 @@
 
 class Clock {
     public:
-        int speed_multiplier;
+        int speedMultiplier;
 
     private:
-        sf::Clock __sfml_clock;
+        sf::Clock m_sfml_clock__;
     
     public:
         Clock(int speed_m = 1)
-        : speed_multiplier(speed_m)  { this->restart(); }
+        : speedMultiplier(speed_m)  { this->restart(); }
 
-        void restart()               { this->__sfml_clock.restart(); }
+        void restart()               { this->m_sfml_clock__.restart(); }
 
-        double get_elapsed_seconds() { return this->speed_multiplier * this->__sfml_clock.getElapsedTime().asSeconds(); }
+        double get_elapsed_seconds() { return this->speedMultiplier * this->m_sfml_clock__.getElapsedTime().asSeconds(); }
 };

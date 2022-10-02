@@ -7,22 +7,21 @@
 #include "WindowView.hpp"
 
 WindowView::WindowView(int size, ...)
-: size(size), hidden(false) {
+: m_size(size), m_hidden(false) {
     va_list  args;
     va_start(args, size);
 
     for (int i = 0; i < size; i++) {
-        this->objects.push_back(va_arg(args, Drawable*));
+        this->m_objects.push_back(va_arg(args, Drawable*));
     }
 
     va_end(args);
 }
 
 void WindowView::set_objects_visibility(bool hidden) {
-    this->hidden = hidden;
+    this->m_hidden = hidden;
     
-    for (Drawable* object : this->objects) {
-        if (hidden) object->hide();
-        else        object->show();
+    for (Drawable* object : this->m_objects) {
+        object->set_hidden(hidden);
     }
 }

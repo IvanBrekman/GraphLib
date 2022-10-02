@@ -24,7 +24,7 @@ class Event {
             MOUSE_BUTTON_RELEASED   = 3,
             MOUSE_MOVED             = 4,
         };
-        Type type = Type::NO_EVENT;
+        Type m_type = Type::NO_EVENT;
 
         struct MouseEvent {
             enum Button_Type {
@@ -34,8 +34,8 @@ class Event {
                 MIDDLE  =  2
             };
 
-            Button_Type button = Button_Type::NONE;
-            Point2D pos = Point2D(0, 0);
+            Button_Type m_button = Button_Type::NONE;
+            Point2D     m_pos    = Point2D(0, 0);
         };
 
         union {
@@ -43,6 +43,6 @@ class Event {
         };
     
     private:
-        Point2D __get_mouse_button_pos(sf::Event event) { return Point2D(event.mouseButton.x, event.mouseButton.y); }
-        Point2D __get_mouse_move_pos  (sf::Event event) { return Point2D(event.mouseMove.x,   event.mouseMove.y);   }
+        Point2D get_mouse_button_pos__(sf::Event event) { return Point2D(event.mouseButton.x, event.mouseButton.y); }
+        Point2D get_mouse_move_pos__  (sf::Event event) { return Point2D(event.mouseMove.x,   event.mouseMove.y);   }
 };

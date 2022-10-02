@@ -37,16 +37,16 @@ bool Window::poll_event(Event* event) {
 
     switch (this->__sfml_poll_event.type) {
         case sf::Event::EventType::Closed:
-            event->type = Event::Type::WINDOW_CLOSED;
+            event->m_type = Event::Type::WINDOW_CLOSED;
             break;
         
         case sf::Event::EventType::MouseButtonPressed:
-            event->type         = Event::Type::MOUSE_BUTTON_PRESSED;
-            event->mouse.pos    = event->__get_mouse_button_pos(this->__sfml_poll_event);
-            event->mouse.button = (Event::MouseEvent::Button_Type)this->__sfml_poll_event.mouseButton.button;
+            event->m_type         = Event::Type::MOUSE_BUTTON_PRESSED;
+            event->mouse.m_pos    = event->get_mouse_button_pos__(this->__sfml_poll_event);
+            event->mouse.m_button = (Event::MouseEvent::Button_Type)this->__sfml_poll_event.mouseButton.button;
 
             for (Button* button : this->__buttons) {
-                if (button->is_pressed(this->__coordinate_system.pixel_to_point(event->mouse.pos), event->mouse.button)) {
+                if (button->is_pressed(this->__coordinate_system.pixel_to_point(event->mouse.m_pos), event->mouse.m_button)) {
                     button->set_button_pressed();
                 }
             }
@@ -54,13 +54,13 @@ bool Window::poll_event(Event* event) {
             break;
         
         case sf::Event::EventType::MouseButtonReleased:
-            event->type         = Event::Type::MOUSE_BUTTON_RELEASED;
-            event->mouse.pos    = event->__get_mouse_button_pos(this->__sfml_poll_event);
-            event->mouse.button = (Event::MouseEvent::Button_Type)this->__sfml_poll_event.mouseButton.button;
+            event->m_type         = Event::Type::MOUSE_BUTTON_RELEASED;
+            event->mouse.m_pos    = event->get_mouse_button_pos__(this->__sfml_poll_event);
+            event->mouse.m_button = (Event::MouseEvent::Button_Type)this->__sfml_poll_event.mouseButton.button;
 
             for (Button* button : this->__buttons) {
                 button->set_button_released();
-                if (button->is_pressed(this->__coordinate_system.pixel_to_point(event->mouse.pos), event->mouse.button)) {
+                if (button->is_pressed(this->__coordinate_system.pixel_to_point(event->mouse.m_pos), event->mouse.m_button)) {
                     button->set_button_hovered();
                 }
             }
@@ -68,11 +68,11 @@ bool Window::poll_event(Event* event) {
             break;
         
         case sf::Event::EventType::MouseMoved:
-            event->type      = Event::Type::MOUSE_MOVED;
-            event->mouse.pos = event->__get_mouse_move_pos(this->__sfml_poll_event);
+            event->m_type      = Event::Type::MOUSE_MOVED;
+            event->mouse.m_pos = event->get_mouse_move_pos__(this->__sfml_poll_event);
 
             for (Button* button : this->__buttons) {
-                if (button->is_pressed(this->__coordinate_system.pixel_to_point(event->mouse.pos), Event::MouseEvent::Button_Type::LEFT)) {
+                if (button->is_pressed(this->__coordinate_system.pixel_to_point(event->mouse.m_pos), Event::MouseEvent::Button_Type::LEFT)) {
                     button->set_button_hovered();
                 } else {
                     button->set_button_released();
