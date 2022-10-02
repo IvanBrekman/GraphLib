@@ -17,11 +17,11 @@ Button::Button(Point2D main_point, const char* text, int text_size, Button::Butt
     this->set_button_type(type);
 }
 
-double Button::width() {
+double Button::width() const {
     return this->__text.get_width()  + Button::__EXTRA_WIDTH;
 }
 
-double Button::height() {
+double Button::height() const {
     return this->__text.get_height() + Button::__EXTRA_HEIGHT;
 }
 
@@ -84,7 +84,7 @@ void Button::draw_impl_(Window& window, const CoordinateSystem& system) {
     this->__text.move_to_shift(-shift);
 }
 
-Point2D Button::center() {
+Point2D Button::center() const {
     if (this->m_centered) return this->m_mainPoint;
 
     return this->m_mainPoint + Point2D(this->width() / 2, this->height() / 2);

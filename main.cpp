@@ -106,7 +106,7 @@ int main(void) {
             }
 
             if (!wait_click && button_presed == Event::MouseEvent::Button_Type::LEFT  && (event.type == Event::MOUSE_MOVED || event.type == Event::MOUSE_BUTTON_PRESSED)) {
-                if (!vector.m_hidden) vector.end_point = system2.pixel_to_point(event.mouse.pos);
+                if (!vector.m_hidden) vector.m_endPoint = system2.pixel_to_point(event.mouse.pos);
             }
 
             if (!wait_click && button_presed == Event::MouseEvent::Button_Type::RIGHT && (event.type == Event::MOUSE_MOVED || event.type == Event::MOUSE_BUTTON_PRESSED)) {

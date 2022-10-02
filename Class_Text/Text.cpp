@@ -27,19 +27,19 @@ void Text::set_size(double size) {
     this->__sfml_text.setCharacterSize(size);
 }
 
-const char* Text::get_text() {
+const char* Text::get_text() const {
     return this->__str_text;
 }
 
-int Text::get_size() {
+int Text::get_size() const {
     return this->__sfml_text.getCharacterSize();
 }
 
-double Text::get_width() {
+double Text::get_width() const {
     return this->__sfml_text.getLocalBounds().width;
 }
 
-double Text::get_height() {
+double Text::get_height() const {
     return this->__sfml_text.getLocalBounds().height;
 }
 
@@ -66,6 +66,6 @@ void Text::draw_impl_(Window& window, const CoordinateSystem& system) {
     window.__sfml_window.draw(this->__sfml_text);
 }
 
-Point2D Text::center() {
+Point2D Text::center() const {
     return m_mainPoint;
 }

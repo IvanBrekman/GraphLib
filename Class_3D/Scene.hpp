@@ -51,7 +51,7 @@ class Scene : public Drawable, public Moveable {
         void render();
 
         void draw_impl_(Window& window, const CoordinateSystem& system) override;
-        Point2D center()                                                override;
+        Point2D center() const                                          override;
 };
 
 double  keep_in_range(double min, double max, double val);

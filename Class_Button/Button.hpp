@@ -35,8 +35,8 @@ class Button : public Drawable, public Moveable {
         Button(double x, double y, const char* text, int text_size, Button_Type type=Button_Type::DEFAULT)
         : Button(Point2D(x, y), text, text_size, type) {}
 
-        double width();
-        double height();
+        double width()  const;
+        double height() const;
 
         bool is_pressed(Point2D point, Event::MouseEvent::Button_Type button);
 
@@ -47,5 +47,5 @@ class Button : public Drawable, public Moveable {
         void set_button_hovered();
 
         void draw_impl_(Window& window, const CoordinateSystem& system) override;
-        Point2D center()                                                override;
+        Point2D center() const                                          override;
 };

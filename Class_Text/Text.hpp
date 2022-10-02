@@ -24,15 +24,15 @@ class Text : public Drawable, public Moveable {
         void set_text(const char* text);
         void set_size(double size);
 
-        const char* get_text();
-        int         get_size();
+        const char* get_text()  const;
+        int         get_size()  const;
 
 
 
-        double get_width();
-        double get_height();
+        double get_width()      const;
+        double get_height()     const;
 
         void set_fill_color(Color color)                                override;
         void draw_impl_(Window& window, const CoordinateSystem& system) override;
-        Point2D center()                                                override;
+        Point2D center() const                                          override;
 };

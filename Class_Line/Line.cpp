@@ -11,35 +11,34 @@
 #include "Line.hpp"
 
 double Line::length() const {
-    return sqrt(pow(this->m_mainPoint.x - this->end_point.x, 2) + pow(this->m_mainPoint.y - this->end_point.y, 2));
+    return sqrt(pow(m_mainPoint.x - m_endPoint.x, 2) + pow(m_mainPoint.y - m_endPoint.y, 2));
 }
 
 void Line::dump() const {
-    printf("<Line: (%.3lf, %.3lf) -> (%.3lf, %.3lf) >\n", this->m_mainPoint.x, this->m_mainPoint.y, this->end_point.x, this->end_point.y);
+    printf("<Line: (%.3lf, %.3lf) -> (%.3lf, %.3lf) >\n", m_mainPoint.x, m_mainPoint.y, m_endPoint.x, m_endPoint.y);
 }
 
+// @virtual
 void Line::draw_impl_(Window& window, const CoordinateSystem& system) {
-    CoordinateSystem draw_system = system;
-    
-    Line line(system.point_to_pixel(this->m_mainPoint), system.point_to_pixel(this->end_point));
+    Line line(system.point_to_pixel(m_mainPoint), system.point_to_pixel(m_endPoint));
 
-    sf::Vertex vert_line[] = {
+    sf::Vertex vertLine[] = {
         sf::Vertex(line.m_mainPoint.to_sfml_vector()),
-        sf::Vertex(line.end_point. to_sfml_vector()),
+        sf::Vertex(line.m_endPoint. to_sfml_vector()),
     };
 
-    vert_line[0].color = this->m_fillColor;
-    vert_line[1].color = this->m_fillColor;
+    vertLine[0].color = m_fillColor;
+    vertLine[1].color = m_fillColor;
 
-    window.__sfml_window.draw(vert_line, 2, sf::Lines);
+    window.__sfml_window.draw(vertLine, 2, sf::Lines);
 }
 
+// @virtual
 void Line::move_to_shift_impl_(Point2D point) {
-    if (this->m_hidden) return;
-
-    this->end_point += point;
+    m_endPoint += point;
 }
 
-Point2D Line::center() {
-    return m_mainPoint + (end_point - m_mainPoint) * 0.5;
+// @virtual
+Point2D Line::center() const {
+    return m_mainPoint + (m_endPoint - m_mainPoint) * 0.5;
 }

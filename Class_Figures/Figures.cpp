@@ -49,7 +49,7 @@ Circle::Circle(Point2D main_point, double radius, bool centered)
     this->m_centered = centered;
 }
 
-Point2D Circle::center() {
+Point2D Circle::center() const {
     return this->m_centered ? this->m_mainPoint : (this->m_mainPoint + Point2D(this->radius, this->radius));
 }
 
@@ -77,7 +77,7 @@ Rectangle::Rectangle(Point2D main_point, double width, double height)
     this->__sfml_shape = sf::RectangleShape(sf::Vector2f(width, height));
 }
 
-Point2D Rectangle::center() {
+Point2D Rectangle::center() const {
     return this->m_centered ? this->m_mainPoint : (this->m_mainPoint + Point2D(this->width / 2, this->height / 2));
 }
 
@@ -156,7 +156,7 @@ Point2D Polygon::get_vertex(int index) {
     return this->__vertexes.at(index);
 }
 
-Point2D Polygon::center() {
+Point2D Polygon::center() const {
     return this->__vertexes.at(0);
 }
 
@@ -208,7 +208,7 @@ Ellipse::Ellipse(Point2D main_point, Point2D radius, bool centered)
     this->_sfml_shape.setPointCount(Ellipse::__POINTS_ON_DRAW);
 }
 
-Point2D Ellipse::center() {
+Point2D Ellipse::center() const {
     return this->m_centered ? this->m_mainPoint : (this->m_mainPoint + this->radius);
 }
 

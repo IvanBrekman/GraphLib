@@ -17,8 +17,8 @@ class Vector : public Line {
         };
     
     private:
-        const double __DRAW_NORMAL_COEF = 0.2;
-        const double __DRAW_ARROW_COEF  = 0.15;
+        const double m_DRAW_NORMAL_COEF__ = 0.2;
+        const double m_DRAW_ARROW_COEF__  = 0.15;
 
     public:
         Vector()

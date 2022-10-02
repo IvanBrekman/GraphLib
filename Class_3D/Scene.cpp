@@ -148,7 +148,7 @@ void Scene::draw_impl_(Window& window, const CoordinateSystem& system) {
     this->__map.draw(window, this->__system);
 }
 
-Point2D Scene::center() {
+Point2D Scene::center() const {
     return this->m_mainPoint;
 }
 

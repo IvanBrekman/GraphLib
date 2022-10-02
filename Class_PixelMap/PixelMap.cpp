@@ -46,6 +46,6 @@ void PixelMap::draw_impl_(Window& window, const CoordinateSystem& system) {
     window.__sfml_window.draw(this->__sfml_sprite);
 }
 
-Point2D PixelMap::center() {
+Point2D PixelMap::center() const {
     return m_mainPoint;
 }

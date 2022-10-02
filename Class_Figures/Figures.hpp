@@ -50,7 +50,7 @@ class Circle : public Figure {
         bool contains(Point2D point)                                    override;
 
         void draw_impl_(Window& window, const CoordinateSystem& system) override;
-        Point2D center()                                                override;
+        Point2D center() const                                          override;
 };
 
 class Rectangle : public Figure {
@@ -69,7 +69,7 @@ class Rectangle : public Figure {
         bool contains(Point2D point)                                    override;
 
         void draw_impl_(Window& window, const CoordinateSystem& system) override;
-        Point2D center()                                                override;
+        Point2D center() const                                          override;
 };
 
 class RegularPolygon : public Circle {
@@ -106,7 +106,7 @@ class Polygon : public Figure {
 
         void draw_impl_(Window& window, const CoordinateSystem& system) override;
 
-        Point2D center()                                                override;
+        Point2D center() const                                          override;
         void move_to_shift_impl_(Point2D shift)                         override;
     
     protected:
@@ -132,7 +132,7 @@ class Ellipse : public Polygon {
 
         void draw_impl_(Window& window, const CoordinateSystem& system) override;
 
-        Point2D center()                                                override;
+        Point2D center() const                                          override;
         void move_to_shift_impl_(Point2D shift)                         override;
 
     private:

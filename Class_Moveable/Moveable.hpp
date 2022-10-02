@@ -30,7 +30,7 @@ class Moveable {
         void move_to_shift(double x, double y) { move_to_shift(Point2D(x, y));                  }
         void move_to_point(double x, double y) { move_to_shift(Point2D(x, y) - m_mainPoint);    }
 
-        virtual Point2D center() = 0;
+        virtual Point2D center() const = 0;
 
         protected:
             virtual void move_to_shift_impl_(Point2D shift) { m_mainPoint += shift; }
