@@ -32,8 +32,8 @@ void PixelMap::draw_impl_(Window& window, const CoordinateSystem& system) {
     if (this->m_hidden) return;
 
     Point2D pixel = system.point_to_pixel(this->m_mainPoint);
-    if (system.axis_y_direction == CoordinateSystem::AxisY_Direction::UP)   pixel.y -= this->height;
-    if (system.axis_x_direction == CoordinateSystem::AxisX_Direction::LEFT) pixel.x -= this->width;
+    if (system.m_axisYDirection == CoordinateSystem::AxisY_Direction::UP)   pixel.y -= this->height;
+    if (system.m_axisXDirection == CoordinateSystem::AxisX_Direction::LEFT) pixel.x -= this->width;
 
     this->__sfml_texture.update(this->__sfml_pixels);
 

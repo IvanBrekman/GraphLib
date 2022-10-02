@@ -25,40 +25,40 @@ class CoordinateSystem : public Drawable {
             LEFT_BOTTOM = 2
         };
 
-        Point2D center;
-        bool    show_axis;
+        Point2D m_center;
+        bool    m_showAxis;
 
-        AxisX_Direction axis_x_direction;
-        AxisY_Direction axis_y_direction;
+        AxisX_Direction m_axisXDirection;
+        AxisY_Direction m_axisYDirection;
 
-        std::vector <Drawable*> objects = std::vector <Drawable*>();
+        std::vector <Drawable*> m_objects = std::vector <Drawable*>();
 
     
     private:
-        Vector __axis_x;
-        Vector __axis_y;
+        Vector m_axisX__;
+        Vector m_axisY__;
 
-        static const int __LAST_INDEX       = -1;
-        static const int __DRAW_AXIS_LENGTH = 100;
+        static const int LAST_INDEX__       = -1;
+        static const int DRAW_AXIS_LENGTH__ = 100;
     
     public:
         CoordinateSystem()
         : CoordinateSystem(0, 0) {}
 
-        CoordinateSystem(Point2D center,     AxisY_Direction diry=AxisY_Direction::DOWN, AxisX_Direction dirx=AxisX_Direction::RIGHT);
-        CoordinateSystem(double x, double y, AxisY_Direction diry=AxisY_Direction::DOWN, AxisX_Direction dirx=AxisX_Direction::RIGHT)
-        : CoordinateSystem(Point2D(x, y), diry, dirx) {};
+        CoordinateSystem(Point2D center,     AxisY_Direction dirY=AxisY_Direction::DOWN, AxisX_Direction dirX=AxisX_Direction::RIGHT);
+        CoordinateSystem(double x, double y, AxisY_Direction dirY=AxisY_Direction::DOWN, AxisX_Direction dirX=AxisX_Direction::RIGHT)
+        : CoordinateSystem(Point2D(x, y), dirY, dirX) {};
 
         Point2D point_to_pixel(Point2D point)   const;
         Point2D pixel_to_point(Point2D pixel)   const;
 
         static CoordinateSystem get_system_by_type(Type type, double width, double height);
 
-        void set_show_axis(bool show_axis_val);
+        void set_show_axis(bool showAxisVal);
         void draw_axis(Window& window);
 
-        void append_object (Drawable*               object,  int index=CoordinateSystem::__LAST_INDEX);
-        void extend_objects(std::vector <Drawable*> objects, int index=CoordinateSystem::__LAST_INDEX);
+        void append_object (Drawable*               object,  int index=CoordinateSystem::LAST_INDEX__);
+        void extend_objects(std::vector <Drawable*> objects, int index=CoordinateSystem::LAST_INDEX__);
 
         void dump()                             const;
 

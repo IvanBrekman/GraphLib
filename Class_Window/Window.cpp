@@ -90,7 +90,7 @@ bool Window::poll_event(Event* event) {
 }
 
 std::vector <Drawable*>* Window::objects() {
-    return &this->__coordinate_system.objects;
+    return &this->__coordinate_system.m_objects;
 }
 
 CoordinateSystem* Window::get_system() {
@@ -98,7 +98,7 @@ CoordinateSystem* Window::get_system() {
 }
 
 void Window::set_coordinate_system(CoordinateSystem system) {
-    system.objects = this->__coordinate_system.objects;
+    system.m_objects = this->__coordinate_system.m_objects;
 
     this->__coordinate_system = system;
 }
@@ -108,12 +108,12 @@ void Window::set_coordinate_system_type(CoordinateSystem::Type type) {
 }
 
 void Window::draw_window_coordinate_system() {
-    bool save = this->__coordinate_system.show_axis;
-    this->__coordinate_system.show_axis = true;
+    bool save = this->__coordinate_system.m_showAxis;
+    this->__coordinate_system.m_showAxis = true;
 
     this->__coordinate_system.draw(*this);
 
-    this->__coordinate_system.show_axis = save;
+    this->__coordinate_system.m_showAxis = save;
 }
 
 void Window::clear() {

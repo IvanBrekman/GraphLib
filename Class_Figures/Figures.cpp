@@ -64,8 +64,8 @@ void Circle::draw_impl_(Window& window, const CoordinateSystem& system) {
     }
     
     Point2D pixel = system.point_to_pixel(min_point);
-    if (system.axis_y_direction == CoordinateSystem::AxisY_Direction::UP)   pixel.y -= this->radius * 2;
-    if (system.axis_x_direction == CoordinateSystem::AxisX_Direction::LEFT) pixel.x -= this->radius * 2;
+    if (system.m_axisYDirection == CoordinateSystem::AxisY_Direction::UP)   pixel.y -= this->radius * 2;
+    if (system.m_axisXDirection == CoordinateSystem::AxisX_Direction::LEFT) pixel.x -= this->radius * 2;
 
     Figure::_draw(window, system, pixel, this->_sfml_shape);
 }
@@ -96,8 +96,8 @@ void Rectangle::draw_impl_(Window& window, const CoordinateSystem& system) {
     }
     
     Point2D pixel = system.point_to_pixel(point);
-    if (system.axis_y_direction == CoordinateSystem::AxisY_Direction::UP)   pixel.y -= this->height;
-    if (system.axis_x_direction == CoordinateSystem::AxisX_Direction::LEFT) pixel.x -= this->width;
+    if (system.m_axisYDirection == CoordinateSystem::AxisY_Direction::UP)   pixel.y -= this->height;
+    if (system.m_axisXDirection == CoordinateSystem::AxisX_Direction::LEFT) pixel.x -= this->width;
 
     Figure::_draw(window, system, pixel, this->__sfml_shape);
 }

@@ -141,8 +141,8 @@ void Scene::draw_impl_(Window& window, const CoordinateSystem& system) {
     this->render();
 
     Point2D pixel = system.point_to_pixel(this->m_mainPoint);
-    if (system.axis_y_direction == CoordinateSystem::AxisY_Direction::UP)   pixel.y -= this->height;
-    if (system.axis_x_direction == CoordinateSystem::AxisX_Direction::LEFT) pixel.x -= this->width;
+    if (system.m_axisYDirection == CoordinateSystem::AxisY_Direction::UP)   pixel.y -= this->height;
+    if (system.m_axisXDirection == CoordinateSystem::AxisX_Direction::LEFT) pixel.x -= this->width;
 
     this->__map.move_to_point(pixel);
     this->__map.draw(window, this->__system);

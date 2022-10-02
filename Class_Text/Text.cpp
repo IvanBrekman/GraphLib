@@ -58,9 +58,9 @@ void Text::draw_impl_(Window& window, const CoordinateSystem& system) {
 
     Point2D pixel = system.point_to_pixel(point);
 
-    if (system.axis_y_direction == CoordinateSystem::AxisY_Direction::UP)   pixel.y -= this->get_height() * 1.6;
+    if (system.m_axisYDirection == CoordinateSystem::AxisY_Direction::UP)   pixel.y -= this->get_height() * 1.6;
     else                                                                    pixel.y -= this->get_height() * 0.3;
-    if (system.axis_x_direction == CoordinateSystem::AxisX_Direction::LEFT) pixel.x -= this->get_width()  * 1.0;
+    if (system.m_axisXDirection == CoordinateSystem::AxisX_Direction::LEFT) pixel.x -= this->get_width()  * 1.0;
 
     this->__sfml_text.setPosition(sf::Vector2f(pixel.x, pixel.y));
     window.__sfml_window.draw(this->__sfml_text);
