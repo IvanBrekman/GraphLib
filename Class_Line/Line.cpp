@@ -28,14 +28,14 @@ void Line::draw_impl_(Window& window, const CoordinateSystem& system) {
         sf::Vertex(line.end_point. to_sfml_vector()),
     };
 
-    vert_line[0].color = this->fill_color;
-    vert_line[1].color = this->fill_color;
+    vert_line[0].color = this->m_fillColor;
+    vert_line[1].color = this->m_fillColor;
 
     window.__sfml_window.draw(vert_line, 2, sf::Lines);
 }
 
 void Line::move_to_shift(Point2D point) {
-    if (this->hidden) return;
+    if (this->m_hidden) return;
 
     this->end_point += point;
 }

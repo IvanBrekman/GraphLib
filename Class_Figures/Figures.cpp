@@ -17,7 +17,7 @@ void Figure::set_fill_color(Color fill_color, Color outline_color, double width)
 }
 
 void Figure::set_centered() {
-    if (this->hidden) return;
+    if (this->m_hidden) return;
     
     this->centered = true;
 }
@@ -27,13 +27,13 @@ sf::RenderWindow* Figure::_get_sfml_window(Window& window) {
 }
 
 void Figure::_set_shape_color(sf::Shape& shape) {
-    shape.setFillColor       (this->fill_color);
+    shape.setFillColor       (this->m_fillColor);
     shape.setOutlineColor    (this->outline_color);
     shape.setOutlineThickness(this->outline_width);
 }
 
 void Figure::_draw(Window& window, const CoordinateSystem& system, Point2D pixel, sf::Shape& shape) {
-    if (this->hidden) return;
+    if (this->m_hidden) return;
     
     shape.setPosition(pixel.to_sfml_vector());
 
@@ -59,7 +59,7 @@ bool Circle::contains(Point2D point) {
 }
 
 void Circle::draw_impl_(Window& window, const CoordinateSystem& system) {
-    if (this->hidden) return;
+    if (this->m_hidden) return;
 
     Point2D min_point = this->main_point;
     if (this->centered) {
@@ -93,7 +93,7 @@ bool Rectangle::contains(Point2D point) {
 }
 
 void Rectangle::draw_impl_(Window& window, const CoordinateSystem& system) {
-    if (this->hidden) return;
+    if (this->m_hidden) return;
 
     Point2D point = this->main_point;
     if (this->centered) {
@@ -185,7 +185,7 @@ bool Polygon::contains(Point2D point) {
 }
 
 void Polygon::draw_impl_(Window& window, const CoordinateSystem& system) {
-    if (this->hidden) return;
+    if (this->m_hidden) return;
     
     int i = 0;
     for (Point2D point : this->__vertexes) {
@@ -199,7 +199,7 @@ void Polygon::draw_impl_(Window& window, const CoordinateSystem& system) {
 }
 
 void Polygon::move_to_shift(Point2D shift) {
-    if (this->hidden) return;
+    if (this->m_hidden) return;
     
     for (int i = 0; i < this->__vertexes.size(); i++) {
         this->__vertexes.at(i) += shift;
@@ -223,7 +223,7 @@ bool Ellipse::contains(Point2D point) {
 }
 
 void Ellipse::draw_impl_(Window& window, const CoordinateSystem& system) {
-    if (this->hidden) return;
+    if (this->m_hidden) return;
     
     for (int i = 0; i < Ellipse::__POINTS_ON_DRAW; i++) {
         Point2D pixel = system.point_to_pixel(this->__get_point(i));
@@ -235,7 +235,7 @@ void Ellipse::draw_impl_(Window& window, const CoordinateSystem& system) {
 }
 
 void Ellipse::move_to_shift(Point2D shift) {
-    if (this->hidden) return;
+    if (this->m_hidden) return;
     
     Figure::move_to_shift(shift);
 }

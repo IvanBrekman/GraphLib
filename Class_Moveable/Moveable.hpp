@@ -22,7 +22,7 @@ class Moveable {
         : main_point(x, y) {}
 
         virtual void move_to_shift(Point2D shift)      { 
-            if (IS_INSTANCE(this, Drawable*) && dynamic_cast<Drawable*>(this)->hidden) return;
+            if (IS_INSTANCE(this, Drawable*) && dynamic_cast<Drawable*>(this)->m_hidden) return;
             this->main_point += shift;                     
         }
                 void move_to_point(Point2D point)      { this->move_to_shift(point - this->main_point); }

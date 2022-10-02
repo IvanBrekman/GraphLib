@@ -6,8 +6,37 @@
 
 #include "Drawable.hpp"
 
-void Drawable::draw_on_window(Window& window) {
-    if (this->hidden) return;
+Drawable::Drawable() {
+    m_fillColor = Color::Black;
+    m_hidden    = false;
+}
 
-    this->draw(window, window.__coordinate_system);
+// @virtual
+void Drawable::set_fill_color(Color color) {
+    m_fillColor = color;
+}
+
+// @virtual
+void Drawable::set_hidden(bool hidden) {
+    m_hidden = hidden;
+}
+
+void Drawable::show() {
+    set_hidden(false);
+}
+
+void Drawable::hide() {
+    set_hidden(true);
+}
+
+void Drawable::draw(Window& window, const CoordinateSystem& system) {
+    if (!m_hidden) {
+        draw_impl_(window, system);
+    }
+}
+
+void Drawable::draw(Window& window) {
+    if (!m_hidden) {
+        draw(window, window.__coordinate_system);
+    }
 }

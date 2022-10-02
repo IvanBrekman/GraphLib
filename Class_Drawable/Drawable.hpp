@@ -6,7 +6,6 @@
 
 #include "../Class_Color/Color.hpp"
 
-// TODO overload draw
 // TODO color parameter
 
 class Window;
@@ -14,20 +13,20 @@ class CoordinateSystem;
 
 class Drawable {
     public:
-        Color fill_color;
-        bool  hidden=false;
+        Color m_fillColor;
+        bool  m_hidden;
 
     public:
-        Drawable()
-        : fill_color(Color::Black) {};
+        Drawable();
 
-        virtual void set_fill_color(Color color) { this->fill_color = color; }
+        virtual void set_fill_color(Color color);
+        virtual void set_hidden    (bool hidden);
 
-        virtual void show() { this->hidden = false; }
-        virtual void hide() { this->hidden = true;  }
+        void show();
+        void hide();
         
-        void draw          (Window& window, const CoordinateSystem& system) { if (!hidden) draw_impl_(window, system); }
-        void draw_on_window(Window& window);
+        void draw              (Window& window, const CoordinateSystem& system);
+        void draw              (Window& window);
     
     protected:
         virtual void draw_impl_(Window& window, const CoordinateSystem& system) = 0;

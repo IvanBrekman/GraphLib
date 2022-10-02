@@ -14,8 +14,8 @@ CoordinateSystem::CoordinateSystem(Point2D center, AxisY_Direction diry, AxisX_D
     this->__axis_x = Vector(center - Point2D(x, 0), center + Point2D(x, 0));
     this->__axis_y = Vector(center - Point2D(0, y), center + Point2D(0, y));
 
-    this->__axis_x.set_fill_color(this->fill_color);
-    this->__axis_y.set_fill_color(this->fill_color);
+    this->__axis_x.set_fill_color(this->m_fillColor);
+    this->__axis_y.set_fill_color(this->m_fillColor);
 }
 
 Point2D CoordinateSystem::point_to_pixel(Point2D point) const {
@@ -82,15 +82,9 @@ void CoordinateSystem::dump() const {
     printf(">\n");
 }
 
-void CoordinateSystem::hide() {
+void CoordinateSystem::set_hidden(bool hidden) {
     for (Drawable* object : objects) {
-        object->hide();
-    }
-}
-
-void CoordinateSystem::show() {
-    for (Drawable* object : objects) {
-        object->show();
+        object->set_hidden(hidden);
     }
 }
 

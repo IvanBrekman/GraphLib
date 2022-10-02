@@ -106,7 +106,7 @@ int main(void) {
             }
 
             if (!wait_click && button_presed == Event::MouseEvent::Button_Type::LEFT  && (event.type == Event::MOUSE_MOVED || event.type == Event::MOUSE_BUTTON_PRESSED)) {
-                if (!vector.hidden) vector.end_point = system2.pixel_to_point(event.mouse.pos);
+                if (!vector.m_hidden) vector.end_point = system2.pixel_to_point(event.mouse.pos);
             }
 
             if (!wait_click && button_presed == Event::MouseEvent::Button_Type::RIGHT && (event.type == Event::MOUSE_MOVED || event.type == Event::MOUSE_BUTTON_PRESSED)) {
@@ -115,7 +115,7 @@ int main(void) {
         }
         // =======================================================
 
-        if (second_hand.hidden == false && update_clock && clock.get_elapsed_seconds() > 1) {
+        if (second_hand.m_hidden == false && update_clock && clock.get_elapsed_seconds() > 1) {
             second_hand.rotate(-360.0 / (60     ));
             minute_hand.rotate(-360.0 / (60 * 60));
 

@@ -26,7 +26,7 @@ double Button::height() {
 }
 
 bool Button::is_pressed(Point2D point, Event::MouseEvent::Button_Type button) {
-    if (this->hidden || button != Event::MouseEvent::Button_Type::LEFT) return false;
+    if (this->m_hidden || button != Event::MouseEvent::Button_Type::LEFT) return false;
     
     return this->__shape->contains(point);
 }
@@ -54,7 +54,7 @@ void Button::set_button_type(Button::Button_Type type) {
             return;
     }
 
-    this->__shape_color = this->fill_color;
+    this->__shape_color = this->m_fillColor;
     this->__shape->set_fill_color(this->__shape_color, Color::Black, 5);
 }
 
@@ -63,18 +63,18 @@ void Button::set_button_pressed() {
 }
 
 void Button::set_button_released() {
-    this->__shape->set_fill_color(this->fill_color, Color::Black, 5);
+    this->__shape->set_fill_color(this->m_fillColor, Color::Black, 5);
 }
 
 void Button::set_button_hovered() {
-    if (this->__shape->fill_color == Color::Yellow) return;
+    if (this->__shape->m_fillColor == Color::Yellow) return;
 
-    this->__shape_color = this->__shape->fill_color;
+    this->__shape_color = this->__shape->m_fillColor;
     this->__shape->set_fill_color(Color::Yellow, Color::Black, 5);
 }
 
 void Button::set_centered() {
-    if (this->hidden) return;
+    if (this->m_hidden) return;
 
     this->centered = true;
 }

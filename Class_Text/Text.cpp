@@ -53,7 +53,7 @@ void Text::set_fill_color(Color color) {
 }
 
 void Text::draw_impl_(Window& window, const CoordinateSystem& system) {
-    if (this->hidden) return;
+    if (this->m_hidden) return;
 
     Point2D point = this->main_point;
     if (this->centered) {

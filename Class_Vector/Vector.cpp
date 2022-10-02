@@ -18,7 +18,7 @@ Vector Vector::get_normal(Normal_Type type) const {
 Vector Vector::operator =(const Vector& vector) {
     this->main_point = vector.main_point;
     this->end_point  = vector.end_point;
-    this->fill_color = vector.fill_color;
+    this->m_fillColor = vector.m_fillColor;
 
     return vector;
 }
@@ -76,13 +76,13 @@ Point2D Vector::normalize() const {
 }
 
 void Vector::resize(double new_size) {
-    if (this->hidden) return;
+    if (this->m_hidden) return;
 
     *this *= new_size / this->length();
 }
 
 void Vector::rotate(double angle) {
-    if (this->hidden) return;
+    if (this->m_hidden) return;
     
     Point2D old_start        = this->main_point;
     Point2D direction_vector = this->normalize();
@@ -112,15 +112,15 @@ void Vector::draw_impl_(Window& window, const CoordinateSystem& system) {
     Line l_arrow = Vector(( normal_vector * this->__DRAW_NORMAL_COEF - *this) * this->__DRAW_ARROW_COEF).to_line();
     Line r_arrow = Vector((-normal_vector * this->__DRAW_NORMAL_COEF - *this) * this->__DRAW_ARROW_COEF).to_line();
 
-    l_arrow.set_fill_color(this->fill_color);
-    r_arrow.set_fill_color(this->fill_color);
+    l_arrow.set_fill_color(this->m_fillColor);
+    r_arrow.set_fill_color(this->m_fillColor);
 
     l_arrow.draw(window, system);
     r_arrow.draw_impl_(window, system);
 }
 
 void Vector::move_to_shift(Point2D shift) {
-    if (this->hidden) return;
+    if (this->m_hidden) return;
     
     Point2D base_shift = this->normalize();
 

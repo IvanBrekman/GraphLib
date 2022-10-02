@@ -29,7 +29,7 @@ Color PixelMap::get_pixel(int x, int y) {
 }
 
 void PixelMap::draw_impl_(Window& window, const CoordinateSystem& system) {
-    if (this->hidden) return;
+    if (this->m_hidden) return;
 
     Point2D pixel = system.point_to_pixel(this->main_point);
     if (system.axis_y_direction == CoordinateSystem::AxisY_Direction::UP)   pixel.y -= this->height;

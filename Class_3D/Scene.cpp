@@ -136,7 +136,7 @@ void Scene::render() {
 }
 
 void Scene::draw_impl_(Window& window, const CoordinateSystem& system) {
-    if (this->hidden) return;
+    if (this->m_hidden) return;
 
     this->render();
 

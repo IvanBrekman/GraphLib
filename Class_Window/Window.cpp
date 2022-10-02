@@ -111,7 +111,7 @@ void Window::draw_window_coordinate_system() {
     bool save = this->__coordinate_system.show_axis;
     this->__coordinate_system.show_axis = true;
 
-    this->__coordinate_system.draw_on_window(*this);
+    this->__coordinate_system.draw(*this);
 
     this->__coordinate_system.show_axis = save;
 }
