@@ -8,13 +8,13 @@
 
 struct Material {
     Material(Point3D albedo, Color color, double spec_exp)
-    : albedo(albedo), diffuse_color(color), specular_exp(spec_exp) {}
+    : albedo(albedo), diffuseColor(color), specularExp(spec_exp) {}
     
     Material()
     : Material(Point3D(1, 0, 0), Color::Black, 100.0) {}
 
-    Color   diffuse_color;
-    double  specular_exp;
+    Color   diffuseColor;
+    double  specularExp;
     Point3D albedo;
 };
 
@@ -27,16 +27,16 @@ class CoordinateSystem;
 
 class Sphere {
     public:
-        Point3D  center;
-        double   radius;
+        Point3D  m_center;
+        double   m_radius;
 
-        Material material;
+        Material m_material;
     
     private:
-        double   __radius_square;
+        double   m_radiusSquare__;
     
     public:
         Sphere(Point3D center, double radius, Material material);
 
-        bool intersect_ray(Point3D ray_start, Point3D ray_dir, double& dist);
+        bool intersect_ray(Point3D rayStart, Point3D rayDir, double& dist);
 };

@@ -131,7 +131,7 @@ void Window::close() {
 void Window::append_view(WindowView* view) {
     this->__views.push_back(view);
 
-    this->extend_objects(view->objects);
+    this->extend_objects(view->m_objects);
 }
 
 void Window::extend_views(std::vector <WindowView*> views) {

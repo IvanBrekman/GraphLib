@@ -125,9 +125,9 @@ int main(void) {
         // ==================== Drawing Objects ====================
         window.clear();
 
-        system1.set_show_axis(!view2.hidden);
-        system2.set_show_axis(!view2.hidden);
-        if (!view2.hidden) window.draw_window_coordinate_system();
+        system1.set_show_axis(!view2.m_hidden);
+        system2.set_show_axis(!view2.m_hidden);
+        if (!view2.m_hidden) window.draw_window_coordinate_system();
 
         window.draw_added_objects();
 

@@ -18,29 +18,29 @@ class Window;
 
 class Scene : public Drawable, public Moveable {
     public:
-        double width;
-        double height;
+        double m_width;
+        double m_height;
 
-        Color  background = Color(51, 178, 204);
+        Color  m_background = Color(51, 178, 204);
 
-        std::vector <Sphere*> spheres;
-        std::vector <Light *> lights;
+        std::vector <Sphere*> m_spheres;
+        std::vector <Light *> m_lights;
     
     private:
-        PixelMap         __map;
-        CoordinateSystem __system;
+        PixelMap         m_map__;
+        CoordinateSystem m_system__;
 
-        const int        __FOV               = M_PI / 2;
-        const int        __REFLECT_DEPTH     = 4;
-        const double     __DEFAULT_DEVIATION = 1e-3;
+        const int        m_FOV__               = M_PI / 2;
+        const int        m_REFLECT_DEPTH__     = 4;
+        const double     m_DEFAULT_DEVIATION__ = 1e-3;
     
     public:
-        Scene(Point2D main_point, double width, double height);
+        Scene(Point2D mainPoint, double width, double height);
         Scene(double x, double y, double width, double height)
         : Scene(Point2D(x, y), width, height) {}
 
-        Color cast_ray         (Point3D ray_start, Point3D ray_dir, std::vector <Sphere*> spheres, std::vector <Light*> lights, int depth=0);
-        bool  intersect_objects(Point3D ray_start, Point3D ray_dir, std::vector <Sphere*> spheres, Point3D& intersection, Point3D& normal, Material& material);
+        Color cast_ray         (Point3D rayStart, Point3D rayDir, std::vector <Sphere*> spheres, std::vector <Light*> lights, int depth=0);
+        bool  intersect_objects(Point3D rayStart, Point3D rayDir, std::vector <Sphere*> spheres, Point3D& intersection, Point3D& normal, Material& material);
 
         void append_sphere (             Sphere*  sphere );
         void extend_spheres(std::vector <Sphere*> spheres);
@@ -54,6 +54,4 @@ class Scene : public Drawable, public Moveable {
         Point2D center() const                                          override;
 };
 
-double  keep_in_range(double min, double max, double val);
-
-Point3D reflect(Point3D light_dir, Point3D normal);
+Point3D reflect(Point3D lightDir, Point3D normal);
