@@ -21,7 +21,7 @@ class Scene : public Drawable, public Moveable {
         double m_width;
         double m_height;
 
-        Color  m_background = Color(51, 178, 204);
+        PixelMap m_background;
 
         std::vector <SceneObject*> m_objects;
         std::vector <Light      *> m_lights;
@@ -30,16 +30,17 @@ class Scene : public Drawable, public Moveable {
         PixelMap         m_map__;
         CoordinateSystem m_system__;
 
-        const int        REFLECT_DEPTH__     = 4;
-        const double     FOV__               = M_PI / 3;
-        const double     DEFAULT_DEVIATION__ = 1e-3;
+        const int        REFLECT_DEPTH__      = 4;
+        const double     FOV__                = M_PI / 3;
+        const double     DEFAULT_DEVIATION__  = 1e-3;
+        const Color      DEFAULT_BACK_COLOR__ = Color(51, 178, 204);
     
     public:
-        Scene(Point2D mainPoint,  double width, double height);
-        Scene(double x, double y, double width, double height)
-        : Scene(Point2D(x, y), width, height) {}
+        Scene(Point2D mainPoint,  double width, double height, const char* backImgPath=nullptr);
+        Scene(double x, double y, double width, double height, const char* backImgPath=nullptr)
+        : Scene(Point2D(x, y), width, height, backImgPath) {}
 
-        Color cast_ray         (Point3D rayStart, Point3D rayDir, int depth=0);
+        Color cast_ray         (Point3D rayStart, Point3D rayDir, int x, int y, int depth=0);
         bool  intersect_objects(Point3D rayStart, Point3D rayDir, Point3D& intersection, Point3D& normal, Material& material);
 
         void append_scene_object (             SceneObject*  object );

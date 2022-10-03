@@ -8,24 +8,34 @@
 #include "Scene.hpp"
 #include "Plane.hpp"
 
-Scene::Scene(Point2D mainPoint, double width, double height)
+Scene::Scene(Point2D mainPoint, double width, double height, const char* backImgPath)
 : Moveable(mainPoint), m_width(width), m_height(height) {
     m_map__    = PixelMap(0, 0, width, height);
     m_system__ = CoordinateSystem::get_system_by_type(CoordinateSystem::Type::LEFT_UP, m_width, m_height);
+
+    if (VALID_PTR(backImgPath)) m_background.load_image(backImgPath);
+    else {
+        m_background = PixelMap(mainPoint, width, height);
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                m_background.set_pixel(x, y, Scene::DEFAULT_BACK_COLOR__);
+            }
+        }
+    }
 }
 
-Color Scene::cast_ray(Point3D rayStart, Point3D rayDir, int depth) {
+Color Scene::cast_ray(Point3D rayStart, Point3D rayDir, int x, int y, int depth) {
     Point3D  intersection;                  // ray intersection point with sphere
     Point3D  normal;                        // normal vector to intersection point
     Material material;
 
     if (depth > Scene::REFLECT_DEPTH__ || !intersect_objects(rayStart, rayDir, intersection, normal, material)) {
-        return m_background;
+        return m_background.get_pixel(x, y);
     }
 
     Point3D reflectDir   = reflect(rayDir, normal).normalize();
     Point3D reflectStart = intersection - (normal * Scene::DEFAULT_DEVIATION__) * (2 * (Point3D::scalar_product(reflectDir, normal) < 0) - 1);
-    Color   reflectColor = cast_ray(reflectStart, reflectDir, depth + 1);
+    Color   reflectColor = cast_ray(reflectStart, reflectDir, x, y, depth + 1);
 
     double  diffuseLightIntensity = 0;      // coef for diffuse  light
     double specularLightIntensity = 0;      // coef for specular light
@@ -111,7 +121,7 @@ void Scene::render() {
 
             Point3D dir = Point3D(px, py, -1).normalize();
 
-            m_map__.set_pixel(x, y, cast_ray(Point3D(0, 0, 0), dir));
+            m_map__.set_pixel(x, y, cast_ray(Point3D(0, 0, 0), dir, x, y));
         }
     }
 }

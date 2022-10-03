@@ -28,6 +28,23 @@ Color PixelMap::get_pixel(int x, int y) {
     return Color(pixel[0], pixel[1], pixel[2], pixel[3]);
 }
 
+void PixelMap::load_image(const char* path) {
+    sf::Image img;
+    img.loadFromFile(path);
+
+    m_width  = img.getSize().x;
+    m_height = img.getSize().y;
+
+    m_sfml_pixels__ = new sf::Uint8[m_width * m_height * 4];
+    m_sfml_texture__.create(m_width, m_height);
+
+    for (int x = 0; x < m_width; x++) {
+        for (int y = 0; y < m_height; y++) {
+            set_pixel(x, y, img.getPixel(x, y));
+        }
+    }
+}
+
 // @virtual
 void PixelMap::draw_impl_(Window& window, const CoordinateSystem& system) {
     if (m_hidden) return;

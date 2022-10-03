@@ -33,6 +33,8 @@ class PixelMap : public Drawable, public Moveable {
 
         void  set_pixel(int x, int y,  Color color);
         Color get_pixel(int x, int y);
+        
+        void load_image(const char* path);
 
         void draw_impl_(Window& window, const CoordinateSystem& system) override;
         Point2D center() const                                          override;
