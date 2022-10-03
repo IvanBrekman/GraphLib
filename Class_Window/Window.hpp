@@ -17,24 +17,20 @@ class WindowView;
 
 class Window {
     friend class Drawable;
-    friend class Line;
-    friend class Figure;
-    friend class PixelMap;
-    friend class Text;
 
     public:
-        int width;
-        int height;
+        int m_width;
+        int m_height;
 
-        Color color;
+        Color m_color;
 
     private:
-        sf::Event                   __sfml_poll_event;
-        sf::RenderWindow            __sfml_window;
+        sf::Event                   m_sfml_pollEvent__;
+        sf::RenderWindow            m_sfml_window__;
 
-        CoordinateSystem            __coordinate_system;
-        std::vector <Button*>       __buttons;
-        std::vector <WindowView*>   __views;
+        CoordinateSystem            m_coordinateSystem__;
+        std::vector <Button*>       m_buttons__;
+        std::vector <WindowView*>   m_views__;
 
     public:
         Window(int width, int height, const char* text="GraphLib Window", Color color=Color::White);

@@ -43,7 +43,7 @@ void PixelMap::draw_impl_(Window& window, const CoordinateSystem& system) {
 
     Color color = get_pixel(0, 0);
 
-    window.__sfml_window.draw(m_sfml_sprite__);
+    get_sfml_window_(window).draw(m_sfml_sprite__);
 }
 
 // @virtual

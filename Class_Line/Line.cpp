@@ -30,7 +30,7 @@ void Line::draw_impl_(Window& window, const CoordinateSystem& system) {
     vertLine[0].color = m_fillColor;
     vertLine[1].color = m_fillColor;
 
-    window.__sfml_window.draw(vertLine, 2, sf::Lines);
+    get_sfml_window_(window).draw(vertLine, 2, sf::Lines);
 }
 
 // @virtual

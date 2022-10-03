@@ -37,10 +37,10 @@ void Drawable::draw(Window& window, const CoordinateSystem& system) {
 
 void Drawable::draw(Window& window) {
     if (!m_hidden) {
-        draw(window, window.__coordinate_system);
+        draw(window, window.m_coordinateSystem__);
     }
 }
 
 sf::RenderWindow& Drawable::get_sfml_window_(Window& window) {
-    return window.__sfml_window;
+    return window.m_sfml_window__;
 }

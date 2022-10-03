@@ -12,41 +12,41 @@
 #include "Window.hpp"
 
 Window::Window(int width, int height, const char* text, Color color)
-: width(width), height(height), color(color) {
+: m_width(width), m_height(height), m_color(color) {
     ASSERT_IF(VALID_PTR(text), "Ivalid text ptr", );
 
-    this->__sfml_window.create(sf::VideoMode(width, height), text, sf::Style::Titlebar | sf::Style::Close);
+    m_sfml_window__.create(sf::VideoMode(width, height), text, sf::Style::Titlebar | sf::Style::Close);
 
-    this->set_coordinate_system_type(CoordinateSystem::Type::LEFT_UP);
+    set_coordinate_system_type(CoordinateSystem::Type::LEFT_UP);
 }
 
 Window::~Window() {
-    this->close();
+    close();
 }
 
 
 bool Window::is_open() const {
-    return this->__sfml_window.isOpen();
+    return m_sfml_window__.isOpen();
 }
 
 bool Window::poll_event(Event* event) {
     ASSERT_IF(VALID_PTR(event), "Invalid event ptr", false);
 
-    bool result = this->__sfml_window.pollEvent(this->__sfml_poll_event);
+    bool result = m_sfml_window__.pollEvent(m_sfml_pollEvent__);
     if (result == 0) return 0;
 
-    switch (this->__sfml_poll_event.type) {
+    switch (m_sfml_pollEvent__.type) {
         case sf::Event::EventType::Closed:
             event->m_type = Event::Type::WINDOW_CLOSED;
             break;
         
         case sf::Event::EventType::MouseButtonPressed:
             event->m_type         = Event::Type::MOUSE_BUTTON_PRESSED;
-            event->mouse.m_pos    = event->get_mouse_button_pos__(this->__sfml_poll_event);
-            event->mouse.m_button = (Event::MouseEvent::Button_Type)this->__sfml_poll_event.mouseButton.button;
+            event->mouse.m_pos    = event->get_mouse_button_pos__(m_sfml_pollEvent__);
+            event->mouse.m_button = (Event::MouseEvent::Button_Type)m_sfml_pollEvent__.mouseButton.button;
 
-            for (Button* button : this->__buttons) {
-                if (button->is_pressed(this->__coordinate_system.pixel_to_point(event->mouse.m_pos), event->mouse.m_button)) {
+            for (Button* button : m_buttons__) {
+                if (button->is_pressed(m_coordinateSystem__.pixel_to_point(event->mouse.m_pos), event->mouse.m_button)) {
                     button->set_button_pressed();
                 }
             }
@@ -55,12 +55,12 @@ bool Window::poll_event(Event* event) {
         
         case sf::Event::EventType::MouseButtonReleased:
             event->m_type         = Event::Type::MOUSE_BUTTON_RELEASED;
-            event->mouse.m_pos    = event->get_mouse_button_pos__(this->__sfml_poll_event);
-            event->mouse.m_button = (Event::MouseEvent::Button_Type)this->__sfml_poll_event.mouseButton.button;
+            event->mouse.m_pos    = event->get_mouse_button_pos__(m_sfml_pollEvent__);
+            event->mouse.m_button = (Event::MouseEvent::Button_Type)m_sfml_pollEvent__.mouseButton.button;
 
-            for (Button* button : this->__buttons) {
+            for (Button* button : m_buttons__) {
                 button->set_button_released();
-                if (button->is_pressed(this->__coordinate_system.pixel_to_point(event->mouse.m_pos), event->mouse.m_button)) {
+                if (button->is_pressed(m_coordinateSystem__.pixel_to_point(event->mouse.m_pos), event->mouse.m_button)) {
                     button->set_button_hovered();
                 }
             }
@@ -69,10 +69,10 @@ bool Window::poll_event(Event* event) {
         
         case sf::Event::EventType::MouseMoved:
             event->m_type      = Event::Type::MOUSE_MOVED;
-            event->mouse.m_pos = event->get_mouse_move_pos__(this->__sfml_poll_event);
+            event->mouse.m_pos = event->get_mouse_move_pos__(m_sfml_pollEvent__);
 
-            for (Button* button : this->__buttons) {
-                if (button->is_pressed(this->__coordinate_system.pixel_to_point(event->mouse.m_pos), Event::MouseEvent::Button_Type::LEFT)) {
+            for (Button* button : m_buttons__) {
+                if (button->is_pressed(m_coordinateSystem__.pixel_to_point(event->mouse.m_pos), Event::MouseEvent::Button_Type::LEFT)) {
                     button->set_button_hovered();
                 } else {
                     button->set_button_released();
@@ -82,7 +82,7 @@ bool Window::poll_event(Event* event) {
             break;
           
         default:
-            LOG1(printf(RED "Unassembled Event. EventType: %d\n" NATURAL, this->__sfml_poll_event.type););
+            LOG1(printf(RED "Unassembled Event. EventType: %d\n" NATURAL, __sfml_poll_event.type););
             break;
     }
 
@@ -90,64 +90,64 @@ bool Window::poll_event(Event* event) {
 }
 
 std::vector <Drawable*>* Window::objects() {
-    return &this->__coordinate_system.m_objects;
+    return &m_coordinateSystem__.m_objects;
 }
 
 CoordinateSystem* Window::get_system() {
-    return &this->__coordinate_system;
+    return &m_coordinateSystem__;
 }
 
 void Window::set_coordinate_system(CoordinateSystem system) {
-    system.m_objects = this->__coordinate_system.m_objects;
+    system.m_objects = m_coordinateSystem__.m_objects;
 
-    this->__coordinate_system = system;
+    m_coordinateSystem__ = system;
 }
 
 void Window::set_coordinate_system_type(CoordinateSystem::Type type) {
-    Window::set_coordinate_system(CoordinateSystem::get_system_by_type(type, this->width, this->height));
+    Window::set_coordinate_system(CoordinateSystem::get_system_by_type(type, m_width, m_height));
 }
 
 void Window::draw_window_coordinate_system() {
-    bool save = this->__coordinate_system.m_showAxis;
-    this->__coordinate_system.m_showAxis = true;
+    bool save = m_coordinateSystem__.m_showAxis;
+    m_coordinateSystem__.m_showAxis = true;
 
-    this->__coordinate_system.draw(*this);
+    m_coordinateSystem__.draw(*this);
 
-    this->__coordinate_system.m_showAxis = save;
+    m_coordinateSystem__.m_showAxis = save;
 }
 
 void Window::clear() {
-    this->__sfml_window.clear(this->color);
+    m_sfml_window__.clear(m_color);
 }
 
 void Window::display() {
-    this->__sfml_window.display();
+    m_sfml_window__.display();
 }
 
 void Window::close() {
-    this->__sfml_window.close();
+    m_sfml_window__.close();
 }
 
 void Window::append_view(WindowView* view) {
-    this->__views.push_back(view);
+    m_views__.push_back(view);
 
-    this->extend_objects(view->m_objects);
+    extend_objects(view->m_objects);
 }
 
 void Window::extend_views(std::vector <WindowView*> views) {
     for (WindowView* view : views) {
-        this->append_view(view);
+        append_view(view);
     }
 }
 
 void Window::show_view(WindowView* view) {
     bool has_view = false;
-    for (WindowView* window_view : this->__views) {
+    for (WindowView* window_view : m_views__) {
         if (window_view == view) has_view = true;
         window_view->set_objects_visibility(true);
     }
 
-    if (!has_view) this->__views.push_back(view);
+    if (!has_view) m_views__.push_back(view);
     view->set_objects_visibility(false);
 }
 
@@ -155,25 +155,25 @@ void Window::append_object(Drawable* object, int index) {
     ASSERT_IF(VALID_PTR(object), "Invalid object ptr", );
     
     if (IS_INSTANCE(object, Button*)) {
-        this->__buttons.push_back(dynamic_cast<Button*>(object));
+        m_buttons__.push_back(dynamic_cast<Button*>(object));
     }
-    this->__coordinate_system.append_object(object, index);
+    m_coordinateSystem__.append_object(object, index);
 }
 
 void Window::extend_objects(std::vector <Drawable*> objects, int index) {
     for (Drawable* object : objects) {
-        this->append_object(object, index);
+        append_object(object, index);
     }
 }
 
 void Window::draw(Drawable* object) {
     ASSERT_IF(VALID_PTR(object), "Invalid object ptr", );
     
-    object->draw(*this, this->__coordinate_system);
+    object->draw(*this, m_coordinateSystem__);
 }
 
 void Window::draw_added_objects() {
-    for (Drawable* object : *this->objects()) {
-        this->draw(object);
+    for (Drawable* object : *objects()) {
+        draw(object);
     }
 }
