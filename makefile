@@ -21,7 +21,7 @@ OBJ_EXT			:= .obj.meow
 SRC_FILES 	    := $(shell find */*$(SRC_EXT) 2>/dev/null)
 OBJ_FILES		:= $(addprefix $(BIN), $(notdir $(SRC_FILES:$(SRC_EXT)=$(OBJ_EXT))))
 
-INCLUDES		:= $(addprefix -I ,    $(shell find -type d -name "Class_*")) -I ../Class_Color
+INCLUDES		:= $(addprefix -I ,    $(shell find -type d -name "Class_*"))
 INCLUDES_INSIDE := $(addprefix -I ../, $(shell find -type d -name "Class_*"))
 SFML_LIBS 		:= -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -lsfml-network
 

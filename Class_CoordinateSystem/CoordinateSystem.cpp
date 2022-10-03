@@ -60,8 +60,8 @@ void CoordinateSystem::draw_axis(Window& window) {
 void CoordinateSystem::append_object(Drawable* object, int index) {
     ASSERT_IF(VALID_PTR(object), "Invalid object ptr", );
     
-    if (index == CoordinateSystem::LAST_INDEX__) m_objects.push_back(object);
-    else                                         m_objects.emplace(m_objects.cbegin() + index, object);
+    if (index == CoordinateSystem::LAST_INDEX) m_objects.push_back(object);
+    else                                       m_objects.emplace(m_objects.cbegin() + index, object);
 }
 
 void CoordinateSystem::extend_objects(std::vector <Drawable*> objects, int index) {

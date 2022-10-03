@@ -6,8 +6,8 @@
 
 #include "Text.hpp"
 
-Text::Text(Point2D main_point, const char* text, int size)
-: Moveable(main_point), m_strText__(text) {
+Text::Text(Point2D mainPoint, const char* text, int size)
+: Moveable(mainPoint), m_strText__(text) {
     ASSERT_IF(VALID_PTR(text), "Invalid text ptr", );
 
     m_sfml_font__.loadFromFile("fonts/arialamu.ttf");

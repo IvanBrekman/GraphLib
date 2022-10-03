@@ -53,10 +53,10 @@ class Window {
 
         void append_view (WindowView* view);
         void extend_views(std::vector <WindowView*> views);
-        void show_view(WindowView* view);
+        void show_view   (WindowView* view);
 
-        void append_object (Drawable*               object,  int index=CoordinateSystem::LAST_INDEX__);
-        void extend_objects(std::vector <Drawable*> objects, int index=CoordinateSystem::LAST_INDEX__);
+        void append_object (Drawable*               object,  int index=CoordinateSystem::LAST_INDEX);
+        void extend_objects(std::vector <Drawable*> objects, int index=CoordinateSystem::LAST_INDEX);
 
         void draw(Drawable* object);
         void draw_added_objects();

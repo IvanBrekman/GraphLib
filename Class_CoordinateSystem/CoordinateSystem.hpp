@@ -8,7 +8,6 @@
 #include "../Class_Point/Point.hpp"
 
 class CoordinateSystem : public Drawable {
-    friend class Window;
 
     public:
         enum AxisX_Direction {
@@ -33,12 +32,12 @@ class CoordinateSystem : public Drawable {
 
         std::vector <Drawable*> m_objects = std::vector <Drawable*>();
 
+        static const int LAST_INDEX       = -1;
     
     private:
         Vector m_axisX__;
         Vector m_axisY__;
 
-        static const int LAST_INDEX__       = -1;
         static const int DRAW_AXIS_LENGTH__ = 100;
     
     public:
@@ -57,8 +56,8 @@ class CoordinateSystem : public Drawable {
         void set_show_axis(bool showAxisVal);
         void draw_axis(Window& window);
 
-        void append_object (Drawable*               object,  int index=CoordinateSystem::LAST_INDEX__);
-        void extend_objects(std::vector <Drawable*> objects, int index=CoordinateSystem::LAST_INDEX__);
+        void append_object (Drawable*               object,  int index=CoordinateSystem::LAST_INDEX);
+        void extend_objects(std::vector <Drawable*> objects, int index=CoordinateSystem::LAST_INDEX);
 
         void dump()                             const;
 

@@ -7,8 +7,8 @@
 
 #include "PixelMap.hpp"
 
-PixelMap::PixelMap(Point2D main_point, int width, int height)
-: Drawable(), Moveable(main_point), m_width(width), m_height(height) {
+PixelMap::PixelMap(Point2D mainPoint, int width, int height)
+: Drawable(), Moveable(mainPoint), m_width(width), m_height(height) {
     m_sfml_pixels__ = new sf::Uint8[width * height * 4];
     m_sfml_texture__.create(width, height);
 }
@@ -40,8 +40,6 @@ void PixelMap::draw_impl_(Window& window, const CoordinateSystem& system) {
 
     m_sfml_sprite__ = sf::Sprite(m_sfml_texture__);
     m_sfml_sprite__.setPosition(pixel.to_sfml_vector());
-
-    Color color = get_pixel(0, 0);
 
     get_sfml_window_(window).draw(m_sfml_sprite__);
 }

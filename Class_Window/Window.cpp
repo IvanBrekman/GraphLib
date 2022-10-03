@@ -82,7 +82,7 @@ bool Window::poll_event(Event* event) {
             break;
           
         default:
-            LOG1(printf(RED "Unassembled Event. EventType: %d\n" NATURAL, __sfml_poll_event.type););
+            LOG1(printf(RED "Unassembled Event. EventType: %d\n" NATURAL, m_sfml_pollEvent__.type););
             break;
     }
 

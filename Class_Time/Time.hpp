@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <SFML/Graphics.hpp>
+
 class Clock {
     public:
         int speedMultiplier;
@@ -13,7 +15,7 @@ class Clock {
     
     public:
         Clock(int speed_m = 1)
-        : speedMultiplier(speed_m)  { this->restart(); }
+        : speedMultiplier(speed_m)   { this->restart(); }
 
         void restart()               { this->m_sfml_clock__.restart(); }
 

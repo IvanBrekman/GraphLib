@@ -27,7 +27,6 @@ class Figure : public Drawable, public Moveable {
         virtual void draw_impl_(Window& window, const CoordinateSystem& system) = 0;
 
     protected:
-
         void set_shape_color_(sf::Shape& shape);
         void draw(Window& window, const CoordinateSystem& system, Point2D pixel, sf::Shape& shape);
 };
@@ -84,7 +83,6 @@ class RegularPolygon : public Circle {
         bool contains(Point2D point) override;
 };
 
-// TODO написать приватный метод в Point2D.__sfml_vector2f(), изза чего будет много friend;
 class Polygon : public Figure {
     using Figure::set_centered;
 

@@ -80,11 +80,11 @@ Rectangle::Rectangle(Point2D main_point, double width, double height)
 
 // @virtual
 bool Rectangle::contains(Point2D point) {
-    Point2D min_point = m_centered ? (m_mainPoint - Point2D(m_width / 2, m_height / 2)) : m_mainPoint;
-    Point2D max_point = min_point + Point2D(m_width, m_height);
+    Point2D minPoint = m_centered ? (m_mainPoint - Point2D(m_width / 2, m_height / 2)) : m_mainPoint;
+    Point2D maxPoint = minPoint + Point2D(m_width, m_height);
 
-    return (min_point.x <= point.x && point.x <= max_point.x) &&
-           (min_point.y <= point.y && point.y <= max_point.y);
+    return (minPoint.x <= point.x && point.x <= maxPoint.x) &&
+           (minPoint.y <= point.y && point.y <= maxPoint.y);
 }
 
 // @virtual
@@ -115,18 +115,18 @@ RegularPolygon::RegularPolygon(Point2D mainPoint, double radius, double vAmount,
 
 // @virtual
 bool RegularPolygon::contains(Point2D point) {
-    int v_size = vertexAmount;
+    int vSize = vertexAmount;
 
     bool contains = false;
 
     point -= m_mainPoint;
 
-    for (int i = 0, j = v_size - 1; i < v_size; i++) {
-        sf::Vector2f vector_pi = m_sfml_shape_.getPoint(i);
-        sf::Vector2f vector_pj = m_sfml_shape_.getPoint(j);
+    for (int i = 0, j = vSize - 1; i < vSize; i++) {
+        sf::Vector2f vectorPi = m_sfml_shape_.getPoint(i);
+        sf::Vector2f vectorPj = m_sfml_shape_.getPoint(j);
 
-        Point2D pi = Point2D(vector_pi.x, vector_pi.y);
-        Point2D pj = Point2D(vector_pj.x, vector_pj.y);
+        Point2D pi = Point2D(vectorPi.x, vectorPi.y);
+        Point2D pj = Point2D(vectorPj.x, vectorPj.y);
 
         if (
             ((pi.y < point.y && point.y <= pj.y) || (pj.y < point.y && point.y <= pi.y)) &&
@@ -164,11 +164,11 @@ Point2D Polygon::get_vertex(int index) {
 // @virtual
 bool Polygon::contains(Point2D point) {
     std::vector <Point2D> v      = m_vertexes__;
-    int                   v_size = v.size();
+    int                   vSize = v.size();
 
     bool contains = false;
 
-    for (int i = 0, j = v_size - 1; i < v_size; i++) {
+    for (int i = 0, j = vSize - 1; i < vSize; i++) {
         if (
             ((v.at(i).y < point.y && point.y <= v.at(j).y) || (v.at(j).y < point.y && point.y <= v.at(i).y)) &&
             ((v.at(i).x + (point.y - v.at(i).y) / (v.at(j).y - v.at(i).y) * (v.at(j).x - v.at(i).x)) < point.x)

@@ -7,8 +7,8 @@
 #include "../Class_Point/Point.hpp"
 
 struct Material {
-    Material(Point3D albedo, Color color, double spec_exp)
-    : albedo(albedo), diffuseColor(color), specularExp(spec_exp) {}
+    Material(Point3D albedo, Color color, double specExp)
+    : albedo(albedo), diffuseColor(color), specularExp(specExp) {}
     
     Material()
     : Material(Point3D(1, 0, 0), Color::Black, 100.0) {}

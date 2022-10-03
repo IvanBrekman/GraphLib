@@ -24,7 +24,7 @@ class PixelMap : public Drawable, public Moveable {
         sf::Sprite  m_sfml_sprite__;
     
     public:
-        PixelMap(Point2D main_point, int width, int height);
+        PixelMap(Point2D mainPoint,  int width, int height);
         PixelMap(double x, double y, int width, int height)
         : PixelMap(Point2D(x, y), width, height) {}
         

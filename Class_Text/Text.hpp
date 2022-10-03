@@ -27,8 +27,6 @@ class Text : public Drawable, public Moveable {
         const char* get_text()  const;
         int         get_size()  const;
 
-
-
         double get_width()      const;
         double get_height()     const;
 

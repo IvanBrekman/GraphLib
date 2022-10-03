@@ -61,8 +61,8 @@ int main(void) {
     window.extend_views({ &view1, &view2, &view3 });
     window.show_view(&view1);
 
-    bool update_clock = true;
-    Event::MouseEvent::Button_Type button_presed = Event::MouseEvent::Button_Type::NONE;
+    bool update_clock  = true;
+    auto button_presed = Event::MouseEvent::Button_Type::NONE;
 
     Clock clock(15);
     while (window.is_open()) {

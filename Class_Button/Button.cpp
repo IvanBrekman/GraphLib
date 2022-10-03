@@ -9,8 +9,8 @@
 
 #include "Button.hpp"
 
-Button::Button(Point2D main_point, const char* text, int text_size, Button::Button_Type type)
-: Moveable(main_point), m_type(type), m_text__(main_point, text, text_size) {
+Button::Button(Point2D mainPoint, const char* text, int textSize, Button::Button_Type type)
+: Moveable(mainPoint), m_type(type), m_text__(mainPoint, text, textSize) {
     ASSERT_IF(VALID_PTR(text), "Invalid text ptr", );
 
     set_fill_color(Color::White);
@@ -53,20 +53,21 @@ void Button::set_button_type(Button::Button_Type type) {
 }
 
 void Button::set_button_pressed() {
-    m_shape__->set_fill_color(Color::Green, Color::Black, 5);
+    m_shape__->set_fill_color(Color::Green,   Color::Black, 5);
 }
 
 void Button::set_button_released() {
-    m_shape__->set_fill_color(m_fillColor, Color::Black, 5);
+    m_shape__->set_fill_color(m_fillColor,    Color::Black, 5);
 }
 
 void Button::set_button_hovered() {
     if (m_shape__->m_fillColor == Color::Yellow) return;
 
     m_shapeColor__ = m_shape__->m_fillColor;
-    m_shape__->set_fill_color(Color::Yellow, Color::Black, 5);
+    m_shape__->set_fill_color(Color::Yellow,  Color::Black, 5);
 }
 
+// @virtual
 void Button::draw_impl_(Window& window, const CoordinateSystem& system) {
     Point2D shift = Point2D(Button::EXTRA_WIDTH__ / 2, -m_text__.get_height() * Button::EXTRA_TEXT_COEF__ + Button::EXTRA_HEIGHT__ / 2);
 
@@ -84,6 +85,7 @@ void Button::draw_impl_(Window& window, const CoordinateSystem& system) {
     m_text__.move_to_shift(-shift);
 }
 
+// @virtual
 Point2D Button::center() const {
     if (m_centered) return m_mainPoint;
 

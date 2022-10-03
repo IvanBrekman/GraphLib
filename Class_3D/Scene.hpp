@@ -30,9 +30,9 @@ class Scene : public Drawable, public Moveable {
         PixelMap         m_map__;
         CoordinateSystem m_system__;
 
-        const int        m_FOV__               = M_PI / 2;
-        const int        m_REFLECT_DEPTH__     = 4;
-        const double     m_DEFAULT_DEVIATION__ = 1e-3;
+        const int        REFLECT_DEPTH__     = 4;
+        const double     FOV__               = M_PI / 3;
+        const double     DEFAULT_DEVIATION__ = 1e-3;
     
     public:
         Scene(Point2D mainPoint, double width, double height);
