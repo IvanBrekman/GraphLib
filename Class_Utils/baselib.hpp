@@ -235,6 +235,8 @@ char* to_string(int number);
 
 int print_int_array(int* array, int size, const char* sep=", ", const char* end="\n");
 
+int cmpDouble(double num1, double num2);
+
 #ifdef ADD_CRC32
 
 typedef unsigned int  DWORD;

@@ -11,10 +11,7 @@
 
 #include "Sphere.hpp"
 
-Sphere::Sphere(Point3D center, double radius, Material material)
-: m_center(center), m_radius(radius), m_material(material), m_radiusSquare__(pow(radius, 2)) {
-}
-
+// @virtual
 bool Sphere::intersect_ray(Point3D rayStart, Point3D rayDir, double& dist) {
     Point3D p  = rayStart;                  // ray start point
     Point3D u  = rayDir.normalize();        // directional vector
@@ -39,4 +36,9 @@ bool Sphere::intersect_ray(Point3D rayStart, Point3D rayDir, double& dist) {
     /* Means that ray intersect with sphere in NEGATIVE side of ray */
 
     return false;
+}
+
+// @virtual
+Point3D Sphere::get_normal(Point3D intersection) {
+    return (intersection - m_center).normalize();
 }

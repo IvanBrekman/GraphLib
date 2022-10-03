@@ -6,6 +6,7 @@
 
 #include "Light.hpp"
 #include "Scene.hpp"
+#include "Plane.hpp"
 
 Scene::Scene(Point2D mainPoint, double width, double height)
 : Moveable(mainPoint), m_width(width), m_height(height) {
@@ -13,22 +14,22 @@ Scene::Scene(Point2D mainPoint, double width, double height)
     m_system__ = CoordinateSystem::get_system_by_type(CoordinateSystem::Type::LEFT_UP, m_width, m_height);
 }
 
-Color Scene::cast_ray(Point3D rayStart, Point3D rayDir, std::vector <Sphere*> spheres, std::vector <Light*> lights, int depth) {
+Color Scene::cast_ray(Point3D rayStart, Point3D rayDir, int depth) {
     Point3D  intersection;                  // ray intersection point with sphere
     Point3D  normal;                        // normal vector to intersection point
     Material material;
 
-    if (depth > Scene::REFLECT_DEPTH__ || !intersect_objects(rayStart, rayDir, spheres, intersection, normal, material)) {
+    if (depth > Scene::REFLECT_DEPTH__ || !intersect_objects(rayStart, rayDir, intersection, normal, material)) {
         return m_background;
     }
 
     Point3D reflectDir   = reflect(rayDir, normal).normalize();
     Point3D reflectStart = intersection - (normal * Scene::DEFAULT_DEVIATION__) * (2 * (Point3D::scalar_product(reflectDir, normal) < 0) - 1);
-    Color   reflectColor = cast_ray(reflectStart, reflectDir, spheres, lights, depth + 1);
+    Color   reflectColor = cast_ray(reflectStart, reflectDir, depth + 1);
 
     double  diffuseLightIntensity = 0;      // coef for diffuse  light
     double specularLightIntensity = 0;      // coef for specular light
-    for (Light* light : lights) {
+    for (Light* light : m_lights) {
         Point3D lightDir   = (light->m_pos - intersection).normalize();         // light direction
         double  lightDist  = (light->m_pos - intersection).length_square();
 
@@ -38,7 +39,7 @@ Color Scene::cast_ray(Point3D rayStart, Point3D rayDir, std::vector <Sphere*> sp
         Point3D  shadowNormal;
         Material shadowMaterial;
         if (
-            intersect_objects(shadowStart, lightDir, spheres, shadowIntersection, shadowNormal, shadowMaterial) &&
+            intersect_objects(shadowStart, lightDir, shadowIntersection, shadowNormal, shadowMaterial) &&
             ((shadowIntersection-shadowStart).length_square() < lightDist)
         ) continue;
         // ===========================================================
@@ -66,47 +67,29 @@ Color Scene::cast_ray(Point3D rayStart, Point3D rayDir, std::vector <Sphere*> sp
     return Color(r, g, b, 255);
 }
 
-bool Scene::intersect_objects(Point3D rayStart, Point3D rayDir, std::vector <Sphere*> spheres, Point3D& intersection, Point3D& normal, Material& material) {
-    double minDist = std::numeric_limits<double>::max();
-    for (Sphere* sphere : spheres) {
-        double distI;
-        if (sphere->intersect_ray(rayStart, rayDir, distI) && distI < minDist) {
+bool Scene::intersect_objects(Point3D rayStart, Point3D rayDir, Point3D& intersection, Point3D& normal, Material& material) {
+    double minDist = std::numeric_limits<double>::max() - 1;
+    for (SceneObject* object : m_objects) {
+        double distI = minDist + 1;
+        if (object->intersect_ray(rayStart, rayDir, distI) && distI < minDist) {
             minDist  = distI;
-            material = sphere->m_material;
+            material = object->m_material;
 
             intersection = rayStart + rayDir * distI;
-            normal       = (intersection - sphere->m_center).normalize();
+            normal       = object->get_normal(intersection);
         }
     }
 
-    // TODO
-    double checkerboardDist = std::numeric_limits<double>::max();
-    Point3D n = Point3D(0, 1, 0);
-    double  d = -4;
-
-    double c = Point3D::scalar_product(rayDir, n);
-    if (fabs(c) > Scene::DEFAULT_DEVIATION__) {
-        double  alpha = (d - Point3D::scalar_product(rayStart, n)) / c;
-        Point3D q     = rayStart + rayDir * alpha;
-        if (alpha > 0 && (-10 < q.x && q.x < 10) && (-30 < q.z && q.z < -10) && alpha < minDist) {
-            checkerboardDist  = alpha;
-            intersection      = q;
-            normal            = n;
-            material.diffuseColor = Color(255,178.5,76.5);
-        }
-    }
-    // TODO
-
-    return std::min(minDist, checkerboardDist) < std::numeric_limits<double>::max();
+    return minDist < std::numeric_limits<double>::max();
 }
 
-void Scene::append_sphere(Sphere* sphere) {
-    m_spheres.push_back(sphere);
+void Scene::append_scene_object(SceneObject* object) {
+    m_objects.push_back(object);
 }
 
-void Scene::extend_spheres(std::vector <Sphere*> spheres) {
-    for (Sphere* sphere : spheres) {
-        append_sphere(sphere);
+void Scene::extend_scene_objects(std::vector <SceneObject*> objects) {
+    for (SceneObject* object : objects) {
+        append_scene_object(object);
     }
 }
 
@@ -128,7 +111,7 @@ void Scene::render() {
 
             Point3D dir = Point3D(px, py, -1).normalize();
 
-            m_map__.set_pixel(x, y, cast_ray(Point3D(0, 0, 0), dir, m_spheres, m_lights));
+            m_map__.set_pixel(x, y, cast_ray(Point3D(0, 0, 0), dir));
         }
     }
 }

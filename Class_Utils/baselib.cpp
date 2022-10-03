@@ -10,6 +10,7 @@
 #include <ctime>
 #include <cctype>
 #include <cstring>
+#include <cmath>
 
 #include <fcntl.h>
 #include <unistd.h>
@@ -259,4 +260,14 @@ int print_int_array(int* array, int size, const char* sep, const char* end) {
     printf(" ]%s", end);
 
     return 1;
+}
+
+int cmpDouble(double num1, double num2) {
+    const double EPS = 1e-3;
+
+    if (fabs(num1 - num2) < EPS) return  0;
+    if ((num1 - num2) >  EPS)    return  1;
+    if ((num1 - num2) < -EPS)    return -1;
+
+    ASSERT_IF(0, "num1 !< num2, num1 !> num2, num1 != num2. WTF?", -15);
 }
