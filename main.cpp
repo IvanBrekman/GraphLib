@@ -46,7 +46,9 @@ int main(void) {
         new Sphere(Point3D(-1.0, -1.5, -12.0), 2, MIRROR ),
         new Sphere(Point3D( 1.5, -0.5, -18.0), 3, RUBIN  ),
         new Sphere(Point3D( 7.0,  5.0, -18.0), 4, MIRROR ),
-        new Plane (Point3D(0, 1, 0), -4, MIRROR, Point2D(-10, 10), Point2D(D_MIN, D_MAX), Point2D(-30, -10))
+        new Plane (Point3D(0, 1, 0), -4,  MIRROR, Point2D(-10, 10), Point2D(D_MIN, D_MAX), Point2D(-30, -10)),
+        new Plane (Point3D(1, 0, 0), -10, EMERALD, Point2D(D_MIN, D_MAX), Point2D(-10, 20), Point2D(-30, 10)),
+        new Plane (Point3D(0, 0, 1), -40, RUBIN, Point2D(0, 30), Point2D(-10, 10), Point2D(D_MIN, D_MAX)),
     });
     scene.extend_lights({
         new Light (Point3D(-20, 20,  20), 1.5),
