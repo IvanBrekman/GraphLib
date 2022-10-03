@@ -40,3 +40,7 @@ void Drawable::draw(Window& window) {
         draw(window, window.__coordinate_system);
     }
 }
+
+sf::RenderWindow& Drawable::get_sfml_window_(Window& window) {
+    return window.__sfml_window;
+}

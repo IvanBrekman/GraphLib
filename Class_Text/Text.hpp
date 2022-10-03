@@ -11,13 +11,13 @@ class Window;
 
 class Text : public Drawable, public Moveable {
     private:
-        sf::Text __sfml_text;
-        sf::Font __sfml_font;
+        sf::Text m_sfml_text__;
+        sf::Font m_sfml_font__;
 
-        const char* __str_text;
+        const char* m_strText__;
     
     public:
-        Text(Point2D main_point, const char* text, int size=30);
+        Text(Point2D mainPoint,  const char* text, int size=30);
         Text(double x, double y, const char* text, int size=30)
         : Text(Point2D(x, y), text, size) {}
 

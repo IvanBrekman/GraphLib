@@ -29,5 +29,7 @@ class Drawable {
         void draw              (Window& window);
     
     protected:
+        sf::RenderWindow& get_sfml_window_(Window& window);
+
         virtual void draw_impl_(Window& window, const CoordinateSystem& system) = 0;
 };

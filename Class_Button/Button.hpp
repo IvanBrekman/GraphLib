@@ -19,21 +19,21 @@ class Button : public Drawable, public Moveable {
             CIRCLE  = 2
         };
 
-        Button_Type type;
+        Button_Type m_type;
     
     private:
-        Text                    __text;
-        Figure*                 __shape;
-        Color                   __shape_color;
+        Text                    m_text__;
+        Figure*                 m_shape__;
+        Color                   m_shapeColor__;
 
-        const double            __EXTRA_WIDTH       = 30;
-        const double            __EXTRA_HEIGHT      = 15;
-        const double            __EXTRA_TEXT_COEF   = 0.3;
+        const double            EXTRA_WIDTH__     = 30;
+        const double            EXTRA_HEIGHT__    = 15;
+        const double            EXTRA_TEXT_COEF__ = 0.3;
     
     public:
-        Button(Point2D main_point, const char* text, int text_size, Button_Type type=Button_Type::DEFAULT);
-        Button(double x, double y, const char* text, int text_size, Button_Type type=Button_Type::DEFAULT)
-        : Button(Point2D(x, y), text, text_size, type) {}
+        Button(Point2D mainPoint,  const char* text, int textSize, Button_Type type=Button_Type::DEFAULT);
+        Button(double x, double y, const char* text, int textSize, Button_Type type=Button_Type::DEFAULT)
+        : Button(Point2D(x, y), text, textSize, type) {}
 
         double width()  const;
         double height() const;

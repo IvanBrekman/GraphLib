@@ -7,63 +7,61 @@
 #include "Text.hpp"
 
 Text::Text(Point2D main_point, const char* text, int size)
-: Moveable(main_point), __str_text(text) {
+: Moveable(main_point), m_strText__(text) {
     ASSERT_IF(VALID_PTR(text), "Invalid text ptr", );
 
-    this->__sfml_font.loadFromFile("fonts/arialamu.ttf");
-    this->__sfml_text = sf::Text(text, this->__sfml_font, size);
+    m_sfml_font__.loadFromFile("fonts/arialamu.ttf");
+    m_sfml_text__ = sf::Text(text, m_sfml_font__, size);
 
-    this->set_fill_color(Color::Black);
+    set_fill_color(Color::Black);
 }
 
 void Text::set_text(const char* text) {
     ASSERT_IF(VALID_PTR(text), "Invalid text ptr", );
 
-    this->__str_text = text;
-    this->__sfml_text.setString(text);
+    m_strText__ = text;
+    m_sfml_text__.setString(text);
 }
 
 void Text::set_size(double size) {
-    this->__sfml_text.setCharacterSize(size);
+    m_sfml_text__.setCharacterSize(size);
 }
 
 const char* Text::get_text() const {
-    return this->__str_text;
+    return m_strText__;
 }
 
 int Text::get_size() const {
-    return this->__sfml_text.getCharacterSize();
+    return m_sfml_text__.getCharacterSize();
 }
 
 double Text::get_width() const {
-    return this->__sfml_text.getLocalBounds().width;
+    return m_sfml_text__.getLocalBounds().width;
 }
 
 double Text::get_height() const {
-    return this->__sfml_text.getLocalBounds().height;
+    return m_sfml_text__.getLocalBounds().height;
 }
 
 void Text::set_fill_color(Color color) {
     Drawable::set_fill_color(color);
-    this->__sfml_text.setFillColor(color);
+    m_sfml_text__.setFillColor(color);
 }
 
 void Text::draw_impl_(Window& window, const CoordinateSystem& system) {
-    if (this->m_hidden) return;
-
-    Point2D point = this->m_mainPoint;
-    if (this->m_centered) {
-        point = this->m_mainPoint - Point2D(this->get_width() / 2, this->get_height() / 2);
+    Point2D point = m_mainPoint;
+    if (m_centered) {
+        point = m_mainPoint - Point2D(get_width() / 2, get_height() / 2);
     }
 
     Point2D pixel = system.point_to_pixel(point);
 
-    if (system.m_axisYDirection == CoordinateSystem::AxisY_Direction::UP)   pixel.y -= this->get_height() * 1.6;
-    else                                                                    pixel.y -= this->get_height() * 0.3;
-    if (system.m_axisXDirection == CoordinateSystem::AxisX_Direction::LEFT) pixel.x -= this->get_width()  * 1.0;
+    if (system.m_axisYDirection == CoordinateSystem::AxisY_Direction::UP)   pixel.y -= get_height() * 1.6;
+    else                                                                    pixel.y -= get_height() * 0.3;
+    if (system.m_axisXDirection == CoordinateSystem::AxisX_Direction::LEFT) pixel.x -= get_width()  * 1.0;
 
-    this->__sfml_text.setPosition(sf::Vector2f(pixel.x, pixel.y));
-    window.__sfml_window.draw(this->__sfml_text);
+    m_sfml_text__.setPosition(sf::Vector2f(pixel.x, pixel.y));
+    get_sfml_window_(window).draw(m_sfml_text__);
 }
 
 Point2D Text::center() const {

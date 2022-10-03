@@ -15,110 +15,115 @@ Figure::Figure(Point2D mainPoint, bool centered)
     m_centered = centered;
 }
 
-void Figure::set_fill_color(Color fill_color, Color outline_color, double width) {
-    Drawable::set_fill_color(fill_color);
-    this->outline_color = outline_color;
-    this->outline_width = width;
+void Figure::set_fill_color(Color fillColor, Color outlineColor, double width) {
+    Drawable::set_fill_color(fillColor);
+    m_outlineColor = outlineColor;
+    m_outlineWidth = width;
 }
 
-sf::RenderWindow* Figure::_get_sfml_window(Window& window) {
-    return &window.__sfml_window;
+void Figure::set_fill_color(Color color) {
+    set_fill_color(color, color, 0);
 }
 
-void Figure::_set_shape_color(sf::Shape& shape) {
-    shape.setFillColor       (this->m_fillColor);
-    shape.setOutlineColor    (this->outline_color);
-    shape.setOutlineThickness(this->outline_width);
+void Figure::set_shape_color_(sf::Shape& shape) {
+    shape.setFillColor       (m_fillColor);
+    shape.setOutlineColor    (m_outlineColor);
+    shape.setOutlineThickness(m_outlineWidth);
 }
 
-void Figure::_draw(Window& window, const CoordinateSystem& system, Point2D pixel, sf::Shape& shape) {
-    if (this->m_hidden) return;
-    
+void Figure::draw(Window& window, const CoordinateSystem& system, Point2D pixel, sf::Shape& shape) {
     shape.setPosition(pixel.to_sfml_vector());
 
-    this->_set_shape_color(shape);
-    this->_get_sfml_window(window)->draw(shape);
+    set_shape_color_(shape);
+    get_sfml_window_(window).draw(shape);
 }
 // ========================================================================================
 
 // ======================================== Circle ========================================
-Circle::Circle(Point2D main_point, double radius, bool centered)
-: Figure(main_point, centered), radius(radius) {
-    this->_sfml_shape = sf::CircleShape(radius, Circle::__POINTS_ON_DRAW);
+Circle::Circle(Point2D mainPoint, double radius, bool centered)
+: Figure(mainPoint, centered), m_radius(radius) {
+    m_sfml_shape_ = sf::CircleShape(radius, Circle::POINTS_ON_DRAW__);
 
-    this->m_centered = centered;
+    m_centered = centered;
 }
 
-Point2D Circle::center() const {
-    return this->m_centered ? this->m_mainPoint : (this->m_mainPoint + Point2D(this->radius, this->radius));
-}
-
+// @virtual
 bool Circle::contains(Point2D point) {
-    return (pow(point.x - this->center().x, 2) + pow(point.y - this->center().y, 2)) <= pow(this->radius, 2);
+    return (pow(point.x - center().x, 2) + pow(point.y - center().y, 2)) <= pow(m_radius, 2);
 }
 
+// @virtual
 void Circle::draw_impl_(Window& window, const CoordinateSystem& system) {
-    Point2D min_point = this->m_mainPoint;
-    if (this->m_centered) {
-        min_point = this->m_mainPoint - Point2D(this->radius, this->radius);
+    Point2D min_point = m_mainPoint;
+    if (m_centered) {
+        min_point = m_mainPoint - Point2D(m_radius, m_radius);
     }
     
     Point2D pixel = system.point_to_pixel(min_point);
-    if (system.m_axisYDirection == CoordinateSystem::AxisY_Direction::UP)   pixel.y -= this->radius * 2;
-    if (system.m_axisXDirection == CoordinateSystem::AxisX_Direction::LEFT) pixel.x -= this->radius * 2;
+    if (system.m_axisYDirection == CoordinateSystem::AxisY_Direction::UP)   pixel.y -= m_radius * 2;
+    if (system.m_axisXDirection == CoordinateSystem::AxisX_Direction::LEFT) pixel.x -= m_radius * 2;
 
-    Figure::_draw(window, system, pixel, this->_sfml_shape);
+    Figure::draw(window, system, pixel, m_sfml_shape_);
+}
+
+// @virtual
+Point2D Circle::center() const {
+    return m_centered ? m_mainPoint : (m_mainPoint + Point2D(m_radius, m_radius));
 }
 // ========================================================================================
 
 // ======================================= Rectangle ======================================
 Rectangle::Rectangle(Point2D main_point, double width, double height)
-: Figure(main_point, false), width(width), height(height) {
-    this->__sfml_shape = sf::RectangleShape(sf::Vector2f(width, height));
+: Figure(main_point, false), m_width(width), m_height(height) {
+    m_sfml_shape__ = sf::RectangleShape(sf::Vector2f(width, height));
 }
 
-Point2D Rectangle::center() const {
-    return this->m_centered ? this->m_mainPoint : (this->m_mainPoint + Point2D(this->width / 2, this->height / 2));
-}
-
+// @virtual
 bool Rectangle::contains(Point2D point) {
-    Point2D min_point = this->m_centered ? (this->m_mainPoint - Point2D(this->width / 2, this->height / 2)) : this->m_mainPoint;
-    Point2D max_point = min_point + Point2D(this->width, this->height);
+    Point2D min_point = m_centered ? (m_mainPoint - Point2D(m_width / 2, m_height / 2)) : m_mainPoint;
+    Point2D max_point = min_point + Point2D(m_width, m_height);
 
     return (min_point.x <= point.x && point.x <= max_point.x) &&
            (min_point.y <= point.y && point.y <= max_point.y);
 }
 
+// @virtual
 void Rectangle::draw_impl_(Window& window, const CoordinateSystem& system) {
-    Point2D point = this->m_mainPoint;
-    if (this->m_centered) {
-        point = this->m_mainPoint - Point2D(this->width / 2, this->height / 2);
+    Point2D point = m_mainPoint;
+    if (m_centered) {
+        point = m_mainPoint - Point2D(m_width / 2, m_height / 2);
     }
     
     Point2D pixel = system.point_to_pixel(point);
-    if (system.m_axisYDirection == CoordinateSystem::AxisY_Direction::UP)   pixel.y -= this->height;
-    if (system.m_axisXDirection == CoordinateSystem::AxisX_Direction::LEFT) pixel.x -= this->width;
+    if (system.m_axisYDirection == CoordinateSystem::AxisY_Direction::UP)   pixel.y -= m_height;
+    if (system.m_axisXDirection == CoordinateSystem::AxisX_Direction::LEFT) pixel.x -= m_width;
 
-    Figure::_draw(window, system, pixel, this->__sfml_shape);
+    Figure::draw(window, system, pixel, m_sfml_shape__);
+}
+
+// @virtual
+Point2D Rectangle::center() const {
+    return m_centered ? m_mainPoint : (m_mainPoint + Point2D(m_width / 2, m_height / 2));
 }
 // ========================================================================================
 
 // ==================================== RegularPolygon ====================================
-RegularPolygon::RegularPolygon(Point2D main_point, double radius, double v_amount, bool centered)
-: Circle(main_point, radius, centered), vertex_amount(v_amount) {
-    this->_sfml_shape.setPointCount(v_amount);
+RegularPolygon::RegularPolygon(Point2D mainPoint, double radius, double vAmount, bool centered)
+: Circle(mainPoint, radius, centered), vertexAmount(vAmount) {
+    m_sfml_shape_.setPointCount(vAmount);
 }
 
+// @virtual
 bool RegularPolygon::contains(Point2D point) {
-    int v_size = this->vertex_amount;
+    int v_size = vertexAmount;
 
     bool contains = false;
 
     point -= m_mainPoint;
 
     for (int i = 0, j = v_size - 1; i < v_size; i++) {
-        sf::Vector2f vector_pi = this->_sfml_shape.getPoint(i);
-        sf::Vector2f vector_pj = this->_sfml_shape.getPoint(j);
+        sf::Vector2f vector_pi = m_sfml_shape_.getPoint(i);
+        sf::Vector2f vector_pj = m_sfml_shape_.getPoint(j);
 
         Point2D pi = Point2D(vector_pi.x, vector_pi.y);
         Point2D pj = Point2D(vector_pj.x, vector_pj.y);
@@ -137,31 +142,28 @@ bool RegularPolygon::contains(Point2D point) {
 // ========================================================================================
 
 // ======================================= Polygon ========================================
-Polygon::Polygon(Point2D* vertexes, int vertexes_amount)
+Polygon::Polygon(Point2D* vertexes, int vertexesAmount)
 : Figure() {
     ASSERT_IF(VALID_PTR(vertexes), "Ivalid vertexes ptr", );
 
-    this->_sfml_shape.setPointCount(vertexes_amount);
+    m_sfml_shape_.setPointCount(vertexesAmount);
 
-    for (int i = 0; i < vertexes_amount; i++) {
-        this->__vertexes.push_back(vertexes[i]);
+    for (int i = 0; i < vertexesAmount; i++) {
+        m_vertexes__.push_back(vertexes[i]);
     }
 }
 
 std::vector <Point2D>* Polygon::get_vertexes() {
-    return &this->__vertexes;
+    return &m_vertexes__;
 }
 
 Point2D Polygon::get_vertex(int index) {
-    return this->__vertexes.at(index);
+    return m_vertexes__.at(index);
 }
 
-Point2D Polygon::center() const {
-    return this->__vertexes.at(0);
-}
-
+// @virtual
 bool Polygon::contains(Point2D point) {
-    std::vector <Point2D> v      = this->__vertexes;
+    std::vector <Point2D> v      = m_vertexes__;
     int                   v_size = v.size();
 
     bool contains = false;
@@ -179,69 +181,79 @@ bool Polygon::contains(Point2D point) {
     return contains;
 }
 
+// @virtual
 void Polygon::draw_impl_(Window& window, const CoordinateSystem& system) {
-    if (this->m_hidden) return;
+    if (m_hidden) return;
     
     int i = 0;
-    for (Point2D point : this->__vertexes) {
+    for (Point2D point : m_vertexes__) {
         Point2D pixel = system.point_to_pixel(point);
 
-        this->_sfml_shape.setPoint(i++, pixel.to_sfml_vector());
+        m_sfml_shape_.setPoint(i++, pixel.to_sfml_vector());
     }
 
-    this->_set_shape_color(this->_sfml_shape);
-    this->_get_sfml_window(window)->draw(this->_sfml_shape);
+    set_shape_color_(m_sfml_shape_);
+    get_sfml_window_(window).draw(m_sfml_shape_);
 }
 
+// @virtual
+Point2D Polygon::center() const {
+    return m_vertexes__.at(0);
+}
+
+// @virtual
 void Polygon::move_to_shift_impl_(Point2D shift) {
-    if (this->m_hidden) return;
+    if (m_hidden) return;
     
-    for (int i = 0; i < this->__vertexes.size(); i++) {
-        this->__vertexes.at(i) += shift;
+    for (int i = 0; i < m_vertexes__.size(); i++) {
+        m_vertexes__.at(i) += shift;
     }
 }
 // ========================================================================================
 
 // ======================================= Ellipse ========================================
-Ellipse::Ellipse(Point2D main_point, Point2D radius, bool centered)
-: Polygon(main_point, centered), radius(radius) {
-    this->_sfml_shape.setPointCount(Ellipse::__POINTS_ON_DRAW);
+Ellipse::Ellipse(Point2D mainPoint, Point2D radius, bool centered)
+: Polygon(mainPoint, centered), m_radius(radius) {
+    m_sfml_shape_.setPointCount(Ellipse::POINTS_ON_DRAW__);
 }
 
-Point2D Ellipse::center() const {
-    return this->m_centered ? this->m_mainPoint : (this->m_mainPoint + this->radius);
-}
-
+// @virtual
 bool Ellipse::contains(Point2D point) {
-    point -= this->center();
-    return (pow(point.x, 2) / pow(this->radius.x, 2) + pow(point.y, 2) / pow(this->radius.y, 2)) <= 1;
+    point -= center();
+    return (pow(point.x, 2) / pow(m_radius.x, 2) + pow(point.y, 2) / pow(m_radius.y, 2)) <= 1;
 }
 
+// @virtual
 void Ellipse::draw_impl_(Window& window, const CoordinateSystem& system) {
-    if (this->m_hidden) return;
-    
-    for (int i = 0; i < Ellipse::__POINTS_ON_DRAW; i++) {
-        Point2D pixel = system.point_to_pixel(this->__get_point(i));
-        this->_sfml_shape.setPoint(i, pixel.to_sfml_vector());
+    for (int i = 0; i < Ellipse::POINTS_ON_DRAW__; i++) {
+        Point2D pixel = system.point_to_pixel(get_point__(i));
+        m_sfml_shape_.setPoint(i, pixel.to_sfml_vector());
     }
 
-    this->_set_shape_color(this->_sfml_shape);
-    this->_get_sfml_window(window)->draw(this->_sfml_shape);
+    set_shape_color_(m_sfml_shape_);
+    get_sfml_window_(window).draw(m_sfml_shape_);
 }
 
+// @virtual
+Point2D Ellipse::center() const {
+    return m_centered ? m_mainPoint : (m_mainPoint + m_radius);
+}
+
+
+// @virtual
 void Ellipse::move_to_shift_impl_(Point2D shift) {
-    if (this->m_hidden) return;
+    if (m_hidden) return;
     
     Figure::move_to_shift(shift);
 }
 
-Point2D Ellipse::__get_point(int index) {
-    float angle = index * 2 * M_PI / Ellipse::__POINTS_ON_DRAW - M_PI / 2;
-    float x = std::cos(angle) * this->radius.x;
-    float y = std::sin(angle) * this->radius.y;
+Point2D Ellipse::get_point__(int index) {
+    float angle = index * 2 * M_PI / Ellipse::POINTS_ON_DRAW__ - M_PI / 2;
+    float x = std::cos(angle) * m_radius.x;
+    float y = std::sin(angle) * m_radius.y;
 
-    Point2D point = this->m_mainPoint + Point2D(radius.x + x, radius.y + y);
+    Point2D point = m_mainPoint + Point2D(m_radius.x + x, m_radius.y + y);
 
-    return this->m_centered ? (point - this->radius) : point;
+    return m_centered ? (point - m_radius) : point;
 }
 // ========================================================================================
