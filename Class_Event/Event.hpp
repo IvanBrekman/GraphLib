@@ -35,7 +35,7 @@ class Event {
             };
 
             Button_Type m_button = Button_Type::NONE;
-            Point2D     m_pos    = Point2D(0, 0);
+            Vec2f     m_pos    = Vec2f(0, 0);
         };
 
         union {
@@ -43,6 +43,6 @@ class Event {
         };
     
     private:
-        Point2D get_mouse_button_pos__(sf::Event event) { return Point2D(event.mouseButton.x, event.mouseButton.y); }
-        Point2D get_mouse_move_pos__  (sf::Event event) { return Point2D(event.mouseMove.x,   event.mouseMove.y);   }
+        Vec2f get_mouse_button_pos__(sf::Event event) { return Vec2f(event.mouseButton.x, event.mouseButton.y); }
+        Vec2f get_mouse_move_pos__  (sf::Event event) { return Vec2f(event.mouseMove.x,   event.mouseMove.y);   }
 };

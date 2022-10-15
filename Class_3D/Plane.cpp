@@ -7,14 +7,14 @@
 #include "Plane.hpp"
 
 // @virtual
-bool Plane::intersect_ray(Point3D rayStart, Point3D rayDir, double& dist) {
-    Point3D n = m_normal;
+bool Plane::intersect_ray(Vec3f rayStart, Vec3f rayDir, double& dist) {
+    Vec3f n = m_normal;
     double  d = m_D;
-    double  c = Point3D::scalar_product(rayDir, n);
+    double  c = scalarProduct(rayDir, n);
 
     if (cmpDouble(c, 0) != 0) {
-        double  alpha = (d - Point3D::scalar_product(rayStart, n)) / c;
-        Point3D q     = rayStart + rayDir * alpha;
+        double  alpha = (d - scalarProduct(rayStart, n)) / c;
+        Vec3f q     = rayStart + rayDir * alpha;
 
         if (
             alpha > 0 &&
@@ -31,6 +31,6 @@ bool Plane::intersect_ray(Point3D rayStart, Point3D rayDir, double& dist) {
 }
 
 // @virtual
-Point3D Plane::get_normal(Point3D _) {
+Vec3f Plane::get_normal(Vec3f _) {
     return m_normal;
 }

@@ -14,20 +14,20 @@ class CoordinateSystem;
 
 class Line : public Drawable, public Moveable {
     public:
-        Point2D m_endPoint;
+        Vec2f m_endPoint;
     
     public:
-        Line(Point2D start, Point2D end)
+        Line(Vec2f start, Vec2f end)
         : Drawable(), Moveable(start), m_endPoint(end) {}
 
         Line(double x1, double y1, double x2, double y2)
-        : Line(Point2D(x1, y1), Point2D(x2, y2)) {}
+        : Line(Vec2f(x1, y1), Vec2f(x2, y2)) {}
 
         double length()  const;
         void   dump()    const;
 
         void draw_impl_(Window& window, const CoordinateSystem& system) override;
 
-        void    move_to_shift_impl_(Point2D shift)                      override;
-        Point2D center() const                                          override;
+        void    move_to_shift_impl_(Vec2f shift)                      override;
+        Vec2f center() const                                          override;
 };

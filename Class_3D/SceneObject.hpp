@@ -8,20 +8,20 @@
 #include "../Class_Color/Color.hpp"
 
 struct Material {
-    Material(Point3D albedo, Color color, double specExp)
+    Material(Vec3f albedo, Color color, double specExp)
     : albedo(albedo), diffuseColor(color), specularExp(specExp) {}
     
     Material()
-    : Material(Point3D(1, 0, 0), Color::Black, 100.0) {}
+    : Material(Vec3f(1, 0, 0), Color::Black, 100.0) {}
 
     Color   diffuseColor;
     double  specularExp;
-    Point3D albedo;
+    Vec3f albedo;
 };
 
-const Material RUBIN  (Point3D(0.9,  0.1, 0.0), Color( 76.5,  25.5,  25.5),   10.0);
-const Material EMERALD(Point3D(0.6,  0.3, 0.1), Color(102.0, 102.0,  76.5),   50.0);
-const Material MIRROR (Point3D(0.0, 10.0, 0.8), Color(255.0, 255.0, 255.0), 1425.0);
+const Material RUBIN  (Vec3f(0.9,  0.1, 0.0), Color( 76.5,  25.5,  25.5),   10.0);
+const Material EMERALD(Vec3f(0.6,  0.3, 0.1), Color(102.0, 102.0,  76.5),   50.0);
+const Material MIRROR (Vec3f(0.0, 10.0, 0.8), Color(255.0, 255.0, 255.0), 1425.0);
 
 class SceneObject {
     public:
@@ -32,6 +32,6 @@ class SceneObject {
         SceneObject(Material material)
         : m_material(material) {}
 
-        virtual bool    intersect_ray(Point3D rayStart, Point3D rayDir, double& dist) = 0;
-        virtual Point3D get_normal   (Point3D intersection) = 0;
+        virtual bool    intersect_ray(Vec3f rayStart, Vec3f rayDir, double& dist) = 0;
+        virtual Vec3f get_normal   (Vec3f intersection) = 0;
 };

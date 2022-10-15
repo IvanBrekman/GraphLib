@@ -1,5 +1,5 @@
 # ====================================================================== Program =======================================================================
-EXE_FILE = $(BIN)/kitty.purrrrr
+EXE_FILE := $(BIN)kitty.purrrrr
 
 
 cr: GraphLib ### While working on LIB ### 

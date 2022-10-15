@@ -34,12 +34,12 @@ void Line::draw_impl_(Window& window, const CoordinateSystem& system) {
 }
 
 // @virtual
-void Line::move_to_shift_impl_(Point2D point) {
+void Line::move_to_shift_impl_(Vec2f point) {
     m_endPoint += point;
 }
 
 // @virtual
-Point2D Line::center() const {
+Vec2f Line::center() const {
     if (m_centered) return m_mainPoint;
     return m_mainPoint + (m_endPoint - m_mainPoint) * 0.5;
 }

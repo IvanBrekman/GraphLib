@@ -4,32 +4,32 @@
 
 #include "CoordinateSystem.hpp"
 
-CoordinateSystem::CoordinateSystem(Point2D center, AxisY_Direction dirY, AxisX_Direction dirX)
+CoordinateSystem::CoordinateSystem(Vec2f center, AxisY_Direction dirY, AxisX_Direction dirX)
 : m_center(center), m_showAxis(false), m_axisXDirection(dirX), m_axisYDirection(dirY), Drawable() {
     set_fill_color(Color::Blue);
 
     double x = dirX * CoordinateSystem::DRAW_AXIS_LENGTH__;
     double y = dirY * CoordinateSystem::DRAW_AXIS_LENGTH__;
 
-    m_axisX__ = Vector(center - Point2D(x, 0), center + Point2D(x, 0));
-    m_axisY__ = Vector(center - Point2D(0, y), center + Point2D(0, y));
+    m_axisX__ = Vector(center - Vec2f(x, 0), center + Vec2f(x, 0));
+    m_axisY__ = Vector(center - Vec2f(0, y), center + Vec2f(0, y));
 
     m_axisX__.set_fill_color(m_fillColor);
     m_axisY__.set_fill_color(m_fillColor);
 }
 
-Point2D CoordinateSystem::point_to_pixel(Point2D point) const {
+Vec2f CoordinateSystem::point_to_pixel(Vec2f point) const {
     double newX = m_axisXDirection * point.x + m_center.x;
     double newY = m_axisYDirection * point.y + m_center.y;
 
-    return Point2D(newX, newY);
+    return Vec2f(newX, newY);
 }
 
-Point2D CoordinateSystem::pixel_to_point(Point2D pixel) const {
+Vec2f CoordinateSystem::pixel_to_point(Vec2f pixel) const {
     double newX = m_axisXDirection * (pixel.x - m_center.x);
     double newY = m_axisYDirection * (pixel.y - m_center.y);
 
-    return Point2D(newX, newY);
+    return Vec2f(newX, newY);
 }
 
 CoordinateSystem CoordinateSystem::get_system_by_type(CoordinateSystem::Type type, double width, double height) {

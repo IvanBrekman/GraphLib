@@ -36,12 +36,12 @@ class Scene : public Drawable, public Moveable {
         const Color      DEFAULT_BACK_COLOR__ = Color(51, 178, 204);
     
     public:
-        Scene(Point2D mainPoint,  double width, double height, const char* backImgPath=nullptr);
+        Scene(Vec2f mainPoint,  double width, double height, const char* backImgPath=nullptr);
         Scene(double x, double y, double width, double height, const char* backImgPath=nullptr)
-        : Scene(Point2D(x, y), width, height, backImgPath) {}
+        : Scene(Vec2f(x, y), width, height, backImgPath) {}
 
-        Color cast_ray         (Point3D rayStart, Point3D rayDir, int x, int y, int depth=0);
-        bool  intersect_objects(Point3D rayStart, Point3D rayDir, Point3D& intersection, Point3D& normal, Material& material);
+        Color cast_ray         (Vec3f rayStart, Vec3f rayDir, int x, int y, int depth=0);
+        bool  intersect_objects(Vec3f rayStart, Vec3f rayDir, Vec3f& intersection, Vec3f& normal, Material& material);
 
         void append_scene_object (             SceneObject*  object );
         void extend_scene_objects(std::vector <SceneObject*> objects);
@@ -52,7 +52,7 @@ class Scene : public Drawable, public Moveable {
         void render();
 
         void draw_impl_(Window& window, const CoordinateSystem& system) override;
-        Point2D center() const                                          override;
+        Vec2f center() const                                          override;
 };
 
-Point3D reflect(Point3D lightDir, Point3D normal);
+Vec3f reflect(Vec3f lightDir, Vec3f normal);

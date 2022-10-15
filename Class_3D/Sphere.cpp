@@ -12,15 +12,15 @@
 #include "Sphere.hpp"
 
 // @virtual
-bool Sphere::intersect_ray(Point3D rayStart, Point3D rayDir, double& dist) {
-    Point3D p  = rayStart;                  // ray start point
-    Point3D u  = rayDir.normalize();        // directional vector
-    Point3D c  = m_center;                  // sphere center
+bool Sphere::intersect_ray(Vec3f rayStart, Vec3f rayDir, double& dist) {
+    Vec3f p  = rayStart;                    // ray start point
+    Vec3f u  = rayDir.normalize();          // directional vector
+    Vec3f c  = m_center;                    // sphere center
     double  r2 = m_radiusSquare__;          // sphere squared radius
 
-    double alpha      = Point3D::scalar_product(c - p, u);      // coef to nearest ray point to sphere center
-    Point3D q         = p + u * alpha;                          //         nearest ray point to sphere center
-    double minDist2   = (q - c).length_square();                // squared min dist from ray to sphere center
+    double alpha      = scalarProduct(c - p, u);                // coef to nearest ray point to sphere center
+    Vec3f q         = p + u * alpha;                            //         nearest ray point to sphere center
+    double minDist2   = (q - c).length_squared();               // squared min dist from ray to sphere center
 
     if (minDist2 > r2) {
         return false;
@@ -28,7 +28,7 @@ bool Sphere::intersect_ray(Point3D rayStart, Point3D rayDir, double& dist) {
 
     double beta  = sqrt(r2 - minDist2);                         // coef to intersection point
     if ((alpha > beta) || (alpha + beta > 0)) {                 // means that ray intersect sphere
-        Point3D q1 = q - u * (beta * (2 * (alpha > beta) - 1)); // nearest ray intersection point
+        Vec3f q1 = q - u * (beta * (2 * (alpha > beta) - 1));   // nearest ray intersection point
         dist       = (q1 - p).length();                         // squared distance to sphere
         return true;
     }
@@ -39,6 +39,6 @@ bool Sphere::intersect_ray(Point3D rayStart, Point3D rayDir, double& dist) {
 }
 
 // @virtual
-Point3D Sphere::get_normal(Point3D intersection) {
+Vec3f Sphere::get_normal(Vec3f intersection) {
     return (intersection - m_center).normalize();
 }

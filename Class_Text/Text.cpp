@@ -6,7 +6,7 @@
 
 #include "Text.hpp"
 
-Text::Text(Point2D mainPoint, const char* text, int size)
+Text::Text(Vec2f mainPoint, const char* text, int size)
 : Moveable(mainPoint), m_strText__(text) {
     ASSERT_IF(VALID_PTR(text), "Invalid text ptr", );
 
@@ -49,12 +49,12 @@ void Text::set_fill_color(Color color) {
 }
 
 void Text::draw_impl_(Window& window, const CoordinateSystem& system) {
-    Point2D point = m_mainPoint;
+    Vec2f point = m_mainPoint;
     if (m_centered) {
-        point = m_mainPoint - Point2D(get_width() / 2, get_height() / 2);
+        point = m_mainPoint - Vec2f(get_width() / 2, get_height() / 2);
     }
 
-    Point2D pixel = system.point_to_pixel(point);
+    Vec2f pixel = system.point_to_pixel(point);
 
     if (system.m_axisYDirection == CoordinateSystem::AxisY_Direction::UP)   pixel.y -= get_height() * 1.6;
     else                                                                    pixel.y -= get_height() * 0.3;
@@ -64,6 +64,6 @@ void Text::draw_impl_(Window& window, const CoordinateSystem& system) {
     get_sfml_window_(window).draw(m_sfml_text__);
 }
 
-Point2D Text::center() const {
+Vec2f Text::center() const {
     return m_mainPoint;
 }

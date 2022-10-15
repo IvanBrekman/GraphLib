@@ -24,7 +24,7 @@ class CoordinateSystem : public Drawable {
             LEFT_BOTTOM = 2
         };
 
-        Point2D m_center;
+        Vec2f m_center;
         bool    m_showAxis;
 
         AxisX_Direction m_axisXDirection;
@@ -44,12 +44,12 @@ class CoordinateSystem : public Drawable {
         CoordinateSystem()
         : CoordinateSystem(0, 0) {}
 
-        CoordinateSystem(Point2D center,     AxisY_Direction dirY=AxisY_Direction::DOWN, AxisX_Direction dirX=AxisX_Direction::RIGHT);
+        CoordinateSystem(Vec2f center,     AxisY_Direction dirY=AxisY_Direction::DOWN, AxisX_Direction dirX=AxisX_Direction::RIGHT);
         CoordinateSystem(double x, double y, AxisY_Direction dirY=AxisY_Direction::DOWN, AxisX_Direction dirX=AxisX_Direction::RIGHT)
-        : CoordinateSystem(Point2D(x, y), dirY, dirX) {};
+        : CoordinateSystem(Vec2f(x, y), dirY, dirX) {};
 
-        Point2D point_to_pixel(Point2D point)   const;
-        Point2D pixel_to_point(Point2D pixel)   const;
+        Vec2f point_to_pixel(Vec2f point)   const;
+        Vec2f pixel_to_point(Vec2f pixel)   const;
 
         static CoordinateSystem get_system_by_type(Type type, double width, double height);
 

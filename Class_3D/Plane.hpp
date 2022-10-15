@@ -15,20 +15,20 @@ const double D_MIN = -D_MAX;
 
 class Plane : public SceneObject {
     public:
-        Point3D m_normal;
+        Vec3f m_normal;
         double  m_D;
 
-        Point2D m_xLimits;
-        Point2D m_yLimits;
-        Point2D m_zLimits;
+        Vec2f m_xLimits;
+        Vec2f m_yLimits;
+        Vec2f m_zLimits;
     
     public:
-        Plane(Point3D normal, double D, Material material,
-              Point2D xLimits=Point2D(D_MIN, D_MAX),
-              Point2D yLimits=Point2D(D_MIN, D_MAX),
-              Point2D zLimits=Point2D(D_MIN, D_MAX))
+        Plane(Vec3f normal, double D, Material material,
+              Vec2f xLimits=Vec2f(D_MIN, D_MAX),
+              Vec2f yLimits=Vec2f(D_MIN, D_MAX),
+              Vec2f zLimits=Vec2f(D_MIN, D_MAX))
         : SceneObject(material), m_normal(normal), m_D(D), m_xLimits(xLimits), m_yLimits(yLimits), m_zLimits(zLimits) {}
 
-        bool    intersect_ray(Point3D rayStart, Point3D rayDir, double& dist) override;
-        Point3D get_normal   (Point3D intersection)                           override;
+        bool    intersect_ray(Vec3f rayStart, Vec3f rayDir, double& dist) override;
+        Vec3f get_normal   (Vec3f intersection)                           override;
 };

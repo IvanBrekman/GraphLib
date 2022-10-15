@@ -8,10 +8,10 @@
 
 class Light {
     public:
-        Point3D m_pos;
+        Vec3f m_pos;
         double  m_intensity;
     
     public:
-        Light(Point3D pos, double intensity)
+        Light(Vec3f pos, double intensity)
         : m_pos(pos), m_intensity(intensity) {}
 };

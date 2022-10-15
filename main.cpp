@@ -42,18 +42,18 @@ int main(void) {
     Scene scene(-500, -300, 1000, 600, "back.jpg");
 
     scene.extend_scene_objects({
-        new Sphere(Point3D(-3.0,  0.0, -16.0), 2, EMERALD),
-        new Sphere(Point3D(-1.0, -1.5, -12.0), 2, MIRROR ),
-        new Sphere(Point3D( 2.5, -0.5, -18.0), 3, RUBIN  ),
-        new Sphere(Point3D( 7.0,  5.0, -18.0), 4, MIRROR ),
-        new Plane (Point3D(0, 1, 0), -4,  RUBIN, Point2D(-10, 10), Point2D(D_MIN, D_MAX), Point2D(-30, -10)),
-        new Plane (Point3D(1, 0, 0), -10, EMERALD, Point2D(D_MIN, D_MAX), Point2D(-10, 20), Point2D(-30, 10)),
-        new Plane (Point3D(0, 0, 1), -40, RUBIN, Point2D(0, 30), Point2D(-10, 10), Point2D(D_MIN, D_MAX)),
+        new Sphere(Vec3f(-3.0,  0.0, -16.0), 2, EMERALD),
+        new Sphere(Vec3f(-1.0, -1.5, -12.0), 2, MIRROR ),
+        new Sphere(Vec3f( 2.5, -0.5, -18.0), 3, RUBIN  ),
+        new Sphere(Vec3f( 7.0,  5.0, -18.0), 4, MIRROR ),
+        new Plane (Vec3f(0, 1, 0), -4,  RUBIN, Vec2f(-10, 10), Vec2f(D_MIN, D_MAX), Vec2f(-30, -10)),
+        new Plane (Vec3f(1, 0, 0), -10, EMERALD, Vec2f(D_MIN, D_MAX), Vec2f(-10, 20), Vec2f(-30, 10)),
+        new Plane (Vec3f(0, 0, 1), -40, RUBIN, Vec2f(0, 30), Vec2f(-10, 10), Vec2f(D_MIN, D_MAX)),
     });
     scene.extend_lights({
-        new Light (Point3D(-20, 20,  20), 1.5),
-        new Light (Point3D( 30, 50, -25), 1.8),
-        new Light (Point3D( 30, 20,  30), 1.7)
+        new Light (Vec3f(-20, 20,  20), 1.5),
+        new Light (Vec3f( 30, 50, -25), 1.8),
+        new Light (Vec3f( 30, 20,  30), 1.7)
     });
 
     WindowView view3(2, &scene, &back_button);
@@ -81,7 +81,7 @@ int main(void) {
                 case Event::MOUSE_BUTTON_PRESSED: {
                     button_presed = event.mouse.m_button;
 
-                    Point2D point = window.get_system()->pixel_to_point(event.mouse.m_pos);
+                    Vec2f point = window.get_system()->pixel_to_point(event.mouse.m_pos);
 
                     if (back_button.is_pressed(point, button_presed)) {
                         window.show_view(&view1);

@@ -8,7 +8,7 @@
 #include "Scene.hpp"
 #include "Plane.hpp"
 
-Scene::Scene(Point2D mainPoint, double width, double height, const char* backImgPath)
+Scene::Scene(Vec2f mainPoint, double width, double height, const char* backImgPath)
 : Moveable(mainPoint), m_width(width), m_height(height) {
     m_map__    = PixelMap(0, 0, width, height);
     m_system__ = CoordinateSystem::get_system_by_type(CoordinateSystem::Type::LEFT_UP, m_width, m_height);
@@ -24,40 +24,40 @@ Scene::Scene(Point2D mainPoint, double width, double height, const char* backImg
     }
 }
 
-Color Scene::cast_ray(Point3D rayStart, Point3D rayDir, int x, int y, int depth) {
-    Point3D  intersection;                  // ray intersection point with sphere
-    Point3D  normal;                        // normal vector to intersection point
+Color Scene::cast_ray(Vec3f rayStart, Vec3f rayDir, int x, int y, int depth) {
+    Vec3f  intersection;                  // ray intersection point with sphere
+    Vec3f  normal;                        // normal vector to intersection point
     Material material;
 
     if (depth > Scene::REFLECT_DEPTH__ || !intersect_objects(rayStart, rayDir, intersection, normal, material)) {
         return m_background.get_pixel(x, y);
     }
 
-    Point3D reflectDir   = reflect(rayDir, normal).normalize();
-    Point3D reflectStart = intersection - (normal * Scene::DEFAULT_DEVIATION__) * (2 * (Point3D::scalar_product(reflectDir, normal) < 0) - 1);
+    Vec3f reflectDir   = reflect(rayDir, normal).normalize();
+    Vec3f reflectStart = intersection - (normal * Scene::DEFAULT_DEVIATION__) * (2 * (scalarProduct(reflectDir, normal) < 0) - 1);
     Color   reflectColor = cast_ray(reflectStart, reflectDir, x, y, depth + 1);
 
     double  diffuseLightIntensity = 0;      // coef for diffuse  light
     double specularLightIntensity = 0;      // coef for specular light
     for (Light* light : m_lights) {
-        Point3D lightDir   = (light->m_pos - intersection).normalize();         // light direction
-        double  lightDist  = (light->m_pos - intersection).length_square();
+        Vec3f lightDir   = (light->m_pos - intersection).normalize();         // light direction
+        double  lightDist  = (light->m_pos - intersection).length_squared();
 
         // ==================== Calculate shadows ====================
-        Point3D  shadowStart = intersection - (normal * Scene::DEFAULT_DEVIATION__) * (2 * (Point3D::scalar_product(lightDir, normal) < 0) - 1);
-        Point3D  shadowIntersection;
-        Point3D  shadowNormal;
+        Vec3f  shadowStart = intersection - (normal * Scene::DEFAULT_DEVIATION__) * (2 * (scalarProduct(lightDir, normal) < 0) - 1);
+        Vec3f  shadowIntersection;
+        Vec3f  shadowNormal;
         Material shadowMaterial;
         if (
             intersect_objects(shadowStart, lightDir, shadowIntersection, shadowNormal, shadowMaterial) &&
-            ((shadowIntersection-shadowStart).length_square() < lightDist)
+            ((shadowIntersection-shadowStart).length_squared() < lightDist)
         ) continue;
         // ===========================================================
 
         /* Means that there isn't any intersections with other scene objects */
 
-         diffuseLightIntensity += light->m_intensity *     std::max(0.0, Point3D::scalar_product(lightDir, normal));
-        specularLightIntensity += light->m_intensity * pow(std::max(0.0, Point3D::scalar_product(reflect(lightDir, normal), rayDir)), material.specularExp);
+         diffuseLightIntensity += light->m_intensity *     std::max(0.0, scalarProduct(lightDir, normal));
+        specularLightIntensity += light->m_intensity * pow(std::max(0.0, scalarProduct(reflect(lightDir, normal), rayDir)), material.specularExp);
     }
 
     double dfCoef  =  diffuseLightIntensity * material.albedo.x;               // coef for fidduse  light according to albedo value
@@ -77,7 +77,7 @@ Color Scene::cast_ray(Point3D rayStart, Point3D rayDir, int x, int y, int depth)
     return Color(r, g, b, 255);
 }
 
-bool Scene::intersect_objects(Point3D rayStart, Point3D rayDir, Point3D& intersection, Point3D& normal, Material& material) {
+bool Scene::intersect_objects(Vec3f rayStart, Vec3f rayDir, Vec3f& intersection, Vec3f& normal, Material& material) {
     double minDist = std::numeric_limits<double>::max() - 1;
     for (SceneObject* object : m_objects) {
         double distI = minDist + 1;
@@ -119,9 +119,9 @@ void Scene::render() {
             double px =  (2 * (x + 0.5) / (double)m_width  - 1) * tan(Scene::FOV__ / 2.) * m_width / (double)m_height;
             double py = -(2 * (y + 0.5) / (double)m_height - 1) * tan(Scene::FOV__ / 2.);
 
-            Point3D dir = Point3D(px, py, -1).normalize();
+            Vec3f dir = Vec3f(px, py, -1).normalize();
 
-            m_map__.set_pixel(x, y, cast_ray(Point3D(0, 0, 0), dir, x, y));
+            m_map__.set_pixel(x, y, cast_ray(Vec3f(0, 0, 0), dir, x, y));
         }
     }
 }
@@ -130,7 +130,7 @@ void Scene::render() {
 void Scene::draw_impl_(Window& window, const CoordinateSystem& system) {
     render();
 
-    Point2D pixel = system.point_to_pixel(m_mainPoint);
+    Vec2f pixel = system.point_to_pixel(m_mainPoint);
     if (system.m_axisYDirection == CoordinateSystem::AxisY_Direction::UP)   pixel.y -= m_height;
     if (system.m_axisXDirection == CoordinateSystem::AxisX_Direction::LEFT) pixel.x -= m_width;
 
@@ -139,10 +139,10 @@ void Scene::draw_impl_(Window& window, const CoordinateSystem& system) {
 }
 
 // @virtual
-Point2D Scene::center() const {
+Vec2f Scene::center() const {
     return m_mainPoint;
 }
 
-Point3D reflect(Point3D light, Point3D normal) {
-    return light - normal * 2.0 * Point3D::scalar_product(light, normal);
+Vec3f reflect(Vec3f light, Vec3f normal) {
+    return light - normal * 2.0 * scalarProduct(light, normal);
 }

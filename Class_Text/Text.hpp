@@ -17,9 +17,9 @@ class Text : public Drawable, public Moveable {
         const char* m_strText__;
     
     public:
-        Text(Point2D mainPoint,  const char* text, int size=30);
+        Text(Vec2f mainPoint,  const char* text, int size=30);
         Text(double x, double y, const char* text, int size=30)
-        : Text(Point2D(x, y), text, size) {}
+        : Text(Vec2f(x, y), text, size) {}
 
         void set_text(const char* text);
         void set_size(double size);
@@ -32,5 +32,5 @@ class Text : public Drawable, public Moveable {
 
         void set_fill_color(Color color)                                override;
         void draw_impl_(Window& window, const CoordinateSystem& system) override;
-        Point2D center() const                                          override;
+        Vec2f center() const                                          override;
 };

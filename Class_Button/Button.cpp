@@ -9,7 +9,7 @@
 
 #include "Button.hpp"
 
-Button::Button(Point2D mainPoint, const char* text, int textSize, Button::Button_Type type)
+Button::Button(Vec2f mainPoint, const char* text, int textSize, Button::Button_Type type)
 : Moveable(mainPoint), m_type(type), m_text__(mainPoint, text, textSize) {
     ASSERT_IF(VALID_PTR(text), "Invalid text ptr", );
 
@@ -25,7 +25,7 @@ double Button::height() const {
     return m_text__.get_height() + Button::EXTRA_HEIGHT__;
 }
 
-bool Button::is_pressed(Point2D point, Event::MouseEvent::Button_Type button) {
+bool Button::is_pressed(Vec2f point, Event::MouseEvent::Button_Type button) {
     if (m_hidden || button != Event::MouseEvent::Button_Type::LEFT) return false;
     
     return m_shape__->contains(point);
@@ -37,7 +37,7 @@ void Button::set_button_type(Button::Button_Type type) {
             m_shape__ = new Rectangle(m_mainPoint, width(), height());
             break;
         case Button::Button_Type::ELLIPSE:
-            m_shape__ = new Ellipse(m_mainPoint, Point2D(width() / 2, height() / 2));
+            m_shape__ = new Ellipse(m_mainPoint, Vec2f(width() / 2, height() / 2));
             break;
         case Button::Button_Type::CIRCLE:
             m_shape__ = new Circle(m_mainPoint, width() / 2);
@@ -69,7 +69,7 @@ void Button::set_button_hovered() {
 
 // @virtual
 void Button::draw_impl_(Window& window, const CoordinateSystem& system) {
-    Point2D shift = Point2D(Button::EXTRA_WIDTH__ / 2, -m_text__.get_height() * Button::EXTRA_TEXT_COEF__ + Button::EXTRA_HEIGHT__ / 2);
+    Vec2f shift = Vec2f(Button::EXTRA_WIDTH__ / 2, -m_text__.get_height() * Button::EXTRA_TEXT_COEF__ + Button::EXTRA_HEIGHT__ / 2);
 
     if (m_centered) {
         m_shape__->set_centered(true);
@@ -86,8 +86,8 @@ void Button::draw_impl_(Window& window, const CoordinateSystem& system) {
 }
 
 // @virtual
-Point2D Button::center() const {
+Vec2f Button::center() const {
     if (m_centered) return m_mainPoint;
 
-    return m_mainPoint + Point2D(width() / 2, height() / 2);
+    return m_mainPoint + Vec2f(width() / 2, height() / 2);
 }

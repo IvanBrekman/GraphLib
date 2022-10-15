@@ -27,13 +27,13 @@ class Vector : public Line {
         Vector(double x1, double y1, double x2, double y2)
         : Line(x1, y1, x2, y2) {}
 
-        Vector(Point2D start, Point2D end)
+        Vector(Vec2f start, Vec2f end)
         : Vector(start.x, start.y, end.x, end.y) {}
 
         Vector get_normal(Normal_Type type)     const;
 
         Vector operator  =(const Vector&  vector);
-        Vector operator +=(const Point2D& point);
+        Vector operator +=(const Vec2f& point);
         Vector operator *=(double scalar);
         Vector operator /=(double scalar);
 
@@ -45,7 +45,7 @@ class Vector : public Line {
 
         Line    to_line()                       const;
 
-        Point2D normalize()                     const;
+        Vec2f normalize()                     const;
 
         void resize(double new_size);
         void rotate(double angle);
@@ -53,5 +53,5 @@ class Vector : public Line {
         
         void draw_impl_(Window& window, const CoordinateSystem& system) override;
 
-        void move_to_shift_impl_(Point2D shift)                         override;
+        void move_to_shift_impl_(Vec2f shift)                         override;
 };

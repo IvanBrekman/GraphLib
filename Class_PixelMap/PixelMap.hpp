@@ -24,9 +24,9 @@ class PixelMap : public Drawable, public Moveable {
         sf::Sprite  m_sfml_sprite__;
     
     public:
-        PixelMap(Point2D mainPoint,  int width, int height);
+        PixelMap(Vec2f mainPoint,  int width, int height);
         PixelMap(double x, double y, int width, int height)
-        : PixelMap(Point2D(x, y), width, height) {}
+        : PixelMap(Vec2f(x, y), width, height) {}
         
         PixelMap()
         : PixelMap(0, 0, 1, 1) {}
@@ -37,5 +37,5 @@ class PixelMap : public Drawable, public Moveable {
         void load_image(const char* path);
 
         void draw_impl_(Window& window, const CoordinateSystem& system) override;
-        Point2D center() const                                          override;
+        Vec2f center() const                                          override;
 };

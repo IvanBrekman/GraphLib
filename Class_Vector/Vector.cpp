@@ -9,7 +9,7 @@
 #include "Vector.hpp"
 
 Vector Vector::get_normal(Normal_Type type) const {
-    Vector normal(Point2D(0, 0), Point2D(m_endPoint.y - m_mainPoint.y, m_mainPoint.x - m_endPoint.x));
+    Vector normal(Vec2f(0, 0), Vec2f(m_endPoint.y - m_mainPoint.y, m_mainPoint.x - m_endPoint.x));
     normal += m_mainPoint;
 
     return normal;
@@ -23,7 +23,7 @@ Vector Vector::operator =(const Vector& vector) {
     return vector;
 }
 
-Vector Vector::operator +=(const Point2D& point) {
+Vector Vector::operator +=(const Vec2f& point) {
     m_mainPoint += point;
     m_endPoint  += point;
 
@@ -71,7 +71,7 @@ Line Vector::to_line() const {
     return Line(m_mainPoint, m_endPoint);
 }
 
-Point2D Vector::normalize() const {
+Vec2f Vector::normalize() const {
     return m_endPoint - m_mainPoint;
 }
 
@@ -84,8 +84,8 @@ void Vector::resize(double new_size) {
 void Vector::rotate(double angle) {
     if (m_hidden) return;
     
-    Point2D oldStart        = m_mainPoint;
-    Point2D directionVector = normalize();
+    Vec2f oldStart        = m_mainPoint;
+    Vec2f directionVector = normalize();
 
     angle = angle - 360 * (int)(angle / 360);
 
@@ -94,8 +94,8 @@ void Vector::rotate(double angle) {
     double newX = directionVector.x * cos(radians) - directionVector.y * sin(radians);
     double newY = directionVector.x * sin(radians) + directionVector.y * cos(radians);
 
-    m_mainPoint = Point2D(0, 0);
-    m_endPoint  = Point2D(newX, newY);
+    m_mainPoint = Vec2f(0, 0);
+    m_endPoint  = Vec2f(newX, newY);
 
     move_to_point(oldStart);
 }
@@ -121,10 +121,10 @@ void Vector::draw_impl_(Window& window, const CoordinateSystem& system) {
 }
 
 // @virtual
-void Vector::move_to_shift_impl_(Point2D shift) {
+void Vector::move_to_shift_impl_(Vec2f shift) {
     if (m_hidden) return;
     
-    Point2D baseShift = normalize();
+    Vec2f baseShift = normalize();
 
     m_mainPoint += shift;
     m_endPoint   = m_mainPoint + baseShift;

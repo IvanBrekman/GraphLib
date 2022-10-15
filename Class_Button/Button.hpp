@@ -31,14 +31,14 @@ class Button : public Drawable, public Moveable {
         const double            EXTRA_TEXT_COEF__ = 0.3;
     
     public:
-        Button(Point2D mainPoint,  const char* text, int textSize, Button_Type type=Button_Type::DEFAULT);
+        Button(Vec2f mainPoint,  const char* text, int textSize, Button_Type type=Button_Type::DEFAULT);
         Button(double x, double y, const char* text, int textSize, Button_Type type=Button_Type::DEFAULT)
-        : Button(Point2D(x, y), text, textSize, type) {}
+        : Button(Vec2f(x, y), text, textSize, type) {}
 
         double width()  const;
         double height() const;
 
-        bool is_pressed(Point2D point, Event::MouseEvent::Button_Type button);
+        bool is_pressed(Vec2f point, Event::MouseEvent::Button_Type button);
 
         void set_button_type(Button_Type type);
 
@@ -47,5 +47,5 @@ class Button : public Drawable, public Moveable {
         void set_button_hovered();
 
         void draw_impl_(Window& window, const CoordinateSystem& system) override;
-        Point2D center() const                                          override;
+        Vec2f center() const                                          override;
 };

@@ -7,7 +7,7 @@
 
 #include "PixelMap.hpp"
 
-PixelMap::PixelMap(Point2D mainPoint, int width, int height)
+PixelMap::PixelMap(Vec2f mainPoint, int width, int height)
 : Drawable(), Moveable(mainPoint), m_width(width), m_height(height) {
     m_sfml_pixels__ = new sf::Uint8[width * height * 4];
     m_sfml_texture__.create(width, height);
@@ -49,7 +49,7 @@ void PixelMap::load_image(const char* path) {
 void PixelMap::draw_impl_(Window& window, const CoordinateSystem& system) {
     if (m_hidden) return;
 
-    Point2D pixel = system.point_to_pixel(m_mainPoint);
+    Vec2f pixel = system.point_to_pixel(m_mainPoint);
     if (system.m_axisYDirection == CoordinateSystem::AxisY_Direction::UP)   pixel.y -= m_height;
     if (system.m_axisXDirection == CoordinateSystem::AxisX_Direction::LEFT) pixel.x -= m_width;
 
@@ -62,7 +62,7 @@ void PixelMap::draw_impl_(Window& window, const CoordinateSystem& system) {
 }
 
 // @virtual
-Point2D PixelMap::center() const {
+Vec2f PixelMap::center() const {
     if (m_centered) return m_mainPoint;
-    return m_mainPoint + Point2D(m_width / 2, m_height / 2);
+    return m_mainPoint + Vec2f(m_width / 2, m_height / 2);
 }
