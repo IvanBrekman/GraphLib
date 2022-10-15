@@ -34,13 +34,13 @@ bool Button::is_pressed(Vec2f point, Event::MouseEvent::Button_Type button) {
 void Button::set_button_type(Button::Button_Type type) {
     switch (type) {
         case Button::Button_Type::DEFAULT:
-            m_shape__ = new Rectangle(m_mainPoint, width(), height());
+            m_shape__ = new Rectangle(main_point(), width(), height());
             break;
         case Button::Button_Type::ELLIPSE:
-            m_shape__ = new Ellipse(m_mainPoint, Vec2f(width() / 2, height() / 2));
+            m_shape__ = new Ellipse(main_point(), Vec2f(width() / 2, height() / 2));
             break;
         case Button::Button_Type::CIRCLE:
-            m_shape__ = new Circle(m_mainPoint, width() / 2);
+            m_shape__ = new Circle(main_point(), width() / 2);
             break;
         
         default:
@@ -71,7 +71,7 @@ void Button::set_button_hovered() {
 void Button::draw_impl_(Window& window, const CoordinateSystem& system) {
     Vec2f shift = Vec2f(Button::EXTRA_WIDTH__ / 2, -m_text__.get_height() * Button::EXTRA_TEXT_COEF__ + Button::EXTRA_HEIGHT__ / 2);
 
-    if (m_centered) {
+    if (centered()) {
         m_shape__->set_centered(true);
 
         shift.x -= width()  / 2;
@@ -87,7 +87,7 @@ void Button::draw_impl_(Window& window, const CoordinateSystem& system) {
 
 // @virtual
 Vec2f Button::center() const {
-    if (m_centered) return m_mainPoint;
+    if (centered()) return main_point();
 
-    return m_mainPoint + Vec2f(width() / 2, height() / 2);
+    return main_point() + Vec2f(width() / 2, height() / 2);
 }

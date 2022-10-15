@@ -56,9 +56,9 @@ bool Circle::contains(Vec2f point) {
 
 // @virtual
 void Circle::draw_impl_(Window& window, const CoordinateSystem& system) {
-    Vec2f min_point = m_mainPoint;
-    if (m_centered) {
-        min_point = m_mainPoint - Vec2f(m_radius, m_radius);
+    Vec2f min_point = main_point();
+    if (centered()) {
+        min_point = main_point() - Vec2f(m_radius, m_radius);
     }
     
     Vec2f pixel = system.point_to_pixel(min_point);
@@ -70,7 +70,7 @@ void Circle::draw_impl_(Window& window, const CoordinateSystem& system) {
 
 // @virtual
 Vec2f Circle::center() const {
-    return m_centered ? m_mainPoint : (m_mainPoint + Vec2f(m_radius, m_radius));
+    return centered() ? main_point() : (main_point() + Vec2f(m_radius, m_radius));
 }
 // ========================================================================================
 
@@ -82,7 +82,7 @@ Rectangle::Rectangle(Vec2f main_point, double width, double height)
 
 // @virtual
 bool Rectangle::contains(Vec2f point) {
-    Vec2f minPoint = m_centered ? (m_mainPoint - Vec2f(m_width / 2, m_height / 2)) : m_mainPoint;
+    Vec2f minPoint = centered() ? (main_point() - Vec2f(m_width / 2, m_height / 2)) : main_point();
     Vec2f maxPoint = minPoint + Vec2f(m_width, m_height);
 
     return (minPoint.x <= point.x && point.x <= maxPoint.x) &&
@@ -91,9 +91,9 @@ bool Rectangle::contains(Vec2f point) {
 
 // @virtual
 void Rectangle::draw_impl_(Window& window, const CoordinateSystem& system) {
-    Vec2f point = m_mainPoint;
-    if (m_centered) {
-        point = m_mainPoint - Vec2f(m_width / 2, m_height / 2);
+    Vec2f point = main_point();
+    if (centered()) {
+        point = main_point() - Vec2f(m_width / 2, m_height / 2);
     }
     
     Vec2f pixel = system.point_to_pixel(point);
@@ -105,7 +105,7 @@ void Rectangle::draw_impl_(Window& window, const CoordinateSystem& system) {
 
 // @virtual
 Vec2f Rectangle::center() const {
-    return m_centered ? m_mainPoint : (m_mainPoint + Vec2f(m_width / 2, m_height / 2));
+    return centered() ? main_point() : (main_point() + Vec2f(m_width / 2, m_height / 2));
 }
 // ========================================================================================
 
@@ -121,7 +121,7 @@ bool RegularPolygon::contains(Vec2f point) {
 
     bool contains = false;
 
-    point -= m_mainPoint;
+    point -= main_point();
 
     for (int i = 0, j = vSize - 1; i < vSize; i++) {
         sf::Vector2f vectorPi = m_sfml_shape_.getPoint(i);
@@ -234,7 +234,7 @@ void Ellipse::draw_impl_(Window& window, const CoordinateSystem& system) {
 
 // @virtual
 Vec2f Ellipse::center() const {
-    return m_centered ? m_mainPoint : (m_mainPoint + m_radius);
+    return centered() ? main_point() : (main_point() + m_radius);
 }
 
 
@@ -248,8 +248,8 @@ Vec2f Ellipse::get_point__(int index) {
     float x = std::cos(angle) * m_radius.x;
     float y = std::sin(angle) * m_radius.y;
 
-    Vec2f point = m_mainPoint + Vec2f(m_radius.x + x, m_radius.y + y);
+    Vec2f point = main_point() + Vec2f(m_radius.x + x, m_radius.y + y);
 
-    return m_centered ? (point - m_radius) : point;
+    return centered() ? (point - m_radius) : point;
 }
 // ========================================================================================

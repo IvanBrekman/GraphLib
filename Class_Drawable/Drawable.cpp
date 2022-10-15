@@ -20,13 +20,13 @@ void Drawable::hide() {
 }
 
 void Drawable::draw(Window& window, const CoordinateSystem& system) {
-    if (!m_hidden) {
+    if (!hidden()) {
         draw_impl_(window, system);
     }
 }
 
 void Drawable::draw(Window& window) {
-    if (!m_hidden) {
+    if (!hidden()) {
         draw_impl_(window, window.m_coordinateSystem__);
     }
 }

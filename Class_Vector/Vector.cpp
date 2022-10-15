@@ -9,14 +9,14 @@
 #include "Vector.hpp"
 
 Vector Vector::get_normal(Normal_Type type) const {
-    Vector normal(Vec2f(0, 0), Vec2f(m_endPoint.y - m_mainPoint.y, m_mainPoint.x - m_endPoint.x));
-    normal += m_mainPoint;
+    Vector normal(Vec2f(0, 0), Vec2f(m_endPoint.y - main_point().y, main_point().x - m_endPoint.x));
+    normal += main_point();
 
     return normal;
 }
 
 Vector Vector::operator =(const Vector& vector) {
-    m_mainPoint = vector.m_mainPoint;
+    m_mainPoint = vector.main_point();
     m_endPoint  = vector.m_endPoint;
     m_fillColor = vector.m_fillColor;
 
@@ -31,7 +31,7 @@ Vector Vector::operator +=(const Vec2f& point) {
 }
 
 Vector Vector::operator *=(double scalar) {
-    m_endPoint = normalize() * scalar + m_mainPoint;
+    m_endPoint = normalize() * scalar + main_point();
 
     return *this;
 }
@@ -41,15 +41,15 @@ Vector Vector::operator /=(double scalar) {
 }
 
 Vector Vector::operator +(const Vector& vector) const {
-    Vector tmp(vector.m_mainPoint, vector.m_endPoint);
+    Vector tmp(vector.main_point(), vector.m_endPoint);
     tmp.move_to_point(m_endPoint);
 
-    return Vector(m_mainPoint, tmp.m_endPoint);
+    return Vector(main_point(), tmp.m_endPoint);
 }
 
 Vector Vector::operator -(const Vector& vector) const {
-    Vector tmp(vector.m_mainPoint, vector.m_endPoint);
-    tmp.move_to_point(m_mainPoint);
+    Vector tmp(vector.main_point(), vector.m_endPoint);
+    tmp.move_to_point(main_point());
 
     return Vector(tmp.m_endPoint, m_endPoint);
 }
@@ -64,15 +64,15 @@ Vector Vector::operator /(double scalar) const  {
 }
 
 Vector Vector::operator -() const {
-    return Vector(m_mainPoint, -normalize() + m_mainPoint);
+    return Vector(main_point(), -normalize() + main_point());
 }
 
 Line Vector::to_line() const {
-    return Line(m_mainPoint, m_endPoint);
+    return Line(main_point(), m_endPoint);
 }
 
 Vec2f Vector::normalize() const {
-    return m_endPoint - m_mainPoint;
+    return m_endPoint - main_point();
 }
 
 void Vector::resize(double new_size) {
@@ -84,7 +84,7 @@ void Vector::resize(double new_size) {
 void Vector::rotate(double angle) {
     if (hidden()) return;
     
-    Vec2f oldStart        = m_mainPoint;
+    Vec2f oldStart        = main_point();
     Vec2f directionVector = normalize();
 
     angle = angle - 360 * (int)(angle / 360);
@@ -101,7 +101,7 @@ void Vector::rotate(double angle) {
 }
 
 void Vector::dump() const {
-    printf("<Vector: (%.3lf, %.3lf) -> (%.3lf, %.3lf) >\n", m_mainPoint.x, m_mainPoint.y, m_endPoint.x, m_endPoint.y);
+    printf("<Vector: (%.3lf, %.3lf) -> (%.3lf, %.3lf) >\n", main_point().x, main_point().y, m_endPoint.x, m_endPoint.y);
 }
 
 // @virtual
@@ -126,5 +126,5 @@ void Vector::move_to_shift_impl_(Vec2f shift) {
     Vec2f baseShift = normalize();
 
     m_mainPoint += shift;
-    m_endPoint   = m_mainPoint + baseShift;
+    m_endPoint   = main_point() + baseShift;
 }

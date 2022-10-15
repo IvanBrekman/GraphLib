@@ -130,7 +130,7 @@ void Scene::render() {
 void Scene::draw_impl_(Window& window, const CoordinateSystem& system) {
     render();
 
-    Vec2f pixel = system.point_to_pixel(m_mainPoint);
+    Vec2f pixel = system.point_to_pixel(main_point());
     if (system.m_axisYDirection == CoordinateSystem::AxisY_Direction::UP)   pixel.y -= m_height;
     if (system.m_axisXDirection == CoordinateSystem::AxisX_Direction::LEFT) pixel.x -= m_width;
 
@@ -140,7 +140,7 @@ void Scene::draw_impl_(Window& window, const CoordinateSystem& system) {
 
 // @virtual
 Vec2f Scene::center() const {
-    return m_mainPoint;
+    return main_point();
 }
 
 Vec3f reflect(Vec3f light, Vec3f normal) {

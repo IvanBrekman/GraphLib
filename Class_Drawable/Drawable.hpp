@@ -6,8 +6,6 @@
 
 #include "../Class_Color/Color.hpp"
 
-// TODO color parameter
-
 class Window;
 class CoordinateSystem;
 
@@ -34,10 +32,11 @@ class Drawable {
         // =================================================
     
     protected:
+        Color m_fillColor;
+        bool  m_hidden;
+
+    protected:
         sf::RenderWindow& get_sfml_window_(Window& window);
 
         virtual void draw_impl_(Window& window, const CoordinateSystem& system) = 0;
-
-        Color m_fillColor;
-        bool  m_hidden;
 };

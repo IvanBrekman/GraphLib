@@ -51,9 +51,9 @@ Text& Text::set_fill_color(Color color) {
 }
 
 void Text::draw_impl_(Window& window, const CoordinateSystem& system) {
-    Vec2f point = m_mainPoint;
-    if (m_centered) {
-        point = m_mainPoint - Vec2f(get_width() / 2, get_height() / 2);
+    Vec2f point = main_point();
+    if (centered()) {
+        point = main_point() - Vec2f(get_width() / 2, get_height() / 2);
     }
 
     Vec2f pixel = system.point_to_pixel(point);
@@ -67,5 +67,5 @@ void Text::draw_impl_(Window& window, const CoordinateSystem& system) {
 }
 
 Vec2f Text::center() const {
-    return m_mainPoint;
+    return main_point();
 }
