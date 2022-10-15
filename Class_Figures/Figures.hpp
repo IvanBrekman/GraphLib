@@ -20,8 +20,8 @@ class Figure : public Drawable, public Moveable {
         Figure()
         : Figure(Vec2f(0, 0), false) {}
 
-        void set_fill_color(Color fillColor, Color outlineColor, double width=1);
-        void set_fill_color(Color color);
+        Figure& set_fill_color(Color fillColor, Color outlineColor, double width=1);
+        Figure& set_fill_color(Color color);
 
         virtual bool contains(Vec2f point) = 0;
         virtual void draw_impl_(Window& window, const CoordinateSystem& system) = 0;

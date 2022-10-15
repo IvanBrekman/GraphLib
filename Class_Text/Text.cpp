@@ -43,9 +43,11 @@ double Text::get_height() const {
     return m_sfml_text__.getLocalBounds().height;
 }
 
-void Text::set_fill_color(Color color) {
+Text& Text::set_fill_color(Color color) {
     Drawable::set_fill_color(color);
     m_sfml_text__.setFillColor(color);
+
+    return *this;
 }
 
 void Text::draw_impl_(Window& window, const CoordinateSystem& system) {

@@ -24,7 +24,7 @@ class Moveable {
 
         void set_centered(bool centered) { m_centered = centered; }
 
-        void move_to_shift(Vec2f shift)      { if (!(IS_INSTANCE(this, Drawable*) && dynamic_cast<Drawable*>(this)->m_hidden)) move_to_shift_impl_(shift); }
+        void move_to_shift(Vec2f shift)      { if (!(IS_INSTANCE(this, Drawable*) && dynamic_cast<Drawable*>(this)->hidden())) move_to_shift_impl_(shift); }
         void move_to_point(Vec2f point)      { move_to_shift(point - m_mainPoint);            }
         
         void move_to_shift(double x, double y) { move_to_shift(Vec2f(x, y));                  }

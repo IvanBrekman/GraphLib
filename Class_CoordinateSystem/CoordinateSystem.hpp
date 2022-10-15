@@ -61,7 +61,7 @@ class CoordinateSystem : public Drawable {
 
         void dump()                             const;
 
-        void set_hidden(bool hidden)                                    override;
+        CoordinateSystem& set_hidden(bool hidden)                       override;
 
     private:
         void draw_impl_(Window& window, const CoordinateSystem& system) override;

@@ -76,13 +76,13 @@ Vec2f Vector::normalize() const {
 }
 
 void Vector::resize(double new_size) {
-    if (m_hidden) return;
+    if (hidden()) return;
 
     *this *= new_size / length();
 }
 
 void Vector::rotate(double angle) {
-    if (m_hidden) return;
+    if (hidden()) return;
     
     Vec2f oldStart        = m_mainPoint;
     Vec2f directionVector = normalize();
@@ -122,8 +122,7 @@ void Vector::draw_impl_(Window& window, const CoordinateSystem& system) {
 
 // @virtual
 void Vector::move_to_shift_impl_(Vec2f shift) {
-    if (m_hidden) return;
-    
+
     Vec2f baseShift = normalize();
 
     m_mainPoint += shift;

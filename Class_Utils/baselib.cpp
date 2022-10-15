@@ -2,14 +2,8 @@
 // Created by ivanbrekman on 06.10.2021.
 //
 
-#include <cstdio>
-#include <cstdlib>
-
-#include <cassert>
-#include <cerrno>
 #include <ctime>
 #include <cctype>
-#include <cstring>
 #include <cmath>
 
 #include <fcntl.h>
@@ -17,6 +11,24 @@
 #include <sys/stat.h>
 
 #include "baselib.hpp"
+
+//! Function checks validity of pointer
+//! \param  ptr checking pointer
+//! \return     0 if all is good, else != 0
+int isbadreadptr(const void* ptr) {
+    int nullfd = open("/dev/random", O_WRONLY);
+
+    int old_errno = errno;
+    errno = 0;
+    
+    int res = write(nullfd, ptr, 1);
+    close(nullfd);
+
+    int result = errno;
+    errno = old_errno;
+
+    return result;
+}
 
 //! Function execute safe calloc call
 //! \param __nmemb amount of elements
@@ -37,7 +49,7 @@ void* calloc_s(size_t __nmemb, size_t __size) {
 //! \param mode     mode with which open file
 //! \return         pointer to opened file (FILE*)
 //! \note call assert if function cannot open file on the path filename
-FILE* open_file(const char* filename, const char mode[]) {
+FILE* openFile(const char* filename, const char mode[]) {
     ASSERT_IF(VALID_PTR(filename), "Invalid filename ptr", NULL);
 
     FILE* file = fopen(filename, mode);
@@ -47,21 +59,10 @@ FILE* open_file(const char* filename, const char mode[]) {
     return file;
 }
 
-//! Function closes file
-//! \param file ptr to FILE object
-//! \return     0 if success, else EOF
-int close_file(FILE* file) {
-    ASSERT_IF(VALID_PTR(file), "Invalid file ptr", EOF);
-
-    int result = fclose(file);
-
-    return result;
-}
-
 //! Function defines size of file
 //! \param filename path to file (absolute or relative)
 //! \return         size of file (in bytes)
-int file_size(const char* filename) {
+int sizeFile(const char* filename) {
     ASSERT_IF(VALID_PTR(filename), "Invalid filename ptr", -1);
 
     struct stat buff = {};
@@ -70,21 +71,32 @@ int file_size(const char* filename) {
     return (int)buff.st_size;
 }
 
+//! Function closes file
+//! \param file ptr to FILE object
+//! \return     0 if success, else EOF
+int closeFile(FILE* file) {
+    ASSERT_IF(VALID_PTR(file), "Invalid file ptr", EOF);
+
+    int result = fclose(file);
+
+    return result;
+}
+
 //! Function gets raw text from file
 //! \param filename path to file to open (absolute or relative)
 //! \return         ptr to readed string
 char* get_raw_text(const char* filename) {
     ASSERT_IF(VALID_PTR(filename), "Invalid filename ptr", NULL);
 
-    FILE* file = open_file(filename, "r");
-    int f_size = file_size(filename);
+    FILE* file = openFile(filename, "r");
+    int f_size = sizeFile(filename);
 
-    char* data = (char*)calloc_s(f_size + 1, sizeof(char));
-    int  bytes = (int)  fread(data, sizeof(char), f_size, file);
+    char* data = NEW_PTR(char, f_size + 1);
+    int  bytes = (int)fread(data, sizeof(char), f_size, file);
 
     ASSERT_IF(bytes == f_size, "Error in reading file", NULL);
 
-    close_file(file);
+    closeFile(file);
     return data;
 }
 
@@ -92,7 +104,7 @@ char* get_raw_text(const char* filename) {
 //! Function clears string from space symbols
 //! \param string ptr to string
 //! \return       ptr to cleared string (same with string)
-char* delete_spaces(char* string) {
+char* deleteSpaces(char* string) {
     ASSERT_IF(VALID_PTR(string), "Invalid string ptr", NULL);
 
     char* new_ptr = &string[0];
@@ -106,27 +118,8 @@ char* delete_spaces(char* string) {
         old_ptr++;
     }
     *new_ptr = '\0';
-    //! TODO: Add realloc?
 
     return string;
-}
-
-//! Function checks validity of pointer
-//! \param  ptr checking pointer
-//! \return     0 if all is good, else != 0
-int isbadreadptr(const void* ptr) {
-    int nullfd = open("/dev/random", O_WRONLY);
-
-    int old_errno = errno;
-    errno = 0;
-    
-    int res = write(nullfd, ptr, 1);
-    close(nullfd);
-
-    int result = errno;
-    errno = old_errno;
-
-    return result;
 }
 
 //! Function writes current date and time to calendar_date
@@ -139,37 +132,37 @@ char* datetime(char* calendar_date) {
     tm* calendar = localtime(&timer);
     ASSERT_IF(VALID_PTR(calendar), "Invalid calendar ptr", NULL);
 
-    strftime(calendar_date, 40, "%d.%m.%Y %H:%M:%S, %A", calendar);
+    strftime(calendar_date, MAX_FILEPATH_SIZE, "%d.%m.%Y %H:%M:%S, %A", calendar);
 
     return calendar_date;
+}
+
+//! Function compare 2 double numbers
+//! \param number1 - first number
+//! \param number2 - second number
+//! \return        - (number1 <  number2) -> negative number
+//!                  (number1 == number2) -> 0
+//!                  (number1 >  number2) -> positive number
+int cmpDouble(double number1, double number2) {
+    if (fabs(number1 - number2) < FLOAT_COMPARE_PRESICION) return  0;
+    if ((number1 - number2) >  FLOAT_COMPARE_PRESICION)    return  1;
+    if ((number1 - number2) < -FLOAT_COMPARE_PRESICION)    return -1;
+
+    ASSERT_IF(0, "num1 !< num2, num1 !> num2, num1 != num2. WTF?", -15);
 }
 
 //! Function checks double number for integer
 //! \param number checking number
 //! \return       1 if number % 1 == 0, else 0
-int is_integer(double number) {
+int isInteger(double number) {
     return (number - (int)number) < FLOAT_COMPARE_PRESICION;
-}
-
-//! Function checks if string can be int
-//! \param string checking string
-//! \return       1 if string can be int, else 0
-int is_number(char* string) {
-    ASSERT_IF(VALID_PTR(string), "Invalid string ptr", 1);
-
-    int res = atoi(string);
-
-    if (res == 0) {
-        return string[0] == '0' && string[1] == '\0';
-    }
-    return 1;
 }
 
 //! Function count digits in number in radix number system
 //! \param number number
 //! \param radix  number system (default 10)
 //! \return       number of digits
-int digits_number(int number, int radix) {
+int digitsNumber(int number, int radix) {
     ASSERT_IF(radix > 1, "Incorrect radix value", -1);
 
     if (number == 0) return 1;
@@ -188,17 +181,31 @@ int digits_number(int number, int radix) {
 //! \param number number
 //! \param bit    number of bit
 //! \return       bit-th bit of number
-int extract_bit(int number, int bit) {
+int extractBit(int number, int bit) {
     ASSERT_IF(bit >= 0, "Incorrect bit number", -1);
 
     return (number >> bit) & 1;
+}
+
+//! Function checks if string can be int
+//! \param string checking string
+//! \return       1 if string can be int, else 0
+int isNumber(char* string) {
+    ASSERT_IF(VALID_PTR(string), "Invalid string ptr", 1);
+
+    int res = atoi(string);
+
+    if (res == 0) {
+        return string[0] == '0' && string[1] == '\0';
+    }
+    return 1;
 }
 
 //! Function convert 4-bytes number to bin view
 //! \param number converting number
 //! \return       converted to bin view number as string
 char* bin4(int number) {
-    char* bits = (char*) calloc_s(32, sizeof(char));
+    char* bits = NEW_PTR(char, 4 * 8);
     int real_bits = 0;
 
     while (number > 0) {
@@ -219,9 +226,9 @@ char* bin4(int number) {
 //! Function convert number to string
 //! \param number converting number
 //! \return       converted number
-char* to_string(int number) {
+char* toString(int number) {
     if (number == 0) {
-        char* str_num = (char*) calloc_s(1 + 1, sizeof(char));
+        char* str_num = NEW_PTR(char, 1 + 1);
         str_num[0] = '0';
         str_num[1] = '\0';
         return str_num;
@@ -233,8 +240,8 @@ char* to_string(int number) {
         number = -number;
     }
 
-    int d_num = digits_number(number, 10);
-    char* str_num = (char*) calloc_s(d_num + shift + 1, sizeof(char));
+    int d_num = digitsNumber(number, 10);
+    char* str_num = NEW_PTR(char, d_num + shift + 1);
 
     for (int i = d_num - 1; number > 0; i--) {
         str_num[i + shift] = (char)('0' + (number % 10));
@@ -244,30 +251,4 @@ char* to_string(int number) {
     str_num[d_num + shift] = '\0';
 
     return str_num;
-}
-
-int print_int_array(int* array, int size, const char* sep, const char* end) {
-    ASSERT_IF(VALID_PTR(array), "Invalif array ptr", 0);
-    ASSERT_IF(VALID_PTR(sep),   "Invalid sep ptr",   0);
-    ASSERT_IF(VALID_PTR(end),   "Invalid end ptr",   0);
-
-    printf("[ ");
-    for (int i = 0; i < size; i++) {
-        printf("%d", array[i]);
-
-        if (i + 1 < size) printf("%s", sep);
-    }
-    printf(" ]%s", end);
-
-    return 1;
-}
-
-int cmpDouble(double num1, double num2) {
-    const double EPS = 1e-3;
-
-    if (fabs(num1 - num2) < EPS) return  0;
-    if ((num1 - num2) >  EPS)    return  1;
-    if ((num1 - num2) < -EPS)    return -1;
-
-    ASSERT_IF(0, "num1 !< num2, num1 !> num2, num1 != num2. WTF?", -15);
 }

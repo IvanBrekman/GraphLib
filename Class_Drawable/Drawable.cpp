@@ -6,19 +6,9 @@
 
 #include "Drawable.hpp"
 
-Drawable::Drawable() {
-    m_fillColor = Color::Black;
-    m_hidden    = false;
-}
-
-// @virtual
-void Drawable::set_fill_color(Color color) {
+Drawable::Drawable(Color color) {
     m_fillColor = color;
-}
-
-// @virtual
-void Drawable::set_hidden(bool hidden) {
-    m_hidden = hidden;
+    m_hidden    = false;
 }
 
 void Drawable::show() {
@@ -40,6 +30,32 @@ void Drawable::draw(Window& window) {
         draw_impl_(window, window.m_coordinateSystem__);
     }
 }
+
+// ==================== Getters ====================
+Color Drawable::fill_color() const {
+    return m_fillColor;
+}
+
+bool Drawable::hidden() const {
+    return m_hidden;
+}
+// =================================================
+
+// ==================== Setters ====================
+// @virtual
+Drawable& Drawable::set_fill_color(Color color) {
+    m_fillColor = color;
+
+    return *this;
+}
+
+// @virtual
+Drawable& Drawable::set_hidden(bool hidden) {
+    m_hidden = hidden;
+
+    return *this;
+}
+// =================================================
 
 sf::RenderWindow& Drawable::get_sfml_window_(Window& window) {
     return window.m_sfml_window__;

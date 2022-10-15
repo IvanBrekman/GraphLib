@@ -13,7 +13,7 @@ int main(void) {
     show_view3_button.set_centered(true);
     exit_button.      set_centered(true);
 
-    WindowView view1(4, &show_view2_button, &show_view3_button, &exit_button, &nothing_button);
+    WindowView view1{&show_view2_button, &show_view3_button, &exit_button, &nothing_button};
     // ========================================================================================
 
     // ======================================== View 2 ========================================
@@ -35,7 +35,7 @@ int main(void) {
     Button back_button(0, -250, "Back", 30, Button::Button_Type::ELLIPSE);
     back_button.set_centered(true);
 
-    WindowView view2(4, &back_button, &system1, &system2, &vector);
+    WindowView view2{&back_button, &system1, &system2, &vector};
     // ========================================================================================
 
     // ======================================== View 3 ========================================
@@ -46,9 +46,9 @@ int main(void) {
         new Sphere(Vec3f(-1.0, -1.5, -12.0), 2, MIRROR ),
         new Sphere(Vec3f( 2.5, -0.5, -18.0), 3, RUBIN  ),
         new Sphere(Vec3f( 7.0,  5.0, -18.0), 4, MIRROR ),
-        new Plane (Vec3f(0, 1, 0), -4,  RUBIN, Vec2f(-10, 10), Vec2f(D_MIN, D_MAX), Vec2f(-30, -10)),
-        new Plane (Vec3f(1, 0, 0), -10, EMERALD, Vec2f(D_MIN, D_MAX), Vec2f(-10, 20), Vec2f(-30, 10)),
-        new Plane (Vec3f(0, 0, 1), -40, RUBIN, Vec2f(0, 30), Vec2f(-10, 10), Vec2f(D_MIN, D_MAX)),
+        new Plane (Vec3f(0, 1, 0), -4,  RUBIN,   Vec2f(-10, 10),      Vec2f(D_MIN, D_MAX),  Vec2f(-30, -10)),
+        new Plane (Vec3f(1, 0, 0), -10, EMERALD, Vec2f(D_MIN, D_MAX), Vec2f(-10, 20),       Vec2f(-30, 10)),
+        new Plane (Vec3f(0, 0, 1), -40, RUBIN,   Vec2f(0, 30),        Vec2f(-10, 10),       Vec2f(D_MIN, D_MAX)),
     });
     scene.extend_lights({
         new Light (Vec3f(-20, 20,  20), 1.5),
@@ -56,7 +56,7 @@ int main(void) {
         new Light (Vec3f( 30, 20,  30), 1.7)
     });
 
-    WindowView view3(2, &scene, &back_button);
+    WindowView view3{&scene, &back_button};
     // ========================================================================================
 
     Window window(1000, 600);
@@ -64,7 +64,6 @@ int main(void) {
     window.extend_views({ &view1, &view2, &view3 });
     window.show_view(&view1);
 
-    bool update_clock  = true;
     auto button_presed = Event::MouseEvent::Button_Type::NONE;
 
     Clock clock(15);
@@ -109,7 +108,7 @@ int main(void) {
             }
 
             if (!wait_click && button_presed == Event::MouseEvent::Button_Type::LEFT  && (event.m_type == Event::MOUSE_MOVED || event.m_type == Event::MOUSE_BUTTON_PRESSED)) {
-                if (!vector.m_hidden) vector.m_endPoint = system2.pixel_to_point(event.mouse.m_pos);
+                if (!vector.hidden()) vector.m_endPoint = system2.pixel_to_point(event.mouse.m_pos);
             }
 
             if (!wait_click && button_presed == Event::MouseEvent::Button_Type::RIGHT && (event.m_type == Event::MOUSE_MOVED || event.m_type == Event::MOUSE_BUTTON_PRESSED)) {
@@ -118,7 +117,7 @@ int main(void) {
         }
         // =======================================================
 
-        if (second_hand.m_hidden == false && update_clock && clock.get_elapsed_seconds() > 1) {
+        if (clock.get_elapsed_seconds() > 1) {
             second_hand.rotate(-360.0 / (60     ));
             minute_hand.rotate(-360.0 / (60 * 60));
 
@@ -128,9 +127,9 @@ int main(void) {
         // ==================== Drawing Objects ====================
         window.clear();
 
-        system1.set_show_axis(!view2.m_hidden);
-        system2.set_show_axis(!view2.m_hidden);
-        if (!view2.m_hidden) window.draw_window_coordinate_system();
+        system1.set_show_axis(!view2.hidden());
+        system2.set_show_axis(!view2.hidden());
+        if (!view2.hidden()) window.draw_window_coordinate_system();
 
         window.draw_added_objects();
 

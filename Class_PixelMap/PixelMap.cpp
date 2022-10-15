@@ -47,8 +47,6 @@ void PixelMap::load_image(const char* path) {
 
 // @virtual
 void PixelMap::draw_impl_(Window& window, const CoordinateSystem& system) {
-    if (m_hidden) return;
-
     Vec2f pixel = system.point_to_pixel(m_mainPoint);
     if (system.m_axisYDirection == CoordinateSystem::AxisY_Direction::UP)   pixel.y -= m_height;
     if (system.m_axisXDirection == CoordinateSystem::AxisX_Direction::LEFT) pixel.x -= m_width;

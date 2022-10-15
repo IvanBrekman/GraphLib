@@ -83,10 +83,12 @@ void CoordinateSystem::dump() const {
 }
 
 // @virtual
-void CoordinateSystem::set_hidden(bool hidden) {
+CoordinateSystem& CoordinateSystem::set_hidden(bool hidden) {
     for (Drawable* object : m_objects) {
         object->set_hidden(hidden);
     }
+
+    return *this;
 }
 
 // @virtual

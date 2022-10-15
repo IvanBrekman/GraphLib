@@ -2,14 +2,24 @@
 // Created by ivanbrekman on 22.09.2021.
 //
 
+// =======================================================================================================================
+// Base Library.
+// baselib contains useful defines, macros, constants and functions, that can be useful in any project.
+
+// =======================================================================================================================
+
 #ifndef BASELIB_H
 #define BASELIB_H
 
-#include "config.hpp"
+#include <cstdio>
+#include <cassert>
+#include <cerrno>
+#include <vector>
 
-#ifndef VALIDATE_LEVEL
-    #define VALIDATE_LEVEL 0
-#endif
+#include "../Class_Drawable/Drawable.hpp"
+
+// ================================================= Include config file =================================================
+#include "config.hpp"
 
 #ifndef EXECUTE_WAITINGS
     #define EXECUTE_WAITINGS 0
@@ -18,122 +28,50 @@
 #ifndef LOG_PRINTF
     #define LOG_PRINTF 0
 #endif
+// =======================================================================================================================
 
-#ifndef LOG_GRAPH
-    #define LOG_GRAPH 0
-#endif
 
-#include <cstdio>
-#include <cstdlib>
-#include <cerrno>
-#include <cassert>
+// =================================================   Oneline defines   =================================================
+#define DBG                   printf("%s:%d\n", __FILE__, __LINE__)
+#define LOCATION(var)         { typeid(var).name(), #var, __FILE__, __FUNCTION__, __LINE__ }
+#define NEW_PTR(type, amount) (type*) calloc_s(amount, sizeof(type))
 
-#define IS_INSTANCE(var, class_) dynamic_cast<class_>(var) != nullptr
+#define MAX(arg1, arg2) ( (arg1) > (arg2) ? (arg1) : (arg2) )
+#define MIN(arg1, arg2) ( (arg1) < (arg2) ? (arg1) : (arg2) )
 
-#define MAX(arg1, arg2) (arg1) > (arg2) ? (arg1) : (arg2)
-#define MIN(arg1, arg2) (arg1) < (arg2) ? (arg1) : (arg2)
+#define IS_INSTANCE(var, class_) ( dynamic_cast<class_>(var) != nullptr )
 
-#define DBG            printf("%s:%d\n", __FILE__, __LINE__)
-#define LOCATION(var)  { TYPE, #var, __FILE__, __FUNCTION__, __LINE__ }
-#define WAIT_INPUT     do { if (EXECUTE_WAITINGS == 1 && LOG_PRINTF > 0) { printf(BLUE "Press any button...\n" NATURAL); getchar(); } } while(0)
+#define COLORED_OUTPUT(str, color, file) ( IS_TERMINAL(file) ? (color str NATURAL) : str )
+#define BAD_OUTPUT(log)                  COLORED_OUTPUT("(BAD)", RED, log)
+#define IS_TERMINAL(file)                ( ((file) == stdout) || ((file) == stderr) || ((file) == stdin) )
 
-#define COLORED_OUTPUT(str, color, file) IS_TERMINAL(file) ? (color str NATURAL) : str
-#define IS_TERMINAL(file)                (file == stdin) || (file == stdout) || (file == stderr)
-#define INT_ADDRESS(ptr)                 (int)((char*)(ptr) - (char*)0)
-#define NEW_PTR(type, amount)            (type*) calloc_s(amount, sizeof(type))
-#define BAD_OUTPUT                       COLORED_OUTPUT("(BAD)", RED, log)
+#define  PRINT_WARNING(text)          printf(__FILE__ ":%d " ORANGE text NATURAL, __LINE__)
+#define APRINT_WARNING(text, args...) printf(__FILE__ ":%d " ORANGE text NATURAL, __LINE__, args)
+// =======================================================================================================================
 
-#define IS_DIGIT(symbol)  ('0' <= symbol && symbol <= '9')
-#define IS_LATIN(symbol) (('a' <= symbol && symbol <= 'z') || ('A' <= symbol && symbol <= 'Z'))
-
-const double FLOAT_COMPARE_PRESICION = 0.0001;
-
-const int MAX_FILEPATH_SIZE       =  50;
-const int MAX_SPRINTF_STRING_SIZE = 500;
-const int NOT_FOUND               = -0xFAC5;
-
-void* calloc_s(size_t __nmemb, size_t __size);
-
-FILE* open_file(const char* filename, const char mode[]);
-int  close_file(FILE* file);
-
-/*
-Default define to ASSERT_OK. Use it to customize macros for each project.
-!Note!  To use this macro check that open_file function is defined
-        or use another function to open file.
-
-#define ASSERT_OK(obj, type, reason, ret) do {                                      \
-    if (VALIDATE_LEVEL >= WEAK_VALIDATE && type ## _error(obj)) {                   \
-        type ## _dump(obj, reason);                                                 \
-        if (VALIDATE_LEVEL >= HIGHEST_VALIDATE) {                                   \
-            LOG_DUMP(obj, reason, type ## _dump);                                   \
-        }                                                                           \
-        ASSERT_IF(0, "verify failed", ret);                                         \
-    } else if (type ## _error(obj)) {                                               \
-        errno = type ## _error(obj);                                                \
-        return ret;                                                                 \
-    }                                                                               \
-} while (0)
-
-*/
-
-#define LOG_DUMP(obj, reason, func) do {                                            \
-    if (VALIDATE_LEVEL >= HIGHEST_VALIDATE) {                                       \
-        FILE* log = open_file("logs/log.txt", "a");                                 \
-        func(obj, reason, log);                                                     \
-        close_file(log);                                                            \
-    }                                                                               \
-} while (0)
-
-#define LOG_DUMP_GRAPH(obj, reason, func) do {                                      \
-    if (LOG_GRAPH == 1) {                                                           \
-        FILE* gr_log = open_file("logs/log.html", "a");                             \
-        func(obj, reason, gr_log);                                                  \
-        close_file(gr_log);                                                         \
-    }                                                                               \
-} while (0)
-
-#define PRINT_WARNING(text) do {                                                    \
-    printf(__FILE__ ":%d " ORANGE text NATURAL, __LINE__);                          \
-    if (VALIDATE_LEVEL >= HIGHEST_VALIDATE) {                                       \
-        FILE* wlog = open_file("logs/log.txt", "a");                                \
-        fprintf(wlog, __FILE__ ":%d " text, __LINE__);                              \
-        close_file(wlog);                                                           \
-    }                                                                               \
-} while (0)
-
-#define APRINT_WARNING(text, args...) do {                                          \
-    printf(__FILE__ ":%d " ORANGE text NATURAL, __LINE__, args);                    \
-    if (VALIDATE_LEVEL >= HIGHEST_VALIDATE) {                                       \
-        FILE* wlog = open_file("logs/log.txt", "a");                                \
-        fprintf(wlog, __FILE__ ":%d " text, __LINE__, args);                        \
-        close_file(wlog);                                                           \
-    }                                                                               \
-} while (0)
-
-#define SPR_SYSTEM(format...) do {                                                  \
-    char* command = (char*) calloc_s(MAX_SPRINTF_STRING_SIZE, sizeof(char));        \
-    sprintf(command, format);                                                       \
-                                                                                    \
-    system(command);                                                                \
-                                                                                    \
-    FREE_PTR(command, char);                                                        \
-} while (0)
-
-#define SPR_FPUTS(file, format...) do {                                             \
-    char* string = (char*) calloc_s(MAX_SPRINTF_STRING_SIZE, sizeof(char));         \
-    sprintf(string, format);                                                        \
-                                                                                    \
-    fputs(string, file);                                                            \
-                                                                                    \
-    FREE_PTR(string, char);                                                         \
-} while (0)
-
+// =================================================  Multiline defines  =================================================
 #define FREE_PTR(ptr, type) do {                \
     free((ptr));                                \
     (ptr) = (type*)poisons::FREED_PTR;          \
 } while (0)
 
+#define SPR_SYSTEM(format...) do {                                              \
+    char* command = NEW_PTR(char, MAX_SPRINTF_STRING_SIZE);                     \
+    sprintf(command, format);                                                   \
+                                                                                \
+    system(command);                                                            \
+                                                                                \
+    FREE_PTR(command, char);                                                    \
+} while (0)
+
+#define FPRINT_DATE(color, file) do {                                           \
+    char* date = NEW_PTR(char, MAX_FILEPATH_SIZE);                              \
+    fprintf(file, COLORED_OUTPUT("Time: %s\n", color, file), datetime(date));   \
+    FREE_PTR(date, char);                                                       \
+} while (0)
+// =======================================================================================================================
+
+// =================================================  Condition defines  =================================================
 #if defined(LOG_PRINTF) && LOG_PRINTF > 0
     #define LOGN(level, code) do {              \
         if (LOG_PRINTF >= level) {              \
@@ -144,19 +82,19 @@ Default define to ASSERT_OK. Use it to customize macros for each project.
     #define LOGN(level, code) 
 #endif
 
-#define LOG1(code)  LOGN(1, code)
-#define LOG2(code)  LOGN(2, code)
+#define LOG1(code) LOGN(1, code)
+#define LOG2(code) LOGN(2, code)
 
 #ifndef NO_CHECKS
     #define VALID_PTR(ptr) !isbadreadptr((const void*)(ptr))
 
-    #define ASSERT_IF(cond, text, ret) do {                                             \
-        assert((cond) && text);                                                         \
-        if (!(cond)) {                                                                  \
-            PRINT_WARNING(text "\n");                                                   \
-            errno = -1;                                                                 \
-            return ret;                                                                 \
-        }                                                                               \
+    #define ASSERT_IF(cond, text, ret) do {                     \
+        assert((cond) && text);                                 \
+        if (!(cond)) {                                          \
+            PRINT_WARNING(text "\n");                           \
+            errno = -1;                                         \
+            return ret;                                         \
+        }                                                       \
     } while(0)
 #else
     #define VALID_PTR(ptr) (                                    \
@@ -168,7 +106,14 @@ Default define to ASSERT_OK. Use it to customize macros for each project.
     #define ASSERT_IF(cond, text, ret) 
 #endif
 
-// Colors----------------------------------------------------------------------
+#if (defined(EXECUTE_WAITINGS) && EXECUTE_WAITINGS == 1) && (defined(LOG_PRINTF) && LOG_PRINTF > 0)
+    #define WAIT_INPUT do { printf(BLUE "Press any button...\n" NATURAL); getchar(); } while(0)
+#else
+    #define WAIT_INPUT 
+#endif
+// =======================================================================================================================
+
+// =================================================    Color defines    =================================================
 #define BLACK       "\033[1;30m"
 #define RED         "\033[1;31m"
 #define GREEN       "\033[1;32m"
@@ -188,55 +133,60 @@ Default define to ASSERT_OK. Use it to customize macros for each project.
 #define GRAY_UNL    "\033[4;37m"
 
 #define NATURAL     "\033[0m"
-// ----------------------------------------------------------------------------
+// =======================================================================================================================
 
-enum validate_level_t {
-    NO_VALIDATE      = 0, // No checks in program
-    WEAK_VALIDATE    = 1, // Checks only fields with  O(1) complexity
-    MEDIUM_VALIDATE  = 2, // Checks filed, which need O(n) complexity
-    STRONG_VALIDATE  = 3, // All checks (hash and others)
-    HIGHEST_VALIDATE = 4  // Error will write in log file
-};
 
+// ================================================= Constant definition =================================================
 enum poisons {
-    UNINITIALIZED_PTR = 0xBAD111,
-    UNINITIALIZED_INT = -1 * (0xBAD666),
+    UNINITIALIZED_ELEMENT   = -0xBAD666,
+    UNINITIALIZED_PTR       =  0xBAD666,
 
-    FREED_ELEMENT     = -1 * (0xBAD667),
-    FREED_PTR         = 0xF2EE
+    POISONED_ELEMENT        = -0xBAD999,
+    POISONED_PTR            =  0xBAD999,
+
+    FREED_ELEMENT           = -0xF2EE,
+    FREED_PTR               =  0xF2EE,
 };
 
-#define PRINT_DATE(color) do {                                      \
-    char* date = (char*) calloc_s(40, sizeof(char));                \
-    printf((color "Time: %s\n" NATURAL), datetime(date));           \
-    FREE_PTR(date, char);                                           \
-} while (0)
+const double FLOAT_COMPARE_PRESICION = 1e-4;
 
-#define FPRINT_DATE(file) do {                                      \
-    char* date = (char*) calloc_s(40, sizeof(char));                \
-    fprintf(file, "Time: %s\n", datetime(date));                    \
-    FREE_PTR(date, char);                                           \
-} while (0)
+const int    MAX_FILEPATH_SIZE       =  50;
+const int    MAX_SPRINTF_STRING_SIZE = 500;
+const int    NOT_FOUND               = -0xFAC5;
+// =======================================================================================================================
 
-int      file_size(const char* filename);
-char* get_raw_text(const char* filename);
-char* delete_spaces(      char* string);
-
+// ================================================= Function prototypes =================================================
 int isbadreadptr(const void* ptr);
+
+void* calloc_s(size_t __nmemb, size_t __size);
+
+FILE*  openFile(const char* filename, const char mode[]);
+int    sizeFile(const char* filename                   );
+int   closeFile(FILE*       file                       );
+
+char* getRawText  (const char* filename);
+char* deleteSpaces(      char* string  );
+
 char* datetime(char* calendar_date);
 
-int is_integer(double number);
-int is_number(char* string);
-int digits_number(int number, int radix=10);
-int   extract_bit(int number, int bit);
+int cmpDouble   (double number1,  double number2);
+int isInteger   (double number                  );
+int digitsNumber(int    number,   int radix=10  );
+int extractBit  (int    number,   int bit       );
+int isNumber    (char*  string                  );
 
-char* bin4(int number);
-char* to_string(int number);
+char* bin4    (int number);
+char* toString(int number);
 
-int print_int_array(int* array, int size, const char* sep=", ", const char* end="\n");
+template<typename T, typename ALLOC>
+void freeStdVector(std::vector<T, ALLOC>& vector, bool deleteVectorElements=true) {
+    if (deleteVectorElements) vector.clear();
+    
+    std::vector<T, ALLOC>().swap(vector);
+}
+// =======================================================================================================================
 
-int cmpDouble(double num1, double num2);
-
+// =================================================  CRC32 realization  =================================================
 #ifdef ADD_CRC32
 
 typedef unsigned int  DWORD;
@@ -300,6 +250,7 @@ DWORD crc32(const void* buf, DWORD size) {
     return crc ^ ~0U;
 }
 
-#endif
+#endif // ADD_CRC32
+// =======================================================================================================================
 
 #endif // BASELIB_H

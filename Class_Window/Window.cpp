@@ -131,7 +131,7 @@ void Window::close() {
 void Window::append_view(WindowView* view) {
     m_views__.push_back(view);
 
-    extend_objects(view->m_objects);
+    extend_objects(view->objects());
 }
 
 void Window::extend_views(std::vector <WindowView*> views) {
@@ -144,11 +144,11 @@ void Window::show_view(WindowView* view) {
     bool has_view = false;
     for (WindowView* window_view : m_views__) {
         if (window_view == view) has_view = true;
-        window_view->set_objects_visibility(true);
+        window_view->set_hidden(true);
     }
 
     if (!has_view) m_views__.push_back(view);
-    view->set_objects_visibility(false);
+    view->set_hidden(false);
 }
 
 void Window::append_object(Drawable* object, int index) {

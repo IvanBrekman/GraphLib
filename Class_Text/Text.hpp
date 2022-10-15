@@ -30,7 +30,7 @@ class Text : public Drawable, public Moveable {
         double get_width()      const;
         double get_height()     const;
 
-        void set_fill_color(Color color)                                override;
+        Text& set_fill_color(Color color)                                override;
         void draw_impl_(Window& window, const CoordinateSystem& system) override;
         Vec2f center() const                                          override;
 };

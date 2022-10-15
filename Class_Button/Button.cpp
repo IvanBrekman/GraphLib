@@ -26,7 +26,7 @@ double Button::height() const {
 }
 
 bool Button::is_pressed(Vec2f point, Event::MouseEvent::Button_Type button) {
-    if (m_hidden || button != Event::MouseEvent::Button_Type::LEFT) return false;
+    if (hidden() || button != Event::MouseEvent::Button_Type::LEFT) return false;
     
     return m_shape__->contains(point);
 }
@@ -61,9 +61,9 @@ void Button::set_button_released() {
 }
 
 void Button::set_button_hovered() {
-    if (m_shape__->m_fillColor == Color::Yellow) return;
+    if (m_shape__->fill_color() == Color::Yellow) return;
 
-    m_shapeColor__ = m_shape__->m_fillColor;
+    m_shapeColor__ = m_shape__->fill_color();
     m_shape__->set_fill_color(Color::Yellow,  Color::Black, 5);
 }
 

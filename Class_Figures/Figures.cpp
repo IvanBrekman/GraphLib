@@ -15,14 +15,16 @@ Figure::Figure(Vec2f mainPoint, bool centered)
     m_centered = centered;
 }
 
-void Figure::set_fill_color(Color fillColor, Color outlineColor, double width) {
+Figure& Figure::set_fill_color(Color fillColor, Color outlineColor, double width) {
     Drawable::set_fill_color(fillColor);
     m_outlineColor = outlineColor;
     m_outlineWidth = width;
+
+    return *this;
 }
 
-void Figure::set_fill_color(Color color) {
-    set_fill_color(color, color, 0);
+Figure& Figure::set_fill_color(Color color) {
+    return set_fill_color(color, color, 0);
 }
 
 void Figure::set_shape_color_(sf::Shape& shape) {
@@ -182,9 +184,7 @@ bool Polygon::contains(Vec2f point) {
 }
 
 // @virtual
-void Polygon::draw_impl_(Window& window, const CoordinateSystem& system) {
-    if (m_hidden) return;
-    
+void Polygon::draw_impl_(Window& window, const CoordinateSystem& system) {    
     int i = 0;
     for (Vec2f point : m_vertexes__) {
         Vec2f pixel = system.point_to_pixel(point);
@@ -202,9 +202,7 @@ Vec2f Polygon::center() const {
 }
 
 // @virtual
-void Polygon::move_to_shift_impl_(Vec2f shift) {
-    if (m_hidden) return;
-    
+void Polygon::move_to_shift_impl_(Vec2f shift) {    
     for (int i = 0; i < m_vertexes__.size(); i++) {
         m_vertexes__.at(i) += shift;
     }
@@ -242,8 +240,6 @@ Vec2f Ellipse::center() const {
 
 // @virtual
 void Ellipse::move_to_shift_impl_(Vec2f shift) {
-    if (m_hidden) return;
-    
     Figure::move_to_shift(shift);
 }
 
