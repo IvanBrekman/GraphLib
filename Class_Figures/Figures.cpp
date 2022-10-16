@@ -15,6 +15,17 @@ Figure::Figure(Vec2f mainPoint, bool centered)
     m_centered = centered;
 }
 
+// ==================== Getters ====================
+Color Figure::outline_color() const {
+    return m_outlineColor;
+}
+
+double Figure::outline_width() const {
+    return m_outlineWidth;
+}
+// =================================================
+
+// ==================== Getters ====================
 Figure& Figure::set_fill_color(Color fillColor, Color outlineColor, double width) {
     Drawable::set_fill_color(fillColor);
     m_outlineColor = outlineColor;
@@ -26,6 +37,7 @@ Figure& Figure::set_fill_color(Color fillColor, Color outlineColor, double width
 Figure& Figure::set_fill_color(Color color) {
     return set_fill_color(color, color, 0);
 }
+// =================================================
 
 void Figure::set_shape_color_(sf::Shape& shape) {
     shape.setFillColor       (m_fillColor);
@@ -44,10 +56,24 @@ void Figure::draw(Window& window, const CoordinateSystem& system, Vec2f pixel, s
 // ======================================== Circle ========================================
 Circle::Circle(Vec2f mainPoint, double radius, bool centered)
 : Figure(mainPoint, centered), m_radius(radius) {
-    m_sfml_shape_ = sf::CircleShape(radius, Circle::POINTS_ON_DRAW__);
+    m_sfml_shape = sf::CircleShape(radius, Circle::POINTS_ON_DRAW);
 
     m_centered = centered;
 }
+
+// ==================== Getters ====================
+double Circle::radius() const {
+    return m_radius;
+}
+// ================================================
+
+// ==================== Setters ====================
+Circle& Circle::set_radius(double newRadius) {
+    m_radius = newRadius;
+
+    return *this;
+}
+// =================================================
 
 // @virtual
 bool Circle::contains(Vec2f point) {
@@ -56,33 +82,57 @@ bool Circle::contains(Vec2f point) {
 
 // @virtual
 void Circle::draw_impl_(Window& window, const CoordinateSystem& system) {
-    Vec2f min_point = main_point();
-    if (centered()) {
-        min_point = main_point() - Vec2f(m_radius, m_radius);
+    Vec2f min_point = m_mainPoint;
+    if (m_centered) {
+        min_point = m_mainPoint - Vec2f(m_radius, m_radius);
     }
     
     Vec2f pixel = system.point_to_pixel(min_point);
-    if (system.m_axisYDirection == CoordinateSystem::AxisY_Direction::UP)   pixel.y -= m_radius * 2;
-    if (system.m_axisXDirection == CoordinateSystem::AxisX_Direction::LEFT) pixel.x -= m_radius * 2;
+    if (system.axis_y_direction() == CoordinateSystem::AxisY_Direction::UP)   pixel.y -= m_radius * 2;
+    if (system.axis_x_direction() == CoordinateSystem::AxisX_Direction::LEFT) pixel.x -= m_radius * 2;
 
-    Figure::draw(window, system, pixel, m_sfml_shape_);
+    Figure::draw(window, system, pixel, m_sfml_shape);
 }
 
 // @virtual
 Vec2f Circle::center() const {
-    return centered() ? main_point() : (main_point() + Vec2f(m_radius, m_radius));
+    return m_centered ? m_mainPoint : (m_mainPoint + Vec2f(m_radius, m_radius));
 }
 // ========================================================================================
 
 // ======================================= Rectangle ======================================
 Rectangle::Rectangle(Vec2f main_point, double width, double height)
 : Figure(main_point, false), m_width(width), m_height(height) {
-    m_sfml_shape__ = sf::RectangleShape(sf::Vector2f(width, height));
+    m_sfml_shape = sf::RectangleShape(sf::Vector2f(width, height));
 }
+
+// ==================== Getters ====================
+double Rectangle::width() const {
+    return m_width;
+}
+
+double Rectangle::height() const {
+    return m_height;
+}
+// =================================================
+
+// ==================== Setters ====================
+Rectangle& Rectangle::set_width(double newWidth) {
+    m_width = newWidth;
+
+    return *this;
+}
+
+Rectangle& Rectangle::set_height(double newHeight) {
+    m_height = newHeight;
+
+    return *this;
+}
+// =================================================
 
 // @virtual
 bool Rectangle::contains(Vec2f point) {
-    Vec2f minPoint = centered() ? (main_point() - Vec2f(m_width / 2, m_height / 2)) : main_point();
+    Vec2f minPoint = m_centered ? (m_mainPoint - Vec2f(m_width / 2, m_height / 2)) : m_mainPoint;
     Vec2f maxPoint = minPoint + Vec2f(m_width, m_height);
 
     return (minPoint.x <= point.x && point.x <= maxPoint.x) &&
@@ -91,41 +141,56 @@ bool Rectangle::contains(Vec2f point) {
 
 // @virtual
 void Rectangle::draw_impl_(Window& window, const CoordinateSystem& system) {
-    Vec2f point = main_point();
-    if (centered()) {
-        point = main_point() - Vec2f(m_width / 2, m_height / 2);
+    Vec2f point = m_mainPoint;
+    if (m_centered) {
+        point = m_mainPoint - Vec2f(m_width / 2, m_height / 2);
     }
     
     Vec2f pixel = system.point_to_pixel(point);
-    if (system.m_axisYDirection == CoordinateSystem::AxisY_Direction::UP)   pixel.y -= m_height;
-    if (system.m_axisXDirection == CoordinateSystem::AxisX_Direction::LEFT) pixel.x -= m_width;
+    if (system.axis_y_direction() == CoordinateSystem::AxisY_Direction::UP)   pixel.y -= m_height;
+    if (system.axis_x_direction() == CoordinateSystem::AxisX_Direction::LEFT) pixel.x -= m_width;
 
-    Figure::draw(window, system, pixel, m_sfml_shape__);
+    Figure::draw(window, system, pixel, m_sfml_shape);
 }
 
 // @virtual
 Vec2f Rectangle::center() const {
-    return centered() ? main_point() : (main_point() + Vec2f(m_width / 2, m_height / 2));
+    return m_centered ? m_mainPoint : (m_mainPoint + Vec2f(m_width / 2, m_height / 2));
 }
 // ========================================================================================
 
 // ==================================== RegularPolygon ====================================
 RegularPolygon::RegularPolygon(Vec2f mainPoint, double radius, double vAmount, bool centered)
-: Circle(mainPoint, radius, centered), vertexAmount(vAmount) {
-    m_sfml_shape_.setPointCount(vAmount);
+: Circle(mainPoint, radius, centered), m_vertexAmount(vAmount) {
+    m_sfml_shape.setPointCount(vAmount);
 }
+
+// ==================== Getters ====================
+double RegularPolygon::vertex_amount() const {
+    return m_vertexAmount;
+}
+// =================================================
+
+// ==================== Setters ====================
+RegularPolygon& RegularPolygon::set_vertex_amount(double newVertexAmount) {
+    m_vertexAmount = newVertexAmount;
+    m_sfml_shape.setPointCount(newVertexAmount);
+
+    return *this;
+}
+// =================================================
 
 // @virtual
 bool RegularPolygon::contains(Vec2f point) {
-    int vSize = vertexAmount;
+    int vSize = m_vertexAmount;
 
     bool contains = false;
 
-    point -= main_point();
+    point -= m_mainPoint;
 
     for (int i = 0, j = vSize - 1; i < vSize; i++) {
-        sf::Vector2f vectorPi = m_sfml_shape_.getPoint(i);
-        sf::Vector2f vectorPj = m_sfml_shape_.getPoint(j);
+        sf::Vector2f vectorPi = m_sfml_shape.getPoint(i);
+        sf::Vector2f vectorPj = m_sfml_shape.getPoint(j);
 
         Vec2f pi = Vec2f(vectorPi.x, vectorPi.y);
         Vec2f pj = Vec2f(vectorPj.x, vectorPj.y);
@@ -148,25 +213,25 @@ Polygon::Polygon(Vec2f* vertexes, int vertexesAmount)
 : Figure() {
     ASSERT_IF(VALID_PTR(vertexes), "Ivalid vertexes ptr", );
 
-    m_sfml_shape_.setPointCount(vertexesAmount);
+    m_sfml_shape.setPointCount(vertexesAmount);
 
     for (int i = 0; i < vertexesAmount; i++) {
-        m_vertexes__.push_back(vertexes[i]);
+        m_vertexes.push_back(vertexes[i]);
     }
 }
 
 std::vector <Vec2f>* Polygon::get_vertexes() {
-    return &m_vertexes__;
+    return &m_vertexes;
 }
 
 Vec2f Polygon::get_vertex(int index) {
-    return m_vertexes__.at(index);
+    return m_vertexes.at(index);
 }
 
 // @virtual
 bool Polygon::contains(Vec2f point) {
-    std::vector <Vec2f> v      = m_vertexes__;
-    int                   vSize = v.size();
+    std::vector <Vec2f> v     = m_vertexes;
+    int                 vSize = v.size();
 
     bool contains = false;
 
@@ -186,25 +251,25 @@ bool Polygon::contains(Vec2f point) {
 // @virtual
 void Polygon::draw_impl_(Window& window, const CoordinateSystem& system) {    
     int i = 0;
-    for (Vec2f point : m_vertexes__) {
+    for (Vec2f point : m_vertexes) {
         Vec2f pixel = system.point_to_pixel(point);
 
-        m_sfml_shape_.setPoint(i++, pixel.to_sfml_vector());
+        m_sfml_shape.setPoint(i++, pixel.to_sfml_vector());
     }
 
-    set_shape_color_(m_sfml_shape_);
-    get_sfml_window_(window).draw(m_sfml_shape_);
+    set_shape_color_(m_sfml_shape);
+    get_sfml_window_(window).draw(m_sfml_shape);
 }
 
 // @virtual
 Vec2f Polygon::center() const {
-    return m_vertexes__.at(0);
+    return m_vertexes.at(0);
 }
 
 // @virtual
 void Polygon::move_to_shift_impl_(Vec2f shift) {    
-    for (int i = 0; i < m_vertexes__.size(); i++) {
-        m_vertexes__.at(i) += shift;
+    for (int i = 0; i < m_vertexes.size(); i++) {
+        m_vertexes.at(i) += shift;
     }
 }
 // ========================================================================================
@@ -212,8 +277,22 @@ void Polygon::move_to_shift_impl_(Vec2f shift) {
 // ======================================= Ellipse ========================================
 Ellipse::Ellipse(Vec2f mainPoint, Vec2f radius, bool centered)
 : Polygon(mainPoint, centered), m_radius(radius) {
-    m_sfml_shape_.setPointCount(Ellipse::POINTS_ON_DRAW__);
+    m_sfml_shape.setPointCount(Ellipse::POINTS_ON_DRAW);
 }
+
+// ==================== Getters ====================
+Vec2f Ellipse::radius() const {
+    return m_radius;
+}
+// =================================================
+
+// ==================== Setters ====================
+Ellipse& Ellipse::set_radius(Vec2f newRadius) {
+    m_radius = newRadius;
+
+    return *this;
+}
+// =================================================
 
 // @virtual
 bool Ellipse::contains(Vec2f point) {
@@ -223,18 +302,18 @@ bool Ellipse::contains(Vec2f point) {
 
 // @virtual
 void Ellipse::draw_impl_(Window& window, const CoordinateSystem& system) {
-    for (int i = 0; i < Ellipse::POINTS_ON_DRAW__; i++) {
+    for (int i = 0; i < Ellipse::POINTS_ON_DRAW; i++) {
         Vec2f pixel = system.point_to_pixel(get_point__(i));
-        m_sfml_shape_.setPoint(i, pixel.to_sfml_vector());
+        m_sfml_shape.setPoint(i, pixel.to_sfml_vector());
     }
 
-    set_shape_color_(m_sfml_shape_);
-    get_sfml_window_(window).draw(m_sfml_shape_);
+    set_shape_color_(m_sfml_shape);
+    get_sfml_window_(window).draw(m_sfml_shape);
 }
 
 // @virtual
 Vec2f Ellipse::center() const {
-    return centered() ? main_point() : (main_point() + m_radius);
+    return m_centered ? m_mainPoint : (m_mainPoint + m_radius);
 }
 
 
@@ -244,12 +323,12 @@ void Ellipse::move_to_shift_impl_(Vec2f shift) {
 }
 
 Vec2f Ellipse::get_point__(int index) {
-    float angle = index * 2 * M_PI / Ellipse::POINTS_ON_DRAW__ - M_PI / 2;
+    float angle = index * 2 * M_PI / Ellipse::POINTS_ON_DRAW - M_PI / 2;
     float x = std::cos(angle) * m_radius.x;
     float y = std::sin(angle) * m_radius.y;
 
-    Vec2f point = main_point() + Vec2f(m_radius.x + x, m_radius.y + y);
+    Vec2f point = m_mainPoint + Vec2f(m_radius.x + x, m_radius.y + y);
 
-    return centered() ? (point - m_radius) : point;
+    return m_centered ? (point - m_radius) : point;
 }
 // ========================================================================================

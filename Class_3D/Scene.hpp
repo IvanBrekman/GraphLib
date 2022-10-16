@@ -18,27 +18,11 @@ class Window;
 
 class Scene : public Drawable, public Moveable {
     public:
-        double m_width;
-        double m_height;
-
-        PixelMap m_background;
-
-        std::vector <SceneObject*> m_objects;
-        std::vector <Light      *> m_lights;
-    
-    private:
-        PixelMap         m_map__;
-        CoordinateSystem m_system__;
-
-        const int        REFLECT_DEPTH__      = 4;
-        const double     FOV__                = M_PI / 3;
-        const double     DEFAULT_DEVIATION__  = 1e-3;
-        const Color      DEFAULT_BACK_COLOR__ = Color(51, 178, 204);
-    
-    public:
-        Scene(Vec2f mainPoint,  double width, double height, const char* backImgPath=nullptr);
+        Scene(Vec2f mainPoint,    double width, double height, const char* backImgPath=nullptr);
         Scene(double x, double y, double width, double height, const char* backImgPath=nullptr)
         : Scene(Vec2f(x, y), width, height, backImgPath) {}
+
+        ~Scene();
 
         Color cast_ray         (Vec3f rayStart, Vec3f rayDir, int x, int y, int depth=0);
         bool  intersect_objects(Vec3f rayStart, Vec3f rayDir, Vec3f& intersection, Vec3f& normal, Material& material);
@@ -51,8 +35,41 @@ class Scene : public Drawable, public Moveable {
 
         void render();
 
+        // ==================== Getters ====================
+        double width()  const;
+        double height() const;
+
+        PixelMap background() const;
+
+        std::vector<SceneObject*> objects() const;
+        std::vector<Light      *> lights () const;
+        // =================================================
+
+        // ==================== Setters ====================
+        Scene& set_background(PixelMap newBack);
+        Scene& set_objects(std::vector<SceneObject*> newObjects);
+        Scene& set_lights (std::vector<Light      *> newLights);
+        // =================================================
+
         void draw_impl_(Window& window, const CoordinateSystem& system) override;
-        Vec2f center() const                                          override;
+        Vec2f center() const                                            override;
+    
+    private:
+        double m_width;
+        double m_height;
+
+        PixelMap m_background;
+
+        std::vector<SceneObject*> m_objects;
+        std::vector<Light      *> m_lights;
+
+        PixelMap         m_map;
+        CoordinateSystem m_system;
+
+        const int        REFLECT_DEPTH      = 4;
+        const double     FOV                = M_PI / 3;
+        const double     DEFAULT_DEVIATION  = 1e-3;
+        const Color      DEFAULT_BACK_COLOR = Color(51, 178, 204);
 };
 
 Vec3f reflect(Vec3f lightDir, Vec3f normal);

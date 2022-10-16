@@ -16,7 +16,7 @@ struct Material {
 
     Color   diffuseColor;
     double  specularExp;
-    Vec3f albedo;
+    Vec3f   albedo;
 };
 
 const Material RUBIN  (Vec3f(0.9,  0.1, 0.0), Color( 76.5,  25.5,  25.5),   10.0);
@@ -25,13 +25,21 @@ const Material MIRROR (Vec3f(0.0, 10.0, 0.8), Color(255.0, 255.0, 255.0), 1425.0
 
 class SceneObject {
     public:
-        Material m_material;
-
-    public:
         SceneObject() {}
         SceneObject(Material material)
         : m_material(material) {}
 
-        virtual bool    intersect_ray(Vec3f rayStart, Vec3f rayDir, double& dist) = 0;
+        // ==================== Getters ====================
+        Material material() const { return m_material; }
+        // =================================================
+
+        // ==================== Setters ====================
+        SceneObject& set_material(Material newMaterial) { m_material = newMaterial; return *this; }
+        // =================================================
+
+        virtual bool  intersect_ray(Vec3f rayStart, Vec3f rayDir, double& dist) = 0;
         virtual Vec3f get_normal   (Vec3f intersection) = 0;
+    
+    private:
+        Material m_material;
 };

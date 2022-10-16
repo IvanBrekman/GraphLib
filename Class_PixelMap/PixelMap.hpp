@@ -15,15 +15,6 @@ class CoordinateSystem;
 
 class PixelMap : public Drawable, public Moveable {
     public:
-        int m_width;
-        int m_height;
-    
-    private:
-        sf::Uint8*  m_sfml_pixels__;
-        sf::Texture m_sfml_texture__;
-        sf::Sprite  m_sfml_sprite__;
-    
-    public:
         PixelMap(Vec2f mainPoint,  int width, int height);
         PixelMap(double x, double y, int width, int height)
         : PixelMap(Vec2f(x, y), width, height) {}
@@ -31,11 +22,29 @@ class PixelMap : public Drawable, public Moveable {
         PixelMap()
         : PixelMap(0, 0, 1, 1) {}
 
+        ~PixelMap();
+
         void  set_pixel(int x, int y,  Color color);
         Color get_pixel(int x, int y);
         
         void load_image(const char* path);
 
+        // ==================== Getters ====================
+        size_t width()  const;
+        size_t height() const;
+        // =================================================
+
+        // ==================== Setters ====================
+        // =================================================
+
         void draw_impl_(Window& window, const CoordinateSystem& system) override;
-        Vec2f center() const                                          override;
+        Vec2f center()  const                                            override;
+    
+    private:
+        size_t m_width;
+        size_t m_height;
+        
+        sf::Uint8*  m_sfml_pixels;
+        sf::Texture m_sfml_texture;
+        sf::Sprite  m_sfml_sprite;
 };

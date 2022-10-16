@@ -19,32 +19,12 @@ class Window {
     friend class Drawable;
 
     public:
-        int m_width;
-        int m_height;
-
-        Color m_color;
-
-    private:
-        sf::Event                   m_sfml_pollEvent__;
-        sf::RenderWindow            m_sfml_window__;
-
-        CoordinateSystem            m_coordinateSystem__;
-        std::vector <Button*>       m_buttons__;
-        std::vector <WindowView*>   m_views__;
-
-    public:
         Window(int width, int height, const char* text="GraphLib Window", Color color=Color::White);
         ~Window();
 
         bool is_open() const;
         bool poll_event(Event* event);
 
-        std::vector <Drawable*>* objects();
-
-        CoordinateSystem* get_system();
-
-        void set_coordinate_system     (CoordinateSystem system);
-        void set_coordinate_system_type(CoordinateSystem::Type type);
         void draw_window_coordinate_system();
 
         void clear();
@@ -60,4 +40,33 @@ class Window {
 
         void draw(Drawable* object);
         void draw_added_objects();
+
+        // ==================== Getters ====================
+        size_t width ()                         const;
+        size_t height()                         const;
+        Color  color ()                         const;
+
+        std::vector<Drawable*> objects()        const;
+
+        CoordinateSystem coordinate_system()    const;
+        // =================================================
+
+        // ==================== Setters ====================
+        Window& set_color                 (Color newColor);
+        Window& set_coordinate_system     (CoordinateSystem system);
+        Window& set_coordinate_system_type(CoordinateSystem::Type type);
+        // =================================================
+    
+    private:
+        size_t m_width;
+        size_t m_height;
+
+        Color  m_color;
+
+        sf::Event                   m_sfml_pollEvent;
+        sf::RenderWindow            m_sfml_window;
+
+        CoordinateSystem            m_coordinateSystem;
+        std::vector<Button    *>    m_buttons;
+        std::vector<WindowView*>    m_views;
 };

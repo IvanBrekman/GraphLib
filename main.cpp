@@ -72,15 +72,15 @@ int main(void) {
         bool wait_click = false;
         Event event;
         while (window.poll_event(&event)) {
-            switch (event.m_type) {
+            switch (event.type) {
                 case Event::WINDOW_CLOSED:
                     window.close();
                     break;
                 
                 case Event::MOUSE_BUTTON_PRESSED: {
-                    button_presed = event.mouse.m_button;
+                    button_presed = event.mouse.button;
 
-                    Vec2f point = window.get_system()->pixel_to_point(event.mouse.m_pos);
+                    Vec2f point = window.coordinate_system().pixel_to_point(event.mouse.pos);
 
                     if (back_button.is_pressed(point, button_presed)) {
                         window.show_view(&view1);
@@ -107,12 +107,12 @@ int main(void) {
                     break;
             }
 
-            if (!wait_click && button_presed == Event::MouseEvent::Button_Type::LEFT  && (event.m_type == Event::MOUSE_MOVED || event.m_type == Event::MOUSE_BUTTON_PRESSED)) {
-                if (!vector.hidden()) vector.m_endPoint = system2.pixel_to_point(event.mouse.m_pos);
+            if (!wait_click && button_presed == Event::MouseEvent::Button_Type::LEFT  && (event.type == Event::MOUSE_MOVED || event.type == Event::MOUSE_BUTTON_PRESSED)) {
+                vector.set_end_point(system2.pixel_to_point(event.mouse.pos));
             }
 
-            if (!wait_click && button_presed == Event::MouseEvent::Button_Type::RIGHT && (event.m_type == Event::MOUSE_MOVED || event.m_type == Event::MOUSE_BUTTON_PRESSED)) {
-                vector.move_to_point(system2.pixel_to_point(event.mouse.m_pos));
+            if (!wait_click && button_presed == Event::MouseEvent::Button_Type::RIGHT && (event.type == Event::MOUSE_MOVED || event.type == Event::MOUSE_BUTTON_PRESSED)) {
+                vector.move_to_point(system2.pixel_to_point(event.mouse.pos));
             }
         }
         // =======================================================

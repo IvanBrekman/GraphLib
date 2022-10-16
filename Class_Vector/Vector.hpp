@@ -7,18 +7,12 @@
 #include "../Class_Line/Line.hpp"
 #include "../Class_Point/Point.hpp"
 
-// TODO color parameter
-
 class Vector : public Line {
     public:
         enum Normal_Type {
             LEFT_NORMAL  =  1,
             RIGHT_NORMAL = -1
         };
-    
-    private:
-        const double m_DRAW_NORMAL_COEF__ = 0.2;
-        const double m_DRAW_ARROW_COEF__  = 0.15;
 
     public:
         Vector()
@@ -43,9 +37,9 @@ class Vector : public Line {
         Vector operator /(double scalar)        const;
         Vector operator -()                     const;
 
-        Line    to_line()                       const;
+        Line  to_line()                         const;
 
-        Vec2f normalize()                     const;
+        Vec2f normalize()                       const;
 
         void resize(double new_size);
         void rotate(double angle);
@@ -53,5 +47,10 @@ class Vector : public Line {
         
         void draw_impl_(Window& window, const CoordinateSystem& system) override;
 
-        void move_to_shift_impl_(Vec2f shift)                         override;
+        void move_to_shift_impl_(Vec2f shift)                           override;
+
+
+    private:
+        const double m_DRAW_NORMAL_COEF = 0.2;
+        const double m_DRAW_ARROW_COEF  = 0.15;
 };

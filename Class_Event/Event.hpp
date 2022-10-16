@@ -24,7 +24,7 @@ class Event {
             MOUSE_BUTTON_RELEASED   = 3,
             MOUSE_MOVED             = 4,
         };
-        Type m_type = Type::NO_EVENT;
+        Type type = Type::NO_EVENT;
 
         struct MouseEvent {
             enum Button_Type {
@@ -34,8 +34,8 @@ class Event {
                 MIDDLE  =  2
             };
 
-            Button_Type m_button = Button_Type::NONE;
-            Vec2f     m_pos    = Vec2f(0, 0);
+            Button_Type button = Button_Type::NONE;
+            Vec2f       pos    = Vec2f(0, 0);
         };
 
         union {

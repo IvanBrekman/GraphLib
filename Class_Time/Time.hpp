@@ -8,16 +8,22 @@
 
 class Clock {
     public:
-        int speedMultiplier;
+        Clock(size_t speed_m = 1)
+        : m_speedMultiplier(speed_m) { this->restart(); }
 
-    private:
-        sf::Clock m_sfml_clock__;
+        void restart()               { this->m_sfml_clock.restart(); }
+
+        double get_elapsed_seconds() { return this->m_speedMultiplier * this->m_sfml_clock.getElapsedTime().asSeconds(); }
+
+        // ==================== Getters ====================
+        size_t speed_multiplier()    { return m_speedMultiplier; }
+        // =================================================
+
+        // ==================== Setters ====================
+        Clock& set_speed_multiplier(size_t newSpeed) { m_speedMultiplier = newSpeed; return *this; }
+        // =================================================
     
-    public:
-        Clock(int speed_m = 1)
-        : speedMultiplier(speed_m)   { this->restart(); }
-
-        void restart()               { this->m_sfml_clock__.restart(); }
-
-        double get_elapsed_seconds() { return this->speedMultiplier * this->m_sfml_clock__.getElapsedTime().asSeconds(); }
+    private:
+        size_t    m_speedMultiplier;
+        sf::Clock m_sfml_clock;
 };

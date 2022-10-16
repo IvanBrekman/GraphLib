@@ -11,19 +11,36 @@
 #include "Line.hpp"
 
 double Line::length() const {
-    return sqrt(pow(main_point().x - m_endPoint.x, 2) + pow(main_point().y - m_endPoint.y, 2));
+    return sqrt(pow(m_mainPoint.x - m_endPoint.x, 2) + pow(m_mainPoint.y - m_endPoint.y, 2));
 }
 
 void Line::dump() const {
-    printf("<Line: (%.3lf, %.3lf) -> (%.3lf, %.3lf) >\n", main_point().x, main_point().y, m_endPoint.x, m_endPoint.y);
+    printf("<Line: (%.3lf, %.3lf) -> (%.3lf, %.3lf) >\n", m_mainPoint.x, m_mainPoint.y, m_endPoint.x, m_endPoint.y);
 }
+
+// ==================== Getters ====================
+Vec2f Line::end_point() const {
+    return m_endPoint;
+}
+// =================================================
+
+// ==================== Setters ====================
+Line& Line::set_end_point(Vec2f newEndPoint) {
+    if (!m_hidden) {
+        m_endPoint = newEndPoint;
+    }
+
+    return *this;
+}
+// =================================================
+
 
 // @virtual
 void Line::draw_impl_(Window& window, const CoordinateSystem& system) {
-    Line line(system.point_to_pixel(main_point()), system.point_to_pixel(m_endPoint));
+    Line line(system.point_to_pixel(m_mainPoint), system.point_to_pixel(m_endPoint));
 
     sf::Vertex vertLine[] = {
-        sf::Vertex(line.main_point().to_sfml_vector()),
+        sf::Vertex(line.m_mainPoint.to_sfml_vector()),
         sf::Vertex(line.m_endPoint. to_sfml_vector()),
     };
 
@@ -40,6 +57,6 @@ void Line::move_to_shift_impl_(Vec2f point) {
 
 // @virtual
 Vec2f Line::center() const {
-    if (centered()) return main_point();
-    return main_point() + (m_endPoint - main_point()) * 0.5;
+    if (m_centered) return m_mainPoint;
+    return m_mainPoint + (m_endPoint - m_mainPoint) * 0.5;
 }
