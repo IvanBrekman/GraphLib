@@ -7,7 +7,7 @@
 #include "../Class_Utils/baselib.hpp"
 #include "WindowView.hpp"
 
-WindowView::WindowView(std::initializer_list<Drawable*> objects)
+WindowView::WindowView(std::initializer_list<Widget*> objects)
 : m_size(0), m_hidden(false) {
     set_objects(objects);
 }
@@ -25,7 +25,7 @@ bool WindowView::hidden() const {
     return m_hidden;
 }
 
-std::vector<Drawable*> WindowView::objects() const {
+std::vector<Widget*> WindowView::objects() const {
     return m_objects;
 }
 // =================================================
@@ -35,17 +35,17 @@ std::vector<Drawable*> WindowView::objects() const {
 WindowView& WindowView::set_hidden(bool hidden) {
     m_hidden = hidden;
     
-    for (Drawable* object : m_objects) {
+    for (Widget* object : m_objects) {
         object->set_hidden(hidden);
     }
 
     return *this;
 }
 
-WindowView& WindowView::set_objects(std::initializer_list<Drawable*> objects) {
+WindowView& WindowView::set_objects(std::initializer_list<Widget*> objects) {
     m_size = 0;
 
-    for (Drawable* object : objects) {
+    for (Widget* object : objects) {
         m_objects.push_back(object);
         m_size++;
     }

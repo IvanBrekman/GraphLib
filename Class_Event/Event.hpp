@@ -7,14 +7,17 @@
 #include <SFML/Graphics.hpp>
 
 #include "../Class_Point/Point.hpp"
+#include "../Class_CoordinateSystem/CoordinateSystem.hpp"
 
 class Window;
 
 class Event {
     friend class Window;
+    friend class EventManager;
 
     public:
-        Event() {}
+         Event() {}
+        ~Event() {}
 
         enum Type {
             NO_EVENT                = 0,
@@ -34,8 +37,9 @@ class Event {
                 MIDDLE  =  2
             };
 
-            Button_Type button = Button_Type::NONE;
-            Vec2f       pos    = Vec2f(0, 0);
+            Button_Type      button = Button_Type::NONE;
+            Vec2f            pos    = Vec2f(0, 0);
+            CoordinateSystem system = CoordinateSystem(0, 0);
         };
 
         union {

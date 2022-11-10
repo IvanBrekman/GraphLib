@@ -11,21 +11,21 @@ class Window;
 
 class Text : public Drawable, public Moveable {
     public:
-        Text(Vec2f mainPoint,  const char* text, int size=30);
-        Text(double x, double y, const char* text, int size=30)
+        Text(Vec2f mainPoint,    const char* text, size_t size=30);
+        Text(double x, double y, const char* text, size_t size=30)
         : Text(Vec2f(x, y), text, size) {}
 
         // ==================== Getters ====================
         const char* get_text()  const;
-        int         get_size()  const;
+        size_t      get_size()  const;
 
-        double get_width()      const;
-        double get_height()     const;
+        size_t width()      const;
+        size_t height()     const;
         // =================================================
 
         // ==================== Setters ====================
         void set_text(const char* text);
-        void set_size(double size);
+        void set_size(size_t      size);
         // =================================================
 
         Text& set_fill_color(Color color)                                override;

@@ -6,8 +6,7 @@
 
 #include <cmath>
 
-#include "../Class_Drawable/Drawable.hpp"
-#include "../Class_Moveable/Moveable.hpp"
+#include "../Class_Widget/Widget.hpp"
 #include "../Class_PixelMap/PixelMap.hpp"
 #include "../Class_CoordinateSystem/CoordinateSystem.hpp"
 
@@ -16,7 +15,7 @@
 
 class Window;
 
-class Scene : public Drawable, public Moveable {
+class Scene : public Widget {
     public:
         Scene(Vec2f mainPoint,    double width, double height, const char* backImgPath=nullptr);
         Scene(double x, double y, double width, double height, const char* backImgPath=nullptr)
@@ -36,9 +35,6 @@ class Scene : public Drawable, public Moveable {
         void render();
 
         // ==================== Getters ====================
-        double width()  const;
-        double height() const;
-
         PixelMap background() const;
 
         std::vector<SceneObject*> objects() const;
@@ -55,9 +51,6 @@ class Scene : public Drawable, public Moveable {
         Vec2f center() const                                            override;
     
     private:
-        double m_width;
-        double m_height;
-
         PixelMap m_background;
 
         std::vector<SceneObject*> m_objects;

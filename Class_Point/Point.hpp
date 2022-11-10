@@ -5,9 +5,10 @@
 #pragma once
 
 #include <cmath>
-#include <cassert>
 #include <iostream>
 #include <SFML/Graphics.hpp>
+
+#include "../Class_Utils/baselib.hpp"
 
 // TODO how use inheritance for methods?
 template<typename T, size_t DIM>
@@ -24,14 +25,14 @@ class VecN {
             }
         }
 
-              T& operator [](size_t index)       { assert(index < DIM); return m_coords[index]; }
+              T& operator [](size_t index)       { ASSERT_IF(index < DIM, "Index greater than DIM size", T()); return m_coords[index]; }
         const T& operator [](size_t index) const { return const_cast<const T&> (const_cast<VecN*> (this)->operator[](index)); }
 
-        double length_squared() { return lengthSquaredVecN(*this); }
-        double length()         { return lengthVecN(*this); }
+        double length_squared() const { return lengthSquaredVecN(*this); }
+        double length()         const { return lengthVecN(*this); }
 
-        VecN   normalize()      { return normalizeVecN(*this); }
-        void   dump()           { return dumpVecN(*this); }
+        VecN   normalize()      const { return normalizeVecN(*this); }
+        void   dump()           const { return dumpVecN(*this); }
 };
 
 typedef VecN<float, 2> Vec2f;
@@ -50,16 +51,16 @@ class VecN<T, 2> {
         VecN<T, 2>()
         : VecN<T, 2>(T(), T()) {}
         
-              T& operator [](size_t index)       { assert(index < 2); return index == 0 ? x : y; }
+              T& operator [](size_t index)       { ASSERT_IF(index < 2, "Index greater than DIM size (2)", x); return index == 0 ? x : y; }
         const T& operator [](size_t index) const { return const_cast<const T&> (const_cast<VecN*> (this)->operator[](index)); }
 
-        sf::Vector2f to_sfml_vector() { return sf::Vector2<T>(x, y); }
+        sf::Vector2f to_sfml_vector() const { return sf::Vector2<T>(x, y); }
 
-        double length_squared() { return lengthSquaredVecN(*this); }
-        double length()         { return lengthVecN(*this); }
+        double length_squared() const { return lengthSquaredVecN(*this); }
+        double length()         const { return lengthVecN(*this); }
 
-        VecN   normalize()      { return normalizeVecN(*this); }
-        void   dump()           { return dumpVecN(*this); }
+        VecN   normalize()      const { return normalizeVecN(*this); }
+        void   dump()           const { return dumpVecN(*this); }
 };
 
 template<typename T>
@@ -76,14 +77,14 @@ class VecN<T, 3> {
         VecN<T, 3>()
         : VecN<T, 3>(T(), T(), T()) {}
 
-              T& operator [](size_t index)       { assert(index < 3); return index == 0 ? x : (index == 1 ? y : z); }
+              T& operator [](size_t index)       { ASSERT_IF(index < 3, "Index greater than DIM size (3)", x); return index == 0 ? x : (index == 1 ? y : z); }
         const T& operator [](size_t index) const { return const_cast<const T&> (const_cast<VecN*> (this)->operator[](index)); }
 
-        double length_squared() { return lengthSquaredVecN(*this); }
-        double length()         { return lengthVecN(*this); }
+        double length_squared() const { return lengthSquaredVecN(*this); }
+        double length()         const { return lengthVecN(*this); }
 
-        VecN   normalize()      { return normalizeVecN(*this); }
-        void   dump()           { return dumpVecN(*this); }
+        VecN   normalize()      const { return normalizeVecN(*this); }
+        void   dump()           const { return dumpVecN(*this); }
 };
 
 template<typename T, size_t DIM> VecN<T, DIM> operator +=(VecN<T, DIM>& lhs, const VecN<T, DIM>& rhs) {

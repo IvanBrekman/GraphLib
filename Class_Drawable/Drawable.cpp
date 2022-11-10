@@ -27,7 +27,7 @@ void Drawable::draw(Window& window, const CoordinateSystem& system) {
 
 void Drawable::draw(Window& window) {
     if (!m_hidden) {
-        draw_impl_(window, window.m_coordinateSystem);
+        draw_impl_(window, window.coordinate_system());
     }
 }
 

@@ -56,7 +56,7 @@ Plane& Plane::set_limits(size_t coordIndex, Vec2f limit) {
             break;
         
         default:
-            assert(0 && "Incorrect coordIndex value");
+            ASSERT_IF(0, "Incorrect coordIndex value", *this);
     }
 
     return *this;

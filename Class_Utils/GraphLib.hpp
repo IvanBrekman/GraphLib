@@ -22,3 +22,4 @@
 #include "Sphere.hpp"
 #include "Plane.hpp"
 #include "Scene.hpp"
+#include "Eventable.hpp"

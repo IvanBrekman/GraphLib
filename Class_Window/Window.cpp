@@ -29,73 +29,27 @@ bool Window::is_open() const {
     return m_sfml_window.isOpen();
 }
 
-bool Window::poll_event(Event* event) {
-    ASSERT_IF(VALID_PTR(event), "Invalid event ptr", false);
-
+bool Window::poll_event() {
     bool result = m_sfml_window.pollEvent(m_sfml_pollEvent);
-    if (result == 0) return 0;
+    if (result == 0) return false;
 
-    switch (m_sfml_pollEvent.type) {
-        case sf::Event::EventType::Closed:
-            event->type = Event::Type::WINDOW_CLOSED;
-            break;
-        
-        case sf::Event::EventType::MouseButtonPressed:
-            event->type         = Event::Type::MOUSE_BUTTON_PRESSED;
-            event->mouse.pos    = event->get_mouse_button_pos__(m_sfml_pollEvent);
-            event->mouse.button = (Event::MouseEvent::Button_Type)m_sfml_pollEvent.mouseButton.button;
+    Event event = Event();
+    m_manager.process_event(m_sfml_pollEvent, event);
 
-            for (Button* button : m_buttons) {
-                if (button->is_pressed(m_coordinateSystem.pixel_to_point(event->mouse.pos), event->mouse.button)) {
-                    button->set_button_pressed();
-                }
-            }
+    if (event.type == Event::Type::WINDOW_CLOSED) close();
 
-            break;
-        
-        case sf::Event::EventType::MouseButtonReleased:
-            event->type         = Event::Type::MOUSE_BUTTON_RELEASED;
-            event->mouse.pos    = event->get_mouse_button_pos__(m_sfml_pollEvent);
-            event->mouse.button = (Event::MouseEvent::Button_Type)m_sfml_pollEvent.mouseButton.button;
-
-            for (Button* button : m_buttons) {
-                button->set_button_released();
-                if (button->is_pressed(m_coordinateSystem.pixel_to_point(event->mouse.pos), event->mouse.button)) {
-                    button->set_button_hovered();
-                }
-            }
-
-            break;
-        
-        case sf::Event::EventType::MouseMoved:
-            event->type      = Event::Type::MOUSE_MOVED;
-            event->mouse.pos = event->get_mouse_move_pos__(m_sfml_pollEvent);
-
-            for (Button* button : m_buttons) {
-                if (button->is_pressed(m_coordinateSystem.pixel_to_point(event->mouse.pos), Event::MouseEvent::Button_Type::LEFT)) {
-                    button->set_button_hovered();
-                } else {
-                    button->set_button_released();
-                }
-            }
-            
-            break;
-          
-        default:
-            LOG1(printf(RED "Unassembled Event. EventType: %d\n" NATURAL, m_sfml_pollEvent.type););
-            break;
-    }
-
-    return 1;
+    return true;
 }
 
 void Window::draw_window_coordinate_system() {
-    bool save = m_coordinateSystem.show_axis();
-    m_coordinateSystem.set_show_axis(true);
+    CoordinateSystem system = m_manager.system();
 
-    m_coordinateSystem.draw(*this);
+    bool save = system.show_axis();
+    system.set_show_axis(true);
 
-    m_coordinateSystem.set_show_axis(save);
+    system.draw(*this);
+
+    system.set_show_axis(save);
 }
 
 void Window::clear() {
@@ -103,6 +57,7 @@ void Window::clear() {
 }
 
 void Window::display() {
+    draw_added_objects();
     m_sfml_window.display();
 }
 
@@ -116,7 +71,7 @@ void Window::append_view(WindowView* view) {
     extend_objects(view->objects());
 }
 
-void Window::extend_views(std::vector <WindowView*> views) {
+void Window::extend_views(std::vector<WindowView*> views) {
     for (WindowView* view : views) {
         append_view(view);
     }
@@ -133,29 +88,26 @@ void Window::show_view(WindowView* view) {
     view->set_hidden(false);
 }
 
-void Window::append_object(Drawable* object, int index) {
+void Window::append_object(Widget* object, int index) {
     ASSERT_IF(VALID_PTR(object), "Invalid object ptr", );
-    
-    if (IS_INSTANCE(object, Button*)) {
-        m_buttons.push_back(dynamic_cast<Button*>(object));
-    }
-    m_coordinateSystem.append_object(object, index);
+
+    m_manager.add_widget(object);
 }
 
-void Window::extend_objects(std::vector <Drawable*> objects, int index) {
-    for (Drawable* object : objects) {
+void Window::extend_objects(std::vector<Widget*> objects, int index) {
+    for (Widget* object : objects) {
         append_object(object, index);
     }
 }
 
-void Window::draw(Drawable* object) {
+void Window::draw(Widget* object) {
     ASSERT_IF(VALID_PTR(object), "Invalid object ptr", );
     
-    object->draw(*this, m_coordinateSystem);
+    object->draw(*this, m_manager.system());
 }
 
 void Window::draw_added_objects() {
-    for (Drawable* object : objects()) {
+    for (Widget* object : objects()) {
         draw(object);
     }
 }
@@ -173,12 +125,12 @@ Color Window::color() const {
     return m_color;
 }
 
-std::vector<Drawable*> Window::objects() const {
-    return m_coordinateSystem.objects();
+std::vector<Widget*> Window::objects() const {
+    return m_manager.objects();
 }
 
 CoordinateSystem Window::coordinate_system() const {
-    return m_coordinateSystem;
+    return m_manager.system();
 }
 // =================================================
 
@@ -190,9 +142,9 @@ Window& Window::set_color(Color newColor) {
 }
 
 Window& Window::set_coordinate_system(CoordinateSystem system) {
-    system.set_objects(m_coordinateSystem.objects());
+    system.set_objects(m_manager.system().objects());
 
-    m_coordinateSystem = system;
+    m_manager.set_system(system);
 
     return *this;
 }

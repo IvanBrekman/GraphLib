@@ -10,9 +10,9 @@
 #include "../Class_Event/Event.hpp"
 #include "../Class_Color/Color.hpp"
 #include "../Class_Drawable/Drawable.hpp"
+#include "../Class_Manager/EventManager.hpp"
 #include "../Class_CoordinateSystem/CoordinateSystem.hpp"
 
-class Button;
 class WindowView;
 
 class Window {
@@ -23,7 +23,7 @@ class Window {
         ~Window();
 
         bool is_open() const;
-        bool poll_event(Event* event);
+        bool poll_event();
 
         void draw_window_coordinate_system();
 
@@ -35,10 +35,10 @@ class Window {
         void extend_views(std::vector <WindowView*> views);
         void show_view   (WindowView* view);
 
-        void append_object (Drawable*               object,  int index=CoordinateSystem::LAST_INDEX);
-        void extend_objects(std::vector <Drawable*> objects, int index=CoordinateSystem::LAST_INDEX);
+        void append_object (Widget*               object,  int index=CoordinateSystem::LAST_INDEX);
+        void extend_objects(std::vector <Widget*> objects, int index=CoordinateSystem::LAST_INDEX);
 
-        void draw(Drawable* object);
+        void draw(Widget* object);
         void draw_added_objects();
 
         // ==================== Getters ====================
@@ -46,7 +46,7 @@ class Window {
         size_t height()                         const;
         Color  color ()                         const;
 
-        std::vector<Drawable*> objects()        const;
+        std::vector<Widget*>   objects()        const;
 
         CoordinateSystem coordinate_system()    const;
         // =================================================
@@ -58,15 +58,15 @@ class Window {
         // =================================================
     
     private:
-        size_t m_width;
-        size_t m_height;
+        size_t       m_width;
+        size_t       m_height;
 
-        Color  m_color;
+        Color        m_color;
+
+        EventManager m_manager;
 
         sf::Event                   m_sfml_pollEvent;
         sf::RenderWindow            m_sfml_window;
 
-        CoordinateSystem            m_coordinateSystem;
-        std::vector<Button    *>    m_buttons;
         std::vector<WindowView*>    m_views;
 };

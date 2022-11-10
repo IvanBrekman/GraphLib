@@ -4,14 +4,13 @@
 
 #pragma once
 
-#include "../Class_Drawable/Drawable.hpp"
-#include "../Class_Moveable/Moveable.hpp"
+#include "..//Class_Widget/Widget.hpp"
 #include "../Class_Event/Event.hpp"
 #include "../Class_Text/Text.hpp"
 
 class Figure;
 
-class Button : public Drawable, public Moveable {
+class Button : public Widget {
     public:
         enum Button_Type {
             DEFAULT = 0,
@@ -24,13 +23,11 @@ class Button : public Drawable, public Moveable {
         Button(double x, double y, const char* text, int textSize, Button_Type type=Button_Type::DEFAULT)
         : Button(Vec2f(x, y), text, textSize, type) {}
         
-        bool is_pressed(Vec2f point, Event::MouseEvent::Button_Type button);
-
         // ==================== Getters ====================
         Button_Type type()  const;
 
-        double width()      const;
-        double height()     const;
+        size_t width()      const;
+        size_t height()     const;
         // =================================================
         
         // ==================== Setters ====================
@@ -41,6 +38,13 @@ class Button : public Drawable, public Moveable {
         void set_button_hovered();
         // =================================================
 
+        bool on_click  (const Event& event) override;
+        bool on_hover  (const Event& event) override;
+        bool on_release(const Event& event) override;
+        bool on_unhover(const Event& event) override;
+
+        bool contains(Vec2f pixel, CoordinateSystem system)             override;
+
         void draw_impl_(Window& window, const CoordinateSystem& system) override;
         Vec2f center()      const                                       override;
     
@@ -48,9 +52,13 @@ class Button : public Drawable, public Moveable {
         Button_Type             m_type;
         Text                    m_text;
         Figure*                 m_shape;
-        Color                   m_shapeColor;
 
-        const double            EXTRA_WIDTH     = 30;
-        const double            EXTRA_HEIGHT    = 15;
-        const double            EXTRA_TEXT_COEF = 0.3;
+        const Color             CLICK_COLOR     = Color::Green;
+        const Color             HOVER_COLOR     = Color::Yellow;
+        const Color             FRAME_COLOR     = Color::Black;
+        const int               FRAME_WIDTH     = 5;
+
+        const size_t            EXTRA_WIDTH     = 30;
+        const size_t            EXTRA_HEIGHT    = 15;
+        const double            EXTRA_TEXT_COEF = 0.5;
 };

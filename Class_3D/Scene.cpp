@@ -9,7 +9,7 @@
 #include "Plane.hpp"
 
 Scene::Scene(Vec2f mainPoint, double width, double height, const char* backImgPath)
-: Moveable(mainPoint), m_width(width), m_height(height), m_map(0, 0, width, height) {
+: Widget(mainPoint, width, height), m_map(0, 0, width, height) {
     m_system = CoordinateSystem::get_system_by_type(CoordinateSystem::Type::LEFT_UP, m_width, m_height);
 
     if (VALID_PTR(backImgPath)) m_background.load_image(backImgPath);
@@ -131,14 +131,6 @@ void Scene::render() {
 }
 
 // ==================== Getters ====================
-double Scene::width() const {
-    return m_width;
-}
-
-double Scene::height() const {
-    return m_height;
-}
-
 PixelMap Scene::background() const {
     return m_background;
 }
@@ -147,7 +139,7 @@ std::vector<SceneObject*> Scene::objects() const {
     return m_objects;
 }
 
-std::vector<Light      *> Scene::lights () const {
+std::vector<Light*> Scene::lights () const {
     return m_lights;
 }
 // =================================================

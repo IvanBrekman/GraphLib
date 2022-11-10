@@ -2,43 +2,27 @@
 #include "GraphLib.hpp"
 
 int main(void) {
+    Window     window(1000, 600);
+    WindowView view1, view2;
+
     // ======================================== View 1 ========================================
     Button nothing_button(-490, -290, "Nothing", 40);
+    nothing_button.set_name("Nothing");
 
-    Button show_view2_button(0,  100, "Coordinate Systems", 30);
-    Button show_view3_button(0,    0, "Sphere",             30);
-    Button exit_button      (0, -100, "Exit",               30);
+    Button show_view2_button(0,  0, "Sphere", 30);
+    Button exit_button      (0, -50, "Exit",   30);
 
-    show_view2_button.set_centered(true);
-    show_view3_button.set_centered(true);
-    exit_button.      set_centered(true);
+    show_view2_button.set_name("Sphere").set_centered(false);
+    show_view2_button.set_on_click_func([&window, &view2] (const Event&, const Eventable&) -> void { window.show_view(&view2); });
 
-    WindowView view1{&show_view2_button, &show_view3_button, &exit_button, &nothing_button};
+    exit_button.set_name("Exit").set_centered(true);
+    exit_button.set_on_click_func([&window] (const Event&, const Eventable&) -> void { window.close(); });
+    // exit_button.set_on_click_func(ON_EVENT_FUNC(&window, window.close();));
+
+    view1.set_objects({&show_view2_button, &exit_button, &nothing_button});
     // ========================================================================================
 
     // ======================================== View 2 ========================================
-    Vector second_hand(0, 0, 0, 100);
-    second_hand.set_fill_color(Color::Red);
-
-    Vector minute_hand(0, 0, 0, 75);
-    minute_hand.set_fill_color(Color::Red);
-
-    Vector vector(40, 40, 100, 100);
-
-    CoordinateSystem system1(100, 300, CoordinateSystem::AxisY_Direction::UP, CoordinateSystem::AxisX_Direction::RIGHT);
-    system1.extend_objects({&second_hand, &minute_hand});
-
-    CoordinateSystem system2(900, 300, CoordinateSystem::AxisY_Direction::DOWN, CoordinateSystem::AxisX_Direction::LEFT);
-    system2.set_show_axis(true);
-    system2.append_object(&vector);
-
-    Button back_button(0, -250, "Back", 30, Button::Button_Type::ELLIPSE);
-    back_button.set_centered(true);
-
-    WindowView view2{&back_button, &system1, &system2, &vector};
-    // ========================================================================================
-
-    // ======================================== View 3 ========================================
     Scene scene(-500, -300, 1000, 600, "src/images/back.jpg");
 
     scene.extend_scene_objects({
@@ -56,85 +40,24 @@ int main(void) {
         new Light (Vec3f( 30, 20,  30), 1.7)
     });
 
-    WindowView view3{&scene, &back_button};
+    Button back_button(0, -250, "Back", 30, Button::Button_Type::ELLIPSE);
+    back_button.set_centered(true);
+    back_button.set_on_click_func([&window, &view1] (const Event&, const Eventable&) -> void { window.show_view(&view1); });
+
+    view2.set_objects({&scene, &back_button});
     // ========================================================================================
 
-    Window window(1000, 600);
     window.set_coordinate_system_type(CoordinateSystem::Type::CENTER);
-    window.extend_views({ &view1, &view2, &view3 });
+    window.set_coordinate_system(CoordinateSystem(500, 300, CoordinateSystem::AxisY_Direction::UP, CoordinateSystem::AxisX_Direction::LEFT));
+    window.extend_views({ &view1, &view2 });
     window.show_view(&view1);
 
-    auto button_presed = Event::MouseEvent::Button_Type::NONE;
-
-    Clock clock(15);
     while (window.is_open()) {
-        // ==================== Window Events ====================
-        bool wait_click = false;
-        Event event;
-        while (window.poll_event(&event)) {
-            switch (event.type) {
-                case Event::WINDOW_CLOSED:
-                    window.close();
-                    break;
-                
-                case Event::MOUSE_BUTTON_PRESSED: {
-                    button_presed = event.mouse.button;
+        while (window.poll_event()) {}
 
-                    Vec2f point = window.coordinate_system().pixel_to_point(event.mouse.pos);
-
-                    if (back_button.is_pressed(point, button_presed)) {
-                        window.show_view(&view1);
-                        wait_click = true;
-                    }
-
-                    if (show_view2_button.is_pressed(point, button_presed)) {
-                        window.show_view(&view2);
-                        wait_click = true;
-                    }
-
-                    if (show_view3_button.is_pressed(point, button_presed)) {
-                        window.show_view(&view3);
-                        wait_click = true;
-                    }
-
-                    if (exit_button.is_pressed(point, button_presed)) window.close();
-
-                    break;
-                }
-                
-                case Event::MOUSE_BUTTON_RELEASED:
-                    button_presed = Event::MouseEvent::Button_Type::NONE;
-                    break;
-            }
-
-            if (!wait_click && button_presed == Event::MouseEvent::Button_Type::LEFT  && (event.type == Event::MOUSE_MOVED || event.type == Event::MOUSE_BUTTON_PRESSED)) {
-                vector.set_end_point(system2.pixel_to_point(event.mouse.pos));
-            }
-
-            if (!wait_click && button_presed == Event::MouseEvent::Button_Type::RIGHT && (event.type == Event::MOUSE_MOVED || event.type == Event::MOUSE_BUTTON_PRESSED)) {
-                vector.move_to_point(system2.pixel_to_point(event.mouse.pos));
-            }
-        }
-        // =======================================================
-
-        if (clock.get_elapsed_seconds() > 1) {
-            second_hand.rotate(-360.0 / (60     ));
-            minute_hand.rotate(-360.0 / (60 * 60));
-
-            clock.restart();
-        }
-
-        // ==================== Drawing Objects ====================
         window.clear();
-
-        system1.set_show_axis(!view2.hidden());
-        system2.set_show_axis(!view2.hidden());
-        if (!view2.hidden()) window.draw_window_coordinate_system();
-
-        window.draw_added_objects();
-
+        window.draw_window_coordinate_system();
         window.display();
-        // =========================================================
     }
 
     return 0;

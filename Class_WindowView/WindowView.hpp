@@ -6,26 +6,29 @@
 
 #include <vector>
 
-#include "../Class_Drawable/Drawable.hpp"
+#include "../Class_Widget/Widget.hpp"
 
 class WindowView {
     public:
-         WindowView(std::initializer_list<Drawable*> objects);
+        WindowView(std::initializer_list<Widget*> objects);
+        WindowView()
+        : WindowView({}) {}
+
         ~WindowView();
 
         // ==================== Getters ====================
         size_t                  size()    const;
         bool                    hidden()  const;
-        std::vector<Drawable*>  objects() const;
+        std::vector<Widget*>    objects() const;
         // =================================================
 
         // ==================== Setters ====================
         WindowView& set_hidden (bool hidden);
-        WindowView& set_objects(std::initializer_list<Drawable*> objects);
+        WindowView& set_objects(std::initializer_list<Widget*> objects);
         // =================================================
 
     private:
         size_t                 m_size;
         bool                   m_hidden;
-        std::vector<Drawable*> m_objects;
+        std::vector<Widget*>   m_objects;
 };
