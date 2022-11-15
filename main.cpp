@@ -2,7 +2,8 @@
 #include "GraphLib.hpp"
 
 int main(void) {
-    Window     window(1000, 600);
+    MainWindow window(1000, 600);
+    window.set_log_val(3);
     WindowView view1, view2;
 
     // ======================================== View 1 ========================================
@@ -19,7 +20,10 @@ int main(void) {
     exit_button.set_on_click_func([&window] (const Event&, const Eventable&) -> void { window.close(); });
     // exit_button.set_on_click_func(ON_EVENT_FUNC(&window, window.close();));
 
-    view1.set_objects({&show_view2_button, &exit_button, &nothing_button});
+    Window w(0, 0, 100, 100);
+    w.set_coordinate_system_type(CoordinateSystem::Type::CENTER).set_name("Window");
+    w.set_centered(true);
+    view1.set_objects({&show_view2_button, &exit_button, &nothing_button, &w});
     // ========================================================================================
 
     // ======================================== View 2 ========================================

@@ -94,7 +94,7 @@ bool Button::contains(Vec2f pixel, CoordinateSystem system) {
 }
 
 // @virtual
-void Button::draw_impl_(Window& window, const CoordinateSystem& system) {
+void Button::draw_impl_(MainWindow& window, const CoordinateSystem& system) {
     Vec2f shift = Vec2f(0, 0);
 
     if (m_centered) {

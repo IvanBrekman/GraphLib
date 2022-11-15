@@ -174,7 +174,7 @@ Scene& Scene::set_lights(std::vector<Light*> newLights) {
 // =================================================
 
 // @virtual
-void Scene::draw_impl_(Window& window, const CoordinateSystem& system) {
+void Scene::draw_impl_(MainWindow& window, const CoordinateSystem& system) {
     render();
 
     Vec2f pixel = system.point_to_pixel(m_mainPoint);

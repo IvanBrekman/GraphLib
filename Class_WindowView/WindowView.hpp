@@ -28,7 +28,6 @@ class WindowView {
         // =================================================
 
     private:
-        size_t                 m_size;
         bool                   m_hidden;
         std::vector<Widget*>   m_objects;
 };

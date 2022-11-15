@@ -10,7 +10,7 @@
 
 #include "SceneObject.hpp"
 
-class Window;
+class MainWindow;
 class CoordinateSystem;
 
 class Sphere : public SceneObject {

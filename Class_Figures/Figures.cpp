@@ -45,7 +45,7 @@ void Figure::set_shape_color_(sf::Shape& shape) {
     shape.setOutlineThickness(m_outlineWidth);
 }
 
-void Figure::draw(Window& window, const CoordinateSystem& system, Vec2f pixel, sf::Shape& shape) {
+void Figure::draw_(MainWindow& window, const CoordinateSystem& system, Vec2f pixel, sf::Shape& shape) {
     shape.setPosition(pixel.to_sfml_vector());
 
     set_shape_color_(shape);
@@ -81,7 +81,7 @@ bool Circle::contains(Vec2f point) {
 }
 
 // @virtual
-void Circle::draw_impl_(Window& window, const CoordinateSystem& system) {
+void Circle::draw_impl_(MainWindow& window, const CoordinateSystem& system) {
     Vec2f min_point = m_mainPoint;
     if (m_centered) {
         min_point = m_mainPoint - Vec2f(m_radius, m_radius);
@@ -91,7 +91,7 @@ void Circle::draw_impl_(Window& window, const CoordinateSystem& system) {
     if (system.axis_y_direction() == CoordinateSystem::AxisY_Direction::UP)   pixel.y -= m_radius * 2;
     if (system.axis_x_direction() == CoordinateSystem::AxisX_Direction::LEFT) pixel.x -= m_radius * 2;
 
-    Figure::draw(window, system, pixel, m_sfml_shape);
+    Figure::draw_(window, system, pixel, m_sfml_shape);
 }
 
 // @virtual
@@ -140,7 +140,7 @@ bool Rectangle::contains(Vec2f point) {
 }
 
 // @virtual
-void Rectangle::draw_impl_(Window& window, const CoordinateSystem& system) {
+void Rectangle::draw_impl_(MainWindow& window, const CoordinateSystem& system) {
     Vec2f point = m_mainPoint;
     if (m_centered) {
         point = m_mainPoint - Vec2f(m_width / 2, m_height / 2);
@@ -150,7 +150,7 @@ void Rectangle::draw_impl_(Window& window, const CoordinateSystem& system) {
     if (system.axis_y_direction() == CoordinateSystem::AxisY_Direction::UP)   pixel.y -= m_height;
     if (system.axis_x_direction() == CoordinateSystem::AxisX_Direction::LEFT) pixel.x -= m_width;
 
-    Figure::draw(window, system, pixel, m_sfml_shape);
+    Figure::draw_(window, system, pixel, m_sfml_shape);
 }
 
 // @virtual
@@ -249,7 +249,7 @@ bool Polygon::contains(Vec2f point) {
 }
 
 // @virtual
-void Polygon::draw_impl_(Window& window, const CoordinateSystem& system) {    
+void Polygon::draw_impl_(MainWindow& window, const CoordinateSystem& system) {    
     int i = 0;
     for (Vec2f point : m_vertexes) {
         Vec2f pixel = system.point_to_pixel(point);
@@ -301,7 +301,7 @@ bool Ellipse::contains(Vec2f point) {
 }
 
 // @virtual
-void Ellipse::draw_impl_(Window& window, const CoordinateSystem& system) {
+void Ellipse::draw_impl_(MainWindow& window, const CoordinateSystem& system) {
     for (int i = 0; i < Ellipse::POINTS_ON_DRAW; i++) {
         Vec2f pixel = system.point_to_pixel(get_point__(i));
         m_sfml_shape.setPoint(i, pixel.to_sfml_vector());

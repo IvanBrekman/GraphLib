@@ -9,15 +9,23 @@
 #include "../Class_Point/Point.hpp"
 #include "../Class_CoordinateSystem/CoordinateSystem.hpp"
 
-class Window;
+class MainWindow;
 
 class Event {
-    friend class Window;
+    friend class MainWindow;
     friend class EventManager;
 
     public:
          Event() {}
         ~Event() {}
+         
+         Event(const Event& event) {
+            system = event.system;
+            type   = event.type;
+            mouse  = event.mouse;
+        }
+
+        CoordinateSystem system = CoordinateSystem(0, 0);
 
         enum Type {
             NO_EVENT                = 0,
@@ -39,7 +47,6 @@ class Event {
 
             Button_Type      button = Button_Type::NONE;
             Vec2f            pos    = Vec2f(0, 0);
-            CoordinateSystem system = CoordinateSystem(0, 0);
         };
 
         union {

@@ -13,7 +13,7 @@
 #include "SceneObject.hpp"
 #include "Light.hpp"
 
-class Window;
+class MainWindow;
 
 class Scene : public Widget {
     public:
@@ -47,7 +47,7 @@ class Scene : public Widget {
         Scene& set_lights (std::vector<Light      *> newLights);
         // =================================================
 
-        void draw_impl_(Window& window, const CoordinateSystem& system) override;
+        void draw_impl_(MainWindow& window, const CoordinateSystem& system) override;
         Vec2f center() const                                            override;
     
     private:

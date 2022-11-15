@@ -36,7 +36,7 @@ Line& Line::set_end_point(Vec2f newEndPoint) {
 
 
 // @virtual
-void Line::draw_impl_(Window& window, const CoordinateSystem& system) {
+void Line::draw_impl_(MainWindow& window, const CoordinateSystem& system) {
     Line line(system.point_to_pixel(m_mainPoint), system.point_to_pixel(m_endPoint));
 
     sf::Vertex vertLine[] = {

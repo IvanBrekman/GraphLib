@@ -7,7 +7,7 @@
 #include "../Class_Drawable/Drawable.hpp"
 #include "../Class_Point/Point.hpp"
 
-class Window;
+class MainWindow;
 
 class Text : public Drawable, public Moveable {
     public:
@@ -29,7 +29,7 @@ class Text : public Drawable, public Moveable {
         // =================================================
 
         Text& set_fill_color(Color color)                                override;
-        void  draw_impl_(Window& window, const CoordinateSystem& system) override;
+        void  draw_impl_(MainWindow& window, const CoordinateSystem& system) override;
         Vec2f center()          const                                    override;
     
     private:

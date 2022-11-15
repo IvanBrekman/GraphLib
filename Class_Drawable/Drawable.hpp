@@ -6,7 +6,7 @@
 
 #include "../Class_Color/Color.hpp"
 
-class Window;
+class MainWindow;
 class CoordinateSystem;
 
 class Drawable {
@@ -18,8 +18,8 @@ class Drawable {
         void show();
         void hide();
         
-        void draw(Window& window, const CoordinateSystem& system);
-        void draw(Window& window);
+        void draw(MainWindow& window, const CoordinateSystem& system);
+        void draw(MainWindow& window);
 
         // ==================== Getters ====================
         Color fill_color() const;
@@ -36,7 +36,7 @@ class Drawable {
         bool  m_hidden;
 
     protected:
-        sf::RenderWindow& get_sfml_window_(Window& window);
+        sf::RenderWindow& get_sfml_window_(MainWindow& window);
 
-        virtual void draw_impl_(Window& window, const CoordinateSystem& system) = 0;
+        virtual void draw_impl_(MainWindow& window, const CoordinateSystem& system) = 0;
 };

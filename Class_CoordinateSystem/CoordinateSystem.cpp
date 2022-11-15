@@ -8,7 +8,7 @@
 CoordinateSystem::CoordinateSystem(Vec2f center, AxisY_Direction dirY, AxisX_Direction dirX)
 : m_center(center), m_showAxis(false), m_axisXDirection(dirX), m_axisYDirection(dirY), Drawable() {
     set_fill_color(Color::Blue);
-
+    
     double x = dirX * CoordinateSystem::DRAW_AXIS_LENGTH;
     double y = dirY * CoordinateSystem::DRAW_AXIS_LENGTH;
 
@@ -37,21 +37,21 @@ Vec2f CoordinateSystem::pixel_to_point(Vec2f pixel) const {
     return Vec2f(newX, newY);
 }
 
-CoordinateSystem CoordinateSystem::get_system_by_type(CoordinateSystem::Type type, double width, double height) {
+CoordinateSystem CoordinateSystem::get_system_by_type(CoordinateSystem::Type type, double width, double height, Vec2f leftUpPixel) {
     switch (type) {
         case CoordinateSystem::Type::CENTER:
-            return CoordinateSystem(width / 2, height / 2, CoordinateSystem::AxisY_Direction::UP);
+            return CoordinateSystem(Vec2f(width / 2, height / 2) + leftUpPixel, CoordinateSystem::AxisY_Direction::UP);
         case CoordinateSystem::Type::LEFT_UP:
-            return CoordinateSystem(0, 0);
+            return CoordinateSystem(Vec2f(0, 0)                  + leftUpPixel);
         case CoordinateSystem::Type::LEFT_BOTTOM:
-            return CoordinateSystem(0, height, CoordinateSystem::AxisY_Direction::UP);
+            return CoordinateSystem(Vec2f(0, height)             + leftUpPixel, CoordinateSystem::AxisY_Direction::UP);
         
         default:
             ASSERT_IF(0, "Unknown Coordinate_System_Type value", CoordinateSystem(width, height));
     }
 }
 
-void CoordinateSystem::draw_axis(Window& window) {
+void CoordinateSystem::draw_axis(MainWindow& window) {
     if (m_showAxis) {
         m_axisX.draw(window, CoordinateSystem(0, 0));
         m_axisY.draw(window, CoordinateSystem(0, 0));
@@ -153,7 +153,7 @@ CoordinateSystem& CoordinateSystem::set_hidden(bool hidden) {
 // =================================================
 
 // @virtual
-void CoordinateSystem::draw_impl_(Window& window, const CoordinateSystem& system) {
+void CoordinateSystem::draw_impl_(MainWindow& window, const CoordinateSystem& system) {
     for (Drawable* object : m_objects) {
         object->draw(window, *this);
     }

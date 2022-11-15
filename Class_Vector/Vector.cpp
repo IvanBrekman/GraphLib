@@ -105,7 +105,7 @@ void Vector::dump() const {
 }
 
 // @virtual
-void Vector::draw_impl_(Window& window, const CoordinateSystem& system) {
+void Vector::draw_impl_(MainWindow& window, const CoordinateSystem& system) {
     Line::draw_impl_(window, system);
 
     Vector normalVector = Vector::get_normal(Vector::Normal_Type::LEFT_NORMAL);

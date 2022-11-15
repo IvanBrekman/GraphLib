@@ -10,7 +10,7 @@
 #include "../Class_Moveable/Moveable.hpp"
 #include "../Class_Point/Point.hpp"
 
-class Window;
+class MainWindow;
 class CoordinateSystem;
 
 class PixelMap : public Drawable, public Moveable {
@@ -37,7 +37,7 @@ class PixelMap : public Drawable, public Moveable {
         // ==================== Setters ====================
         // =================================================
 
-        void draw_impl_(Window& window, const CoordinateSystem& system) override;
+        void draw_impl_(MainWindow& window, const CoordinateSystem& system) override;
         Vec2f center()  const                                            override;
     
     private:

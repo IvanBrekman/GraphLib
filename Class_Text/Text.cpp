@@ -56,17 +56,13 @@ Text& Text::set_fill_color(Color color) {
 }
 
 // @virtual
-void Text::draw_impl_(Window& window, const CoordinateSystem& system) {
+void Text::draw_impl_(MainWindow& window, const CoordinateSystem& system) {
     Vec2f point = m_mainPoint;
     if (m_centered) {
         point = m_mainPoint - Vec2f(width() / 2, height() / 2);
     }
 
     Vec2f pixel = system.point_to_pixel(point);
-    m_mainPoint.dump();
-    point.dump();
-    pixel.dump();
-    printf("\n");
 
     if (system.axis_y_direction() == CoordinateSystem::AxisY_Direction::UP)   pixel.y -= height() * (m_centered ? 1.4 : 1.7);
     else                                                                      pixel.y -= height() * 0.3;

@@ -63,7 +63,7 @@ size_t PixelMap::height() const {
 // =================================================
 
 // @virtual
-void PixelMap::draw_impl_(Window& window, const CoordinateSystem& system) {
+void PixelMap::draw_impl_(MainWindow& window, const CoordinateSystem& system) {
     Vec2f pixel = system.point_to_pixel(m_mainPoint);
     if (system.axis_y_direction() == CoordinateSystem::AxisY_Direction::UP)   pixel.y -= m_height;
     if (system.axis_x_direction() == CoordinateSystem::AxisX_Direction::LEFT) pixel.x -= m_width;

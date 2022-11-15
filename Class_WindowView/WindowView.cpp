@@ -8,7 +8,7 @@
 #include "WindowView.hpp"
 
 WindowView::WindowView(std::initializer_list<Widget*> objects)
-: m_size(0), m_hidden(false) {
+: m_hidden(false) {
     set_objects(objects);
 }
 
@@ -18,7 +18,7 @@ WindowView::~WindowView() {
 
 // ==================== Getters ====================
 size_t WindowView::size() const {
-    return m_size;
+    return m_objects.size();
 }
 
 bool WindowView::hidden() const {
@@ -43,11 +43,10 @@ WindowView& WindowView::set_hidden(bool hidden) {
 }
 
 WindowView& WindowView::set_objects(std::initializer_list<Widget*> objects) {
-    m_size = 0;
+    m_objects.resize(0);
 
     for (Widget* object : objects) {
         m_objects.push_back(object);
-        m_size++;
     }
 
     return *this;

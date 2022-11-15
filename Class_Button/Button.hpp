@@ -43,10 +43,10 @@ class Button : public Widget {
         bool on_release(const Event& event) override;
         bool on_unhover(const Event& event) override;
 
-        bool contains(Vec2f pixel, CoordinateSystem system)             override;
+        bool contains(Vec2f pixel, CoordinateSystem system)                 override;
 
-        void draw_impl_(Window& window, const CoordinateSystem& system) override;
-        Vec2f center()      const                                       override;
+        void draw_impl_(MainWindow& window, const CoordinateSystem& system) override;
+        Vec2f center()      const                                           override;
     
     private:
         Button_Type             m_type;

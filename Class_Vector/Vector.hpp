@@ -45,7 +45,7 @@ class Vector : public Line {
         void rotate(double angle);
         void dump()                             const;
         
-        void draw_impl_(Window& window, const CoordinateSystem& system) override;
+        void draw_impl_(MainWindow& window, const CoordinateSystem& system) override;
 
         void move_to_shift_impl_(Vec2f shift)                           override;
 

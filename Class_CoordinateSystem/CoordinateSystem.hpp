@@ -38,9 +38,9 @@ class CoordinateSystem : public Drawable {
         Vec2f point_to_pixel(Vec2f point)   const;
         Vec2f pixel_to_point(Vec2f pixel)   const;
 
-        static CoordinateSystem get_system_by_type(Type type, double width, double height);
+        static CoordinateSystem get_system_by_type(Type type, double width, double height, Vec2f leftUpPixel=Vec2f(0, 0));
 
-        void draw_axis(Window& window);
+        void draw_axis(MainWindow& window);
 
         void append_object (Drawable*               object,  int index=CoordinateSystem::LAST_INDEX);
         void extend_objects(std::vector<Drawable*>  objects, int index=CoordinateSystem::LAST_INDEX);
@@ -84,5 +84,5 @@ class CoordinateSystem : public Drawable {
         static const int DRAW_AXIS_LENGTH = 100;
     
     private:
-        void draw_impl_(Window& window, const CoordinateSystem& system) override;
+        void draw_impl_(MainWindow& window, const CoordinateSystem& system) override;
 };

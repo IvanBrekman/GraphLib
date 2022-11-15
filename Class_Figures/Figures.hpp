@@ -27,7 +27,7 @@ class Figure : public Drawable, public Moveable {
         // =================================================
 
         virtual bool contains(Vec2f point) = 0;
-        virtual void draw_impl_(Window& window, const CoordinateSystem& system) = 0;
+        virtual void draw_impl_(MainWindow& window, const CoordinateSystem& system) = 0;
 
     protected:
         Color  m_outlineColor;
@@ -35,7 +35,7 @@ class Figure : public Drawable, public Moveable {
 
     protected:
         void set_shape_color_(sf::Shape& shape);
-        void draw(Window& window, const CoordinateSystem& system, Vec2f pixel, sf::Shape& shape);
+        void draw_(MainWindow& window, const CoordinateSystem& system, Vec2f pixel, sf::Shape& shape);
 };
 
 class Circle : public Figure {
@@ -54,7 +54,7 @@ class Circle : public Figure {
 
         bool contains(Vec2f point)                                      override;
 
-        void draw_impl_(Window& window, const CoordinateSystem& system) override;
+        void draw_impl_(MainWindow& window, const CoordinateSystem& system) override;
         Vec2f center()  const                                           override;
     
     protected:
@@ -82,10 +82,10 @@ class Rectangle : public Figure {
         Rectangle& set_height(double newHeight);
         // =================================================
 
-        bool contains(Vec2f point)                                      override;
+        bool contains(Vec2f point)                                          override;
 
-        void draw_impl_(Window& window, const CoordinateSystem& system) override;
-        Vec2f center()  const                                            override;
+        void draw_impl_(MainWindow& window, const CoordinateSystem& system) override;
+        Vec2f center()  const                                               override;
     
     private:
         double m_width;
@@ -133,7 +133,7 @@ class Polygon : public Figure {
 
         bool contains(Vec2f point)                                    override;
 
-        void draw_impl_(Window& window, const CoordinateSystem& system) override;
+        void draw_impl_(MainWindow& window, const CoordinateSystem& system) override;
 
         Vec2f center() const                                          override;
         void move_to_shift_impl_(Vec2f shift)                         override;
@@ -161,7 +161,7 @@ class Ellipse : public Polygon {
 
         bool contains(Vec2f point)                                      override;
 
-        void draw_impl_(Window& window, const CoordinateSystem& system) override;
+        void draw_impl_(MainWindow& window, const CoordinateSystem& system) override;
 
         Vec2f center() const                                            override;
         void  move_to_shift_impl_(Vec2f shift)                          override;

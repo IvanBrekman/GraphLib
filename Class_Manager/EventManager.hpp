@@ -11,16 +11,17 @@
 class EventManager {
     public:
         EventManager()
-        : m_objects() {}
+        : m_objects(), m_system(0, 0) {}
 
         ~EventManager();
 
-        void process_event(sf::Event sfml_event, Event& event)  const;
+        void process_event(sf::Event sfml_event, Event& event)          const;
+        void trigger_event  (const Event& event, Eventable::Type type)  const;
 
-        void process_move   (const Event& event)                const;
-        void process_tick   (const Event& event)                const;
-        void process_click  (const Event& event)                const;
-        void process_release(const Event& event)                const;
+        void trigger_move   (const Event& event)                        const;
+        void trigger_tick   (const Event& event)                        const;
+        void trigger_click  (const Event& event)                        const;
+        void trigger_release(const Event& event)                        const;
 
         void add_widget(Widget* widget);
 

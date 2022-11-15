@@ -19,15 +19,15 @@ void Drawable::hide() {
     set_hidden(true);
 }
 
-void Drawable::draw(Window& window, const CoordinateSystem& system) {
+void Drawable::draw(MainWindow& window, const CoordinateSystem& system) {
     if (!m_hidden) {
         draw_impl_(window, system);
     }
 }
 
-void Drawable::draw(Window& window) {
+void Drawable::draw(MainWindow& window) {
     if (!m_hidden) {
-        draw_impl_(window, window.coordinate_system());
+        draw_impl_(window, window.system());
     }
 }
 
@@ -57,6 +57,6 @@ Drawable& Drawable::set_hidden(bool hidden) {
 }
 // =================================================
 
-sf::RenderWindow& Drawable::get_sfml_window_(Window& window) {
+sf::RenderWindow& Drawable::get_sfml_window_(MainWindow& window) {
     return window.m_sfml_window;
 }
